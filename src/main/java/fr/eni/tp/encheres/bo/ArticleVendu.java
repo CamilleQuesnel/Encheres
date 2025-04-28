@@ -1,5 +1,165 @@
 package fr.eni.tp.encheres.bo;
 
-public class ArticleVendu {
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 
+public class ArticleVendu {
+    private int noArticle;
+    private String nomArticle;
+    private String description;
+    private LocalDate dateDebutEncheres;
+    private LocalDate dateFinEncheres;
+    private int miseAPrix;
+    private int prixVente;
+    private String etatVente;
+    private Utilisateur utilisateur;
+    private Retrait lieuRetrait;
+    private Enchere enchere;
+    private Categorie categorieArticle;
+
+    public ArticleVendu() {
+    }
+
+    public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, Enchere enchere, Categorie categorieArticle) {
+        this.noArticle = noArticle;
+        this.nomArticle = nomArticle;
+        this.description = description;
+        this.dateDebutEncheres = dateDebutEncheres;
+        this.dateFinEncheres = dateFinEncheres;
+        this.miseAPrix = miseAPrix;
+        this.prixVente = prixVente;
+        this.etatVente = etatVente;
+        this.utilisateur = utilisateur;
+        this.lieuRetrait = lieuRetrait;
+        this.enchere = enchere;
+        this.categorieArticle = categorieArticle;
+    }
+
+    public int getNoArticle() {
+        return noArticle;
+    }
+
+    public void setNoArticle(int noArticle) {
+        this.noArticle = noArticle;
+    }
+
+    public String getNomArticle() {
+        return nomArticle;
+    }
+
+    public void setNomArticle(String nomArticle) {
+        this.nomArticle = nomArticle;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDate getDateDebutEncheres() {
+        return dateDebutEncheres;
+    }
+
+    public void setDateDebutEncheres(LocalDate dateDebutEncheres) {
+        this.dateDebutEncheres = dateDebutEncheres;
+    }
+
+    public LocalDate getDateFinEncheres() {
+        return dateFinEncheres;
+    }
+
+    public void setDateFinEncheres(LocalDate dateFinEncheres) {
+        this.dateFinEncheres = dateFinEncheres;
+    }
+
+    public int getMiseAPrix() {
+        return miseAPrix;
+    }
+
+    public void setMiseAPrix(int miseAPrix) {
+        this.miseAPrix = miseAPrix;
+    }
+
+    public int getPrixVente() {
+        return prixVente;
+    }
+
+    public void setPrixVente(int prixVente) {
+        this.prixVente = prixVente;
+    }
+
+    public String getEtatVente() {
+        return etatVente;
+    }
+
+    public void setEtatVente(String etatVente) {
+        this.etatVente = etatVente;
+    }
+
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
+
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+
+    public Retrait getLieuRetrait() {
+        return lieuRetrait;
+    }
+
+    public void setLieuRetrait(Retrait lieuRetrait) {
+        this.lieuRetrait = lieuRetrait;
+    }
+
+    public Enchere getEnchere() {
+        return enchere;
+    }
+
+    public void setEnchere(Enchere enchere) {
+        this.enchere = enchere;
+    }
+
+    public Categorie getCategorieArticle() {
+        return categorieArticle;
+    }
+
+    public void setCategorieArticle(Categorie categorieArticle) {
+        this.categorieArticle = categorieArticle;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("ArticleVendu{");
+        sb.append("noArticle=").append(noArticle);
+        sb.append(", nomArticle='").append(nomArticle).append('\'');
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", dateDebutEncheres=").append(dateDebutEncheres);
+        sb.append(", dateFinEncheres=").append(dateFinEncheres);
+        sb.append(", miseAPrix=").append(miseAPrix);
+        sb.append(", prixVente=").append(prixVente);
+        sb.append(", etatVente='").append(etatVente).append('\'');
+        sb.append(", utilisateur=").append(utilisateur);
+        sb.append(", lieuRetrait=").append(lieuRetrait);
+        sb.append(", enchere=").append(enchere);
+        sb.append(", categorieArticle=").append(categorieArticle);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ArticleVendu that = (ArticleVendu) o;
+        return noArticle == that.noArticle && miseAPrix == that.miseAPrix && prixVente == that.prixVente && Objects.equals(nomArticle, that.nomArticle) && Objects.equals(description, that.description) && Objects.equals(dateDebutEncheres, that.dateDebutEncheres) && Objects.equals(dateFinEncheres, that.dateFinEncheres) && Objects.equals(etatVente, that.etatVente) && Objects.equals(utilisateur, that.utilisateur) && Objects.equals(lieuRetrait, that.lieuRetrait) && Objects.equals(enchere, that.enchere) && Objects.equals(categorieArticle, that.categorieArticle);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(noArticle, nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, utilisateur, lieuRetrait, enchere, categorieArticle);
+    }
 }
