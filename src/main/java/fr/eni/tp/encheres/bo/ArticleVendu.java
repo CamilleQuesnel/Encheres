@@ -15,13 +15,13 @@ public class ArticleVendu {
     private String etatVente;
     private Utilisateur utilisateur;
     private Retrait lieuRetrait;
-    private Enchere enchere;
+    private List <Enchere> encheres;
     private Categorie categorieArticle;
 
     public ArticleVendu() {
     }
 
-    public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, Enchere enchere, Categorie categorieArticle) {
+    public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, List<Enchere> encheres, Categorie categorieArticle) {
         this.noArticle = noArticle;
         this.nomArticle = nomArticle;
         this.description = description;
@@ -32,7 +32,7 @@ public class ArticleVendu {
         this.etatVente = etatVente;
         this.utilisateur = utilisateur;
         this.lieuRetrait = lieuRetrait;
-        this.enchere = enchere;
+        this.encheres = encheres;
         this.categorieArticle = categorieArticle;
     }
 
@@ -116,12 +116,12 @@ public class ArticleVendu {
         this.lieuRetrait = lieuRetrait;
     }
 
-    public Enchere getEnchere() {
-        return enchere;
+    public List<Enchere> getEncheres() {
+        return encheres;
     }
 
-    public void setEnchere(Enchere enchere) {
-        this.enchere = enchere;
+    public void setEncheres(List<Enchere> encheres) {
+        this.encheres = encheres;
     }
 
     public Categorie getCategorieArticle() {
@@ -145,7 +145,7 @@ public class ArticleVendu {
         sb.append(", etatVente='").append(etatVente).append('\'');
         sb.append(", utilisateur=").append(utilisateur);
         sb.append(", lieuRetrait=").append(lieuRetrait);
-        sb.append(", enchere=").append(enchere);
+        sb.append(", encheres=").append(encheres);
         sb.append(", categorieArticle=").append(categorieArticle);
         sb.append('}');
         return sb.toString();
@@ -155,11 +155,11 @@ public class ArticleVendu {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ArticleVendu that = (ArticleVendu) o;
-        return noArticle == that.noArticle && miseAPrix == that.miseAPrix && prixVente == that.prixVente && Objects.equals(nomArticle, that.nomArticle) && Objects.equals(description, that.description) && Objects.equals(dateDebutEncheres, that.dateDebutEncheres) && Objects.equals(dateFinEncheres, that.dateFinEncheres) && Objects.equals(etatVente, that.etatVente) && Objects.equals(utilisateur, that.utilisateur) && Objects.equals(lieuRetrait, that.lieuRetrait) && Objects.equals(enchere, that.enchere) && Objects.equals(categorieArticle, that.categorieArticle);
+        return noArticle == that.noArticle && miseAPrix == that.miseAPrix && prixVente == that.prixVente && Objects.equals(nomArticle, that.nomArticle) && Objects.equals(description, that.description) && Objects.equals(dateDebutEncheres, that.dateDebutEncheres) && Objects.equals(dateFinEncheres, that.dateFinEncheres) && Objects.equals(etatVente, that.etatVente) && Objects.equals(utilisateur, that.utilisateur) && Objects.equals(lieuRetrait, that.lieuRetrait) && Objects.equals(encheres, that.encheres) && Objects.equals(categorieArticle, that.categorieArticle);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(noArticle, nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, utilisateur, lieuRetrait, enchere, categorieArticle);
+        return Objects.hash(noArticle, nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, utilisateur, lieuRetrait, encheres, categorieArticle);
     }
 }
