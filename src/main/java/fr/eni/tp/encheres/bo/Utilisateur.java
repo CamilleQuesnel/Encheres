@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.Objects;
 
 public class Utilisateur {
-    private long noUtilisateur;
+    private int noUtilisateur;
     private String pseudo;
     private String nom;
     private String prenom;
     private String email;
     private String telephone;
     private String rue;
-    private int codePostal;
+    private String codePostal;
     private String ville;
     private String motDePasse;
     private int credit;
@@ -24,7 +24,7 @@ public class Utilisateur {
     public Utilisateur() {
     }
 
-    public Utilisateur(long noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone, String rue, int codePostal, String ville, String motDePasse, int credit, boolean administrateur, List<ArticleVendu> ventes, List<ArticleVendu> achats, List<Enchere> encheres) {
+    public Utilisateur(int noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur, List<ArticleVendu> ventes, List<ArticleVendu> achats, List<Enchere> encheres) {
         this.noUtilisateur = noUtilisateur;
         this.pseudo = pseudo;
         this.nom = nom;
@@ -46,7 +46,7 @@ public class Utilisateur {
         return noUtilisateur;
     }
 
-    public void setNoUtilisateur(long noUtilisateur) {
+    public void setNoUtilisateur(int noUtilisateur) {
         this.noUtilisateur = noUtilisateur;
     }
 
@@ -98,11 +98,11 @@ public class Utilisateur {
         this.rue = rue;
     }
 
-    public int getCodePostal() {
+    public String getCodePostal() {
         return codePostal;
     }
 
-    public void setCodePostal(int codePostal) {
+    public void setCodePostal(String codePostal) {
         this.codePostal = codePostal;
     }
 

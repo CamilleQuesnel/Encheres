@@ -15,13 +15,13 @@ public class ArticleVendu {
     private String etatVente;
     private Utilisateur utilisateur;
     private Retrait lieuRetrait;
-    private List<Enchere> encheres;
-    private Categorie categorie;
+    private Enchere enchere;
+    private Categorie categorieArticle;
 
     public ArticleVendu() {
     }
 
-    public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, List<Enchere> encheres, Categorie categorie) {
+    public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, Enchere enchere, Categorie categorieArticle) {
         this.noArticle = noArticle;
         this.nomArticle = nomArticle;
         this.description = description;
@@ -32,8 +32,8 @@ public class ArticleVendu {
         this.etatVente = etatVente;
         this.utilisateur = utilisateur;
         this.lieuRetrait = lieuRetrait;
-        this.encheres = encheres;
-        this.categorie = categorie;
+        this.enchere = enchere;
+        this.categorieArticle = categorieArticle;
     }
 
     public int getNoArticle() {
@@ -116,50 +116,50 @@ public class ArticleVendu {
         this.lieuRetrait = lieuRetrait;
     }
 
-    public List<Enchere> getEncheres() {
-        return encheres;
+    public Enchere getEnchere() {
+        return enchere;
     }
 
-    public void setEncheres(List<Enchere> encheres) {
-        this.encheres = encheres;
+    public void setEnchere(Enchere enchere) {
+        this.enchere = enchere;
     }
 
-    public Categorie getCategorie() {
-        return categorie;
+    public Categorie getCategorieArticle() {
+        return categorieArticle;
     }
 
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
+    public void setCategorieArticle(Categorie categorieArticle) {
+        this.categorieArticle = categorieArticle;
     }
 
     @Override
     public String toString() {
-        return "ArticleVendu{" +
-                "noArticle=" + noArticle +
-                ", nomArticle='" + nomArticle + '\'' +
-                ", description='" + description + '\'' +
-                ", dateDebutEncheres=" + dateDebutEncheres +
-                ", dateFinEncheres=" + dateFinEncheres +
-                ", miseAPrix=" + miseAPrix +
-                ", prixVente=" + prixVente +
-                ", etatVente='" + etatVente + '\'' +
-                ", utilisateur=" + utilisateur +
-                ", lieuRetrait=" + lieuRetrait +
-                ", encheres=" + encheres +
-                ", categorie=" + categorie +
-                '}';
+        final StringBuffer sb = new StringBuffer("ArticleVendu{");
+        sb.append("noArticle=").append(noArticle);
+        sb.append(", nomArticle='").append(nomArticle).append('\'');
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", dateDebutEncheres=").append(dateDebutEncheres);
+        sb.append(", dateFinEncheres=").append(dateFinEncheres);
+        sb.append(", miseAPrix=").append(miseAPrix);
+        sb.append(", prixVente=").append(prixVente);
+        sb.append(", etatVente='").append(etatVente).append('\'');
+        sb.append(", utilisateur=").append(utilisateur);
+        sb.append(", lieuRetrait=").append(lieuRetrait);
+        sb.append(", enchere=").append(enchere);
+        sb.append(", categorieArticle=").append(categorieArticle);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
     public boolean equals(Object o) {
-
         if (o == null || getClass() != o.getClass()) return false;
         ArticleVendu that = (ArticleVendu) o;
-        return noArticle == that.noArticle && miseAPrix == that.miseAPrix && prixVente == that.prixVente && Objects.equals(nomArticle, that.nomArticle) && Objects.equals(description, that.description) && Objects.equals(dateDebutEncheres, that.dateDebutEncheres) && Objects.equals(dateFinEncheres, that.dateFinEncheres) && Objects.equals(etatVente, that.etatVente) && Objects.equals(utilisateur, that.utilisateur) && Objects.equals(lieuRetrait, that.lieuRetrait) && Objects.equals(encheres, that.encheres) && Objects.equals(categorie, that.categorie);
+        return noArticle == that.noArticle && miseAPrix == that.miseAPrix && prixVente == that.prixVente && Objects.equals(nomArticle, that.nomArticle) && Objects.equals(description, that.description) && Objects.equals(dateDebutEncheres, that.dateDebutEncheres) && Objects.equals(dateFinEncheres, that.dateFinEncheres) && Objects.equals(etatVente, that.etatVente) && Objects.equals(utilisateur, that.utilisateur) && Objects.equals(lieuRetrait, that.lieuRetrait) && Objects.equals(enchere, that.enchere) && Objects.equals(categorieArticle, that.categorieArticle);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(noArticle, nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, utilisateur, lieuRetrait, encheres, categorie);
+        return Objects.hash(noArticle, nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, utilisateur, lieuRetrait, enchere, categorieArticle);
     }
 }

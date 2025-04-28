@@ -1,22 +1,23 @@
 package fr.eni.tp.encheres.bo;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class Enchere {
     private LocalDate dateEnchere;
     private int montant_enchere;
     private Utilisateur utilisateur;
-    private ArticleVendu articleVendu;
+    private List<ArticleVendu> articleVendus;
 
     public Enchere() {
     }
 
-    public Enchere(LocalDate dateEnchere, int montant_enchere, Utilisateur utilisateur, ArticleVendu articleVendu) {
+    public Enchere(LocalDate dateEnchere, int montant_enchere, Utilisateur utilisateur, List<ArticleVendu> articleVendus) {
         this.dateEnchere = dateEnchere;
         this.montant_enchere = montant_enchere;
         this.utilisateur = utilisateur;
-        this.articleVendu = articleVendu;
+        this.articleVendus = articleVendus;
     }
 
     public LocalDate getDateEnchere() {
@@ -43,33 +44,34 @@ public class Enchere {
         this.utilisateur = utilisateur;
     }
 
-    public ArticleVendu getArticleVendu() {
-        return articleVendu;
+    public List<ArticleVendu> getArticleVendus() {
+        return articleVendus;
     }
 
-    public void setArticleVendu(ArticleVendu articleVendu) {
-        this.articleVendu = articleVendu;
+    public void setArticleVendus(List<ArticleVendu> articleVendus) {
+        this.articleVendus = articleVendus;
     }
 
     @Override
     public String toString() {
-        return "Enchere{" +
-                "dateEnchere=" + dateEnchere +
-                ", montant_enchere=" + montant_enchere +
-                ", utilisateur=" + utilisateur +
-                ", articleVendu=" + articleVendu +
-                '}';
+        final StringBuffer sb = new StringBuffer("Enchere{");
+        sb.append("dateEnchere=").append(dateEnchere);
+        sb.append(", montant_enchere=").append(montant_enchere);
+        sb.append(", utilisateur=").append(utilisateur);
+        sb.append(", articleVendus=").append(articleVendus);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Enchere enchere = (Enchere) o;
-        return montant_enchere == enchere.montant_enchere && Objects.equals(dateEnchere, enchere.dateEnchere) && Objects.equals(utilisateur, enchere.utilisateur) && Objects.equals(articleVendu, enchere.articleVendu);
+        return montant_enchere == enchere.montant_enchere && Objects.equals(dateEnchere, enchere.dateEnchere) && Objects.equals(utilisateur, enchere.utilisateur) && Objects.equals(articleVendus, enchere.articleVendus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dateEnchere, montant_enchere, utilisateur, articleVendu);
+        return Objects.hash(dateEnchere, montant_enchere, utilisateur, articleVendus);
     }
 }
