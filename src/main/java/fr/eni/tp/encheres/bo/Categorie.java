@@ -6,23 +6,14 @@ import java.util.Objects;
 public class Categorie {
     private int noCategorie;
     private String libelle;
-    private List<ArticleVendu> articleVendus;
+
 
     public Categorie() {
     }
 
-    public Categorie(int noCategorie, String libelle, List<ArticleVendu> articleVendus) {
+    public Categorie(int noCategorie, String libelle) {
         this.noCategorie = noCategorie;
         this.libelle = libelle;
-        this.articleVendus = articleVendus;
-    }
-
-    public int getNoCategorie() {
-        return noCategorie;
-    }
-
-    public void setNoCategorie(int noCategorie) {
-        this.noCategorie = noCategorie;
     }
 
     public String getLibelle() {
@@ -33,34 +24,32 @@ public class Categorie {
         this.libelle = libelle;
     }
 
-    public List<ArticleVendu> getArticleVendus() {
-        return articleVendus;
+    public int getNoCategorie() {
+        return noCategorie;
     }
 
-    public void setArticleVendus(List<ArticleVendu> articleVendus) {
-        this.articleVendus = articleVendus;
+    public void setNoCategorie(int noCategorie) {
+        this.noCategorie = noCategorie;
     }
 
     @Override
     public String toString() {
-        return "Categorie{" +
-                "noCategorie=" + noCategorie +
-                ", libelle='" + libelle + '\'' +
-                ", articleVendus=" + articleVendus +
-                '}';
+        final StringBuffer sb = new StringBuffer("Categorie{");
+        sb.append("noCategorie=").append(noCategorie);
+        sb.append(", libelle='").append(libelle).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
     public boolean equals(Object o) {
-
-
         if (o == null || getClass() != o.getClass()) return false;
         Categorie categorie = (Categorie) o;
-        return noCategorie == categorie.noCategorie && Objects.equals(libelle, categorie.libelle) && Objects.equals(articleVendus, categorie.articleVendus);
+        return noCategorie == categorie.noCategorie && Objects.equals(libelle, categorie.libelle);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(noCategorie, libelle, articleVendus);
+        return Objects.hash(noCategorie, libelle);
     }
 }

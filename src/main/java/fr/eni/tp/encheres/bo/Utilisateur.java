@@ -17,14 +17,12 @@ public class Utilisateur {
     private String motDePasse;
     private int credit;
     private boolean administrateur;
-    private List <ArticleVendu> ventes = new ArrayList<>();
-    private List <ArticleVendu> achats = new ArrayList<>();
-    private List <Enchere> encheres = new ArrayList<>();
+
 
     public Utilisateur() {
     }
 
-    public Utilisateur(int noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur, List<ArticleVendu> ventes, List<ArticleVendu> achats, List<Enchere> encheres) {
+    public Utilisateur(int noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur) {
         this.noUtilisateur = noUtilisateur;
         this.pseudo = pseudo;
         this.nom = nom;
@@ -37,12 +35,9 @@ public class Utilisateur {
         this.motDePasse = motDePasse;
         this.credit = credit;
         this.administrateur = administrateur;
-        this.ventes = ventes;
-        this.achats = achats;
-        this.encheres = encheres;
     }
 
-    public long getNoUtilisateur() {
+    public int getNoUtilisateur() {
         return noUtilisateur;
     }
 
@@ -138,60 +133,34 @@ public class Utilisateur {
         this.administrateur = administrateur;
     }
 
-    public List<ArticleVendu> getVentes() {
-        return ventes;
-    }
-
-    public void setVentes(List<ArticleVendu> ventes) {
-        this.ventes = ventes;
-    }
-
-    public List<ArticleVendu> getAchats() {
-        return achats;
-    }
-
-    public void setAchats(List<ArticleVendu> achats) {
-        this.achats = achats;
-    }
-
-    public List<Enchere> getEncheres() {
-        return encheres;
-    }
-
-    public void setEncheres(List<Enchere> encheres) {
-        this.encheres = encheres;
-    }
-
     @Override
     public String toString() {
-        return "Utilisateur{" +
-                "noUtilisateur=" + noUtilisateur +
-                ", pseudo='" + pseudo + '\'' +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", rue='" + rue + '\'' +
-                ", codePostal=" + codePostal +
-                ", ville='" + ville + '\'' +
-                ", motDePasse='" + motDePasse + '\'' +
-                ", credit=" + credit +
-                ", administrateur=" + administrateur +
-                ", ventes=" + ventes +
-                ", achats=" + achats +
-                ", encheres=" + encheres +
-                '}';
+        final StringBuffer sb = new StringBuffer("Utilisateur{");
+        sb.append("noUtilisateur=").append(noUtilisateur);
+        sb.append(", pseudo='").append(pseudo).append('\'');
+        sb.append(", nom='").append(nom).append('\'');
+        sb.append(", prenom='").append(prenom).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", telephone='").append(telephone).append('\'');
+        sb.append(", rue='").append(rue).append('\'');
+        sb.append(", codePostal='").append(codePostal).append('\'');
+        sb.append(", ville='").append(ville).append('\'');
+        sb.append(", motDePasse='").append(motDePasse).append('\'');
+        sb.append(", credit=").append(credit);
+        sb.append(", administrateur=").append(administrateur);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Utilisateur that = (Utilisateur) o;
-        return noUtilisateur == that.noUtilisateur && codePostal == that.codePostal && credit == that.credit && administrateur == that.administrateur && Objects.equals(pseudo, that.pseudo) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(email, that.email) && Objects.equals(telephone, that.telephone) && Objects.equals(rue, that.rue) && Objects.equals(ville, that.ville) && Objects.equals(motDePasse, that.motDePasse) && Objects.equals(ventes, that.ventes) && Objects.equals(achats, that.achats) && Objects.equals(encheres, that.encheres);
+        return noUtilisateur == that.noUtilisateur && credit == that.credit && administrateur == that.administrateur && Objects.equals(pseudo, that.pseudo) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(email, that.email) && Objects.equals(telephone, that.telephone) && Objects.equals(rue, that.rue) && Objects.equals(codePostal, that.codePostal) && Objects.equals(ville, that.ville) && Objects.equals(motDePasse, that.motDePasse);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(noUtilisateur, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, administrateur, ventes, achats, encheres);
+        return Objects.hash(noUtilisateur, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, administrateur);
     }
 }

@@ -8,16 +8,16 @@ public class Enchere {
     private LocalDate dateEnchere;
     private int montant_enchere;
     private Utilisateur utilisateur;
-    private List<ArticleVendu> articleVendus;
+    private ArticleVendu articleVendu;
 
     public Enchere() {
     }
 
-    public Enchere(LocalDate dateEnchere, int montant_enchere, Utilisateur utilisateur, List<ArticleVendu> articleVendus) {
+    public Enchere(LocalDate dateEnchere, int montant_enchere, Utilisateur utilisateur, ArticleVendu articleVendu) {
         this.dateEnchere = dateEnchere;
         this.montant_enchere = montant_enchere;
         this.utilisateur = utilisateur;
-        this.articleVendus = articleVendus;
+        this.articleVendu = articleVendu;
     }
 
     public LocalDate getDateEnchere() {
@@ -44,12 +44,12 @@ public class Enchere {
         this.utilisateur = utilisateur;
     }
 
-    public List<ArticleVendu> getArticleVendus() {
-        return articleVendus;
+    public ArticleVendu getArticleVendu() {
+        return articleVendu;
     }
 
-    public void setArticleVendus(List<ArticleVendu> articleVendus) {
-        this.articleVendus = articleVendus;
+    public void setArticleVendu(ArticleVendu articleVendu) {
+        this.articleVendu = articleVendu;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class Enchere {
         sb.append("dateEnchere=").append(dateEnchere);
         sb.append(", montant_enchere=").append(montant_enchere);
         sb.append(", utilisateur=").append(utilisateur);
-        sb.append(", articleVendus=").append(articleVendus);
+        sb.append(", articleVendu=").append(articleVendu);
         sb.append('}');
         return sb.toString();
     }
@@ -67,11 +67,11 @@ public class Enchere {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Enchere enchere = (Enchere) o;
-        return montant_enchere == enchere.montant_enchere && Objects.equals(dateEnchere, enchere.dateEnchere) && Objects.equals(utilisateur, enchere.utilisateur) && Objects.equals(articleVendus, enchere.articleVendus);
+        return montant_enchere == enchere.montant_enchere && Objects.equals(dateEnchere, enchere.dateEnchere) && Objects.equals(utilisateur, enchere.utilisateur) && Objects.equals(articleVendu, enchere.articleVendu);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dateEnchere, montant_enchere, utilisateur, articleVendus);
+        return Objects.hash(dateEnchere, montant_enchere, utilisateur, articleVendu);
     }
 }
