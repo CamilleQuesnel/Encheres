@@ -17,12 +17,13 @@ public class Utilisateur {
     private String motDePasse;
     private int credit;
     private boolean administrateur;
+    private boolean actif;
 
 
     public Utilisateur() {
     }
 
-    public Utilisateur(int noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur) {
+    public Utilisateur(int noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur, boolean actif) {
         this.noUtilisateur = noUtilisateur;
         this.pseudo = pseudo;
         this.nom = nom;
@@ -35,6 +36,19 @@ public class Utilisateur {
         this.motDePasse = motDePasse;
         this.credit = credit;
         this.administrateur = administrateur;
+        this.actif = actif;
+    }
+
+    public Utilisateur(String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal, String ville, String motDePasse) {
+        this.pseudo = pseudo;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.telephone = telephone;
+        this.rue = rue;
+        this.codePostal = codePostal;
+        this.ville = ville;
+        this.motDePasse = motDePasse;
     }
 
     public int getNoUtilisateur() {
@@ -133,34 +147,43 @@ public class Utilisateur {
         this.administrateur = administrateur;
     }
 
+    public boolean isActif() {
+        return actif;
+    }
+
+    public void setActif(boolean actif) {
+        this.actif = actif;
+    }
+
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("Utilisateur{");
-        sb.append("noUtilisateur=").append(noUtilisateur);
-        sb.append(", pseudo='").append(pseudo).append('\'');
-        sb.append(", nom='").append(nom).append('\'');
-        sb.append(", prenom='").append(prenom).append('\'');
-        sb.append(", email='").append(email).append('\'');
-        sb.append(", telephone='").append(telephone).append('\'');
-        sb.append(", rue='").append(rue).append('\'');
-        sb.append(", codePostal='").append(codePostal).append('\'');
-        sb.append(", ville='").append(ville).append('\'');
-        sb.append(", motDePasse='").append(motDePasse).append('\'');
-        sb.append(", credit=").append(credit);
-        sb.append(", administrateur=").append(administrateur);
-        sb.append('}');
-        return sb.toString();
+        return "Utilisateur{" +
+                "noUtilisateur=" + noUtilisateur +
+                ", pseudo='" + pseudo + '\'' +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", rue='" + rue + '\'' +
+                ", codePostal='" + codePostal + '\'' +
+                ", ville='" + ville + '\'' +
+                ", motDePasse='" + motDePasse + '\'' +
+                ", credit=" + credit +
+                ", administrateur=" + administrateur +
+                ", actif=" + actif +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
+
         if (o == null || getClass() != o.getClass()) return false;
         Utilisateur that = (Utilisateur) o;
-        return noUtilisateur == that.noUtilisateur && credit == that.credit && administrateur == that.administrateur && Objects.equals(pseudo, that.pseudo) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(email, that.email) && Objects.equals(telephone, that.telephone) && Objects.equals(rue, that.rue) && Objects.equals(codePostal, that.codePostal) && Objects.equals(ville, that.ville) && Objects.equals(motDePasse, that.motDePasse);
+        return noUtilisateur == that.noUtilisateur && credit == that.credit && administrateur == that.administrateur && actif == that.actif && Objects.equals(pseudo, that.pseudo) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(email, that.email) && Objects.equals(telephone, that.telephone) && Objects.equals(rue, that.rue) && Objects.equals(codePostal, that.codePostal) && Objects.equals(ville, that.ville) && Objects.equals(motDePasse, that.motDePasse);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(noUtilisateur, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, administrateur);
+        return Objects.hash(noUtilisateur, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, administrateur, actif);
     }
 }
