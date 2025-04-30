@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Utilisateur> readUsers() {
-
+    return null;
     }
 
     @Override
