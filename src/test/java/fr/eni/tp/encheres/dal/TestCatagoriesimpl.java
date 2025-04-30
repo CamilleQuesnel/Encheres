@@ -16,27 +16,30 @@ public class TestCatagoriesimpl {
 
 
     @Test
-    void test_selectAllCategorie(){
+    void test_selectAllCategorie() {
         List<Categorie> categories = categorieDAO.selectAllCategorie();
         System.out.println(categories);
     }
+
     @Test
-    void test_findCategorieById(){
-        Categorie categorie  =categorieDAO.findCategorieById(1);//
+    void test_findCategorieById() {
+        Categorie categorie = categorieDAO.findCategorieById(2);//
         Assertions.assertEquals("Jouets", categorie.getLibelle());
 
     }
+
     @Test
-    void test_findCategorieByLibelle(){
-        Categorie categorie  =categorieDAO.findCategorieByLibelle("Jouets");//
+    void test_findCategorieByLibelle() {
+        Categorie categorie = categorieDAO.findCategorieByLibelle("Jouets");//
         Assertions.assertEquals("Jouets", categorie.getLibelle());
     }
+
     @Test
-    void test_create(){
+    void test_create() {
         String libelle = "TEST A EFFACER";
         categorieDAO.create(libelle);
         // test recuperation de l'id
-        Categorie categorie =  categorieDAO.findCategorieById(18);
+        Categorie categorie = categorieDAO.findCategorieById(18);
         System.out.println("************* test_create ************");
         System.out.println(categorie);
         System.out.println("************* test_create ************");
@@ -44,26 +47,31 @@ public class TestCatagoriesimpl {
     }
 
     @Test
-    void test_isIfCategorieExists(){
-       boolean isFind = categorieDAO.isIfCategorieExists("Sport");
+    void test_isIfCategorieExists() {
+        boolean isFind = categorieDAO.isIfCategorieExists("Sport");
         Assertions.assertTrue(isFind);
-       boolean isNotFind = categorieDAO.isIfCategorieExists("Azerty");
+        boolean isNotFind = categorieDAO.isIfCategorieExists("Azerty");
         Assertions.assertFalse(isNotFind);
 
     }
 
     @Test
-    void test_updateCategorie(){
-        Categorie categorie = categorieDAO.findCategorieById(1);//Jouets
+    void test_updateCategorie() {
+        Categorie categorie = categorieDAO.findCategorieById(2);//Jouets
         categorie.setLibelle("TEST");
         categorieDAO.updateCategorie(categorie);
-        Assertions.assertEquals("TEST",categorieDAO.findCategorieByLibelle("TEST"));
+        Assertions.assertEquals("TEST", categorieDAO.findCategorieByLibelle("TEST").getLibelle());
         categorie.setLibelle("Jouets"); // Remise en etats de la BDD
         categorieDAO.updateCategorie(categorie);
+        Assertions.assertEquals("Jouets", categorieDAO.findCategorieByLibelle("Jouets").getLibelle());
 
     }
 
+    @Test
+    void test_deleteCategorie() {
+        categorieDAO.deleteCategorie(2);
+        // ASSERT THROW
+        Assertions.assertThrows();
 
-
-
+    }
 }

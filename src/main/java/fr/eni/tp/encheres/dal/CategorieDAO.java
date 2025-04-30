@@ -13,4 +13,5 @@ public interface CategorieDAO {
     void updateCategorie(Categorie categorie );
     void deleteCategorie(int id);
 
+
 }

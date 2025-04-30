@@ -1,5 +1,6 @@
 package fr.eni.tp.encheres.dal.impl;
 
+import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Categorie;
 import fr.eni.tp.encheres.dal.CategorieDAO;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +25,10 @@ public class CategorieImpl implements CategorieDAO {
     private static final String SELECT_BY_ID="SELECT no_categorie, libelle FROM CATEGORIES WHERE no_categorie = :id;";
     private static final String SELECT_BY_LIBELLE="SELECT no_categorie, libelle FROM CATEGORIES WHERE libelle = :libelle;";
     private static final String INSERT="INSERT INTO CATEGORIES (libelle) VALUES (:libelle);";
-    private static final String UPDATE="UPDATE CATEGORIES SET libelle = :libelle WHERE no_categorie = :id;";
+    private static final String UPDATE="UPDATE CATEGORIES SET libelle = :libelle WHERE no_categorie = :no_categorie;";
+    // Pour delete une categorie
+    private static final String UPDATE_ARTICLES_WITH_NEW_LIBELLE = "UPDATE ARTICLES_VENDUS set no_categorie = 1 WHERE no_categorie = :id_delete;";
+    private static final String DELETE_CATEGORIE_WITH_NO_CAEGORIE = "DELETE FROM CATEGORIES WHERE no_categorie = :id_delete;";
 
     //*****************  QUERIES  ***********************
 
@@ -116,19 +121,17 @@ public class CategorieImpl implements CategorieDAO {
         try{
         Categorie categorie = this.findCategorieByLibelle(libelle);
         }catch(Exception e){
-            System.out.println("PAS DE CATEGORIE TROUVER !!!!!!");
+//            System.out.println("PAS DE CATEGORIE TROUVER !!!!!!");
             isExits = false;
         }
         return isExits;
     }
 
-    @Override
+    @Override //TEST OK
     public void updateCategorie(Categorie categorie) {
-
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("libelle", categorie.getLibelle());
         mapSqlParameterSource.addValue("no_categorie", categorie.getNoCategorie());
-
 
         namedParameterJdbcTemplate.update(
                 UPDATE,
@@ -139,7 +142,26 @@ public class CategorieImpl implements CategorieDAO {
     }
 
     @Override
+    @Transactional
     public void deleteCategorie(int id) {
+        MapSqlParameterSource mapSqlParameterSourceUpdate = new MapSqlParameterSource();
+        mapSqlParameterSourceUpdate.addValue("id_delete", id);
+
+        namedParameterJdbcTemplate.update(
+                UPDATE_ARTICLES_WITH_NEW_LIBELLE,
+                mapSqlParameterSourceUpdate
+        );
+        namedParameterJdbcTemplate.update(
+                DELETE_CATEGORIE_WITH_NO_CAEGORIE,
+                mapSqlParameterSourceUpdate
+        );
+
+
+
+        // 1 Recherche L'id categorie a supprimer dans la table articles_vendus
+        // 2 Update articles vendu avec no_cat divers .
+        // 3 delete categorie
+
 
     }
 }
@@ -152,4 +174,5 @@ class CategorieRowMapper implements RowMapper<Categorie> {
 
         return categorie;
     }
+
 }
