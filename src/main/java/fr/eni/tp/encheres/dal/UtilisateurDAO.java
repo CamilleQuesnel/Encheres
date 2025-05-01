@@ -15,6 +15,7 @@ public interface UtilisateurDAO {
     boolean isUserEmailUnique (Utilisateur utilisateur);
     List<Utilisateur> findUsers();
     List<Utilisateur> findUsersBuyers();
-
+    void deleteCredit(int noUtilisateur, int credit);
+    void updateCredit(int noUtilisateur, int credit);
 
 }

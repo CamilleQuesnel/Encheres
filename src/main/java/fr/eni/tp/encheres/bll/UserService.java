@@ -1,17 +1,20 @@
 package fr.eni.tp.encheres.bll;
 
 import fr.eni.tp.encheres.bo.Utilisateur;
+import fr.eni.tp.encheres.dto.RegisterDTO;
+import fr.eni.tp.encheres.dto.UpdateDTO;
 
 import java.util.List;
 
 public interface UserService {
 
-    public Utilisateur getUtilisateur();
-    public Utilisateur createUtilisateur(Utilisateur utilisateur);
-    public Utilisateur updateUtilisateur(Utilisateur utilisateur);
-    public Utilisateur deleteUtilisateur(int id);
-
+    public Utilisateur getUtilisateurById(int id);
+    public Utilisateur getUtilisateurByEmail(String email);
+    public Utilisateur getUtilisateurByPseudo(String pseudo);
+    public void createUtilisateur(RegisterDTO registerDTO);
+    public void updateUtilisateur(UpdateDTO updateDTO);
+    public void desactivateUtilisateur(int no_utilisateur);
+    public void deleteUtilisateur(int no_utilisateur);
     public List<Utilisateur> readUsers();
-    public List<Utilisateur> updateUsers(Utilisateur utilisateur);
-    public List<Utilisateur> deleteUsers(int id);
+
 }

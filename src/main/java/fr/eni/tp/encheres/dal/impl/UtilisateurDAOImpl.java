@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+
 @Repository
 public class UtilisateurDAOImpl implements UtilisateurDAO {
 
@@ -50,6 +51,8 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
                     "WHERE no_utilisateur = :no_utilisateur";
 
     private static final String DELETE_USER_BY_ID="DELETE FROM UTILISATEURS WHERE no_utilisateur = :no_utilisateur;";
+    private static final String DELETE_SOME_CREDIT="UPDATE UTILISATEUR SET credit = credit - :montant_enchere WHERE no_utilisateur = :no_utilisateur;";//faudra implémenter montant_enchere dans le service enchere pour le récupérer
+    private static final String ADD_SOME_CREDIT="UPDATE UTILISATEUR SET credit = credit + :montant_enchere WHERE no_utilisateur = :no_utilisateur;";//idem faudra implétmenter montant_enchere dans le service enchere
 
 
         /**
@@ -203,6 +206,38 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         return namedParameterJdbcTemplate.query(
                 SELECT_USERS_BUYERS,
                 new BeanPropertyRowMapper<>(Utilisateur.class)
+        );
+    }
+
+    /**
+     * TODO faire le test voir si ça fonctionne
+     * @param noUtilisateur
+     * @param credit
+     */
+    @Override
+    public void deleteCredit(int noUtilisateur, int credit) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("no_utilisateur", noUtilisateur);
+        mapSqlParameterSource.addValue("credit", credit);
+        namedParameterJdbcTemplate.update(
+                DELETE_SOME_CREDIT,
+                mapSqlParameterSource
+        );
+    }
+
+    /**
+     * TODO faire le test voir si ça fonctionne
+     * @param noUtilisateur
+     * @param credit
+     */
+    @Override
+    public void updateCredit(int noUtilisateur, int credit) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("no_utilisateur", noUtilisateur);
+        mapSqlParameterSource.addValue("credit", credit);
+        namedParameterJdbcTemplate.update(
+                ADD_SOME_CREDIT,
+                mapSqlParameterSource
         );
     }
 
