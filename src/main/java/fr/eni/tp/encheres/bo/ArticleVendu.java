@@ -15,11 +15,10 @@ public class ArticleVendu {
     private String etatVente;
     private Utilisateur utilisateur;
     private Retrait lieuRetrait;
-    private List <Enchere> encheres;
+    private List<Enchere> encheres;
     private Categorie categorieArticle;
 
-    public ArticleVendu() {
-    }
+    public ArticleVendu() {}
 
     public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, List<Enchere> encheres, Categorie categorieArticle) {
         this.noArticle = noArticle;
@@ -132,30 +131,50 @@ public class ArticleVendu {
         this.categorieArticle = categorieArticle;
     }
 
+    // Ajout des getters utilitaires demandés
+    public int getNoUtilisateur() {
+        return utilisateur != null ? utilisateur.getNoUtilisateur() : 0;
+    }
+
+    public int getNoCategorie() {
+        return categorieArticle != null ? categorieArticle.getNoCategorie() : 0;
+    }
+
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("ArticleVendu{");
-        sb.append("noArticle=").append(noArticle);
-        sb.append(", nomArticle='").append(nomArticle).append('\'');
-        sb.append(", description='").append(description).append('\'');
-        sb.append(", dateDebutEncheres=").append(dateDebutEncheres);
-        sb.append(", dateFinEncheres=").append(dateFinEncheres);
-        sb.append(", miseAPrix=").append(miseAPrix);
-        sb.append(", prixVente=").append(prixVente);
-        sb.append(", etatVente='").append(etatVente).append('\'');
-        sb.append(", utilisateur=").append(utilisateur);
-        sb.append(", lieuRetrait=").append(lieuRetrait);
-        sb.append(", encheres=").append(encheres);
-        sb.append(", categorieArticle=").append(categorieArticle);
-        sb.append('}');
-        return sb.toString();
+        return "ArticleVendu{" +
+                "noArticle=" + noArticle +
+                ", nomArticle='" + nomArticle + '\'' +
+                ", description='" + description + '\'' +
+                ", dateDebutEncheres=" + dateDebutEncheres +
+                ", dateFinEncheres=" + dateFinEncheres +
+                ", miseAPrix=" + miseAPrix +
+                ", prixVente=" + prixVente +
+                ", etatVente='" + etatVente + '\'' +
+                ", utilisateur=" + utilisateur +
+                ", lieuRetrait=" + lieuRetrait +
+                ", encheres=" + encheres +
+                ", categorieArticle=" + categorieArticle +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (!(o instanceof ArticleVendu)) return false;
         ArticleVendu that = (ArticleVendu) o;
-        return noArticle == that.noArticle && miseAPrix == that.miseAPrix && prixVente == that.prixVente && Objects.equals(nomArticle, that.nomArticle) && Objects.equals(description, that.description) && Objects.equals(dateDebutEncheres, that.dateDebutEncheres) && Objects.equals(dateFinEncheres, that.dateFinEncheres) && Objects.equals(etatVente, that.etatVente) && Objects.equals(utilisateur, that.utilisateur) && Objects.equals(lieuRetrait, that.lieuRetrait) && Objects.equals(encheres, that.encheres) && Objects.equals(categorieArticle, that.categorieArticle);
+        return noArticle == that.noArticle &&
+                miseAPrix == that.miseAPrix &&
+                prixVente == that.prixVente &&
+                Objects.equals(nomArticle, that.nomArticle) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(dateDebutEncheres, that.dateDebutEncheres) &&
+                Objects.equals(dateFinEncheres, that.dateFinEncheres) &&
+                Objects.equals(etatVente, that.etatVente) &&
+                Objects.equals(utilisateur, that.utilisateur) &&
+                Objects.equals(lieuRetrait, that.lieuRetrait) &&
+                Objects.equals(encheres, that.encheres) &&
+                Objects.equals(categorieArticle, that.categorieArticle);
     }
 
     @Override

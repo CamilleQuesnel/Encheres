@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ArticleVenduImpl implements ArticleVenduDAO {
@@ -35,20 +36,19 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
     }
 
 
-//finfById
+    //finfById
     private static final String SELECT_BY_ID = "SELECT * FROM ARTICLES_VENDUS WHERE no_article = :id";
 
-    //TODO: findByCategorie
 
-//findAll
+    //findAll
     private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS";
-//Insert
-    private static final String INSERT = "SELECT nom_article, description,date_debut_encheres,date_fin_encheres,prix_initial,a.no_utilisateur,a.no_categorie \n" +
-        "FROM ARTICLES_VENDUS AS a \n" +
-        "INNER JOIN UTILISATEURS AS u ON a.no_utilisateur=u.no_utilisateur\n" +
-        "INNER JOIN CATEGORIES AS c ON a.no_categorie=c.no_categorie";
+    //Insert
+    private static final String INSERT = "INSERT INTO ARTICLES_VENDUS " +
+            "(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, etat_vente, no_utilisateur, no_categorie) " +
+            "VALUES (:nom_article, :description, :date_debut_encheres, :date_fin_encheres, :prix_initial, :etat_vente, :no_utilisateur, :no_categorie)";
 
-//Update
+
+    //Update
     private static final String UPDATE =
             "UPDATE ARTICLES_VENDUS SET " +
                     "nom_article = :nom_article, " +
@@ -63,7 +63,7 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
                     "WHERE no_article = :no_article";
 
 
-//Delete
+    //Delete
     private static final String DELETE = "DELETE FROM ARTICLES_VENDUS WHERE no_article = :id";
 
 
@@ -73,15 +73,21 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
 
 
     @Override
-    public List<ArticleVendu> findById(int id) {
-        MapSqlParameterSource  mapSqlParameterSource = new MapSqlParameterSource();
+    public Optional<ArticleVendu> findById(int id) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", id);
 
-        return namedParameterJdbcTemplate.query(
+        List<ArticleVendu> results = namedParameterJdbcTemplate.query(
                 SELECT_BY_ID,
                 mapSqlParameterSource,
                 new ArticleVenduRowMapper()
         );
+
+        if (results.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(results.get(0));
+        }
     }
 
 
@@ -99,12 +105,26 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
         );
     }
 
+    /**
+     *
+     * @param idCategorie
+     * @return
+     */
 
 
     @Override
     public List<ArticleVendu> findByCategorie(int idCategorie) {
-        return List.of();
-        // TODO:
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("no_categorie", idCategorie);
+
+        String SELECT_BY_CATEGORIE = "SELECT * FROM ARTICLES_VENDUS WHERE no_categorie = :no_categorie";
+
+        return namedParameterJdbcTemplate.query(
+                SELECT_BY_CATEGORIE,
+                mapSqlParameterSource,
+                new ArticleVenduRowMapper()
+        );
+
     }
 
 
@@ -116,8 +136,6 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
         mapSqlParameterSource.addValue("date_debut_encheres",article.getDateDebutEncheres());
         mapSqlParameterSource.addValue("date_fin_encheres", article.getDateFinEncheres());
         mapSqlParameterSource.addValue("prix_initial",article.getMiseAPrix());
-        mapSqlParameterSource.addValue("no_utilisateur", article);
-        mapSqlParameterSource.addValue("no_categorie",article);
         // Récupération des identifiants de l'utilisateur et de la catégorie
         if (article.getUtilisateur() != null) {
             mapSqlParameterSource.addValue("no_utilisateur", article.getUtilisateur().getNoUtilisateur());
@@ -156,21 +174,19 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
     @Override
     public void update(ArticleVendu article) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("no_article", article.getNoArticle());
         mapSqlParameterSource.addValue("nom_article", article.getNomArticle());
         mapSqlParameterSource.addValue("description", article.getDescription());
         mapSqlParameterSource.addValue("date_debut_encheres", article.getDateDebutEncheres());
         mapSqlParameterSource.addValue("date_fin_encheres", article.getDateFinEncheres());
         mapSqlParameterSource.addValue("prix_initial", article.getMiseAPrix());
         mapSqlParameterSource.addValue("prix_vente", article.getPrixVente());
-        mapSqlParameterSource.addValue("no_utilisateur", article);
-        mapSqlParameterSource.addValue("no_categorie", article);
-        // Récupération des identifiants de l'utilisateur et de la catégorie
+
         if (article.getUtilisateur() != null) {
             mapSqlParameterSource.addValue("no_utilisateur", article.getUtilisateur().getNoUtilisateur());
         } else {
             throw new IllegalArgumentException("Utilisateur ne peut pas être null");
         }
-
 
         if (article.getCategorieArticle() != null) {
             mapSqlParameterSource.addValue("no_categorie", article.getCategorieArticle().getNoCategorie());
@@ -178,16 +194,12 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
             throw new IllegalArgumentException("CategorieArticle ne peut pas être null");
         }
 
-
         mapSqlParameterSource.addValue("etat_vente", article.getEtatVente());
-
 
         namedParameterJdbcTemplate.update(
                 UPDATE,
                 mapSqlParameterSource
         );
-
-
     }
 
     @Override
