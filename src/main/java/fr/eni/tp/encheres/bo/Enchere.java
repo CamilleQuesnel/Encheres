@@ -7,6 +7,7 @@ import java.util.Objects;
 public class Enchere {
     private LocalDate dateEnchere;
     private int montant_enchere;
+    private String etat_achat;
     private Utilisateur utilisateur;
     private ArticleVendu articleVendu;
 
@@ -14,9 +15,10 @@ public class Enchere {
     public Enchere() {
     }
 
-    public Enchere(LocalDate dateEnchere, int montant_enchere, Utilisateur utilisateur, ArticleVendu articleVendu) {
+    public Enchere(LocalDate dateEnchere, int montant_enchere, String etat_achat, Utilisateur utilisateur, ArticleVendu articleVendu) {
         this.dateEnchere = dateEnchere;
         this.montant_enchere = montant_enchere;
+        this.etat_achat = etat_achat;
         this.utilisateur = utilisateur;
         this.articleVendu = articleVendu;
     }
@@ -37,6 +39,14 @@ public class Enchere {
         this.montant_enchere = montant_enchere;
     }
 
+    public String getEtat_achat() {
+        return etat_achat;
+    }
+
+    public void setEtat_achat(String etat_achat) {
+        this.etat_achat = etat_achat;
+    }
+
     public Utilisateur getUtilisateur() {
         return utilisateur;
     }
@@ -54,25 +64,26 @@ public class Enchere {
     }
 
     @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("Enchere{");
-        sb.append("dateEnchere=").append(dateEnchere);
-        sb.append(", montant_enchere=").append(montant_enchere);
-        sb.append(", utilisateur=").append(utilisateur);
-        sb.append(", articleVendu=").append(articleVendu);
-        sb.append('}');
-        return sb.toString();
-    }
-
-    @Override
     public boolean equals(Object o) {
+
         if (o == null || getClass() != o.getClass()) return false;
         Enchere enchere = (Enchere) o;
-        return montant_enchere == enchere.montant_enchere && Objects.equals(dateEnchere, enchere.dateEnchere) && Objects.equals(utilisateur, enchere.utilisateur) && Objects.equals(articleVendu, enchere.articleVendu);
+        return montant_enchere == enchere.montant_enchere && Objects.equals(dateEnchere, enchere.dateEnchere) && Objects.equals(etat_achat, enchere.etat_achat) && Objects.equals(utilisateur, enchere.utilisateur) && Objects.equals(articleVendu, enchere.articleVendu);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dateEnchere, montant_enchere, utilisateur, articleVendu);
+        return Objects.hash(dateEnchere, montant_enchere, etat_achat, utilisateur, articleVendu);
+    }
+
+    @Override
+    public String toString() {
+        return "Enchere{" +
+                "dateEnchere=" + dateEnchere +
+                ", montant_enchere=" + montant_enchere +
+                ", etat_achat='" + etat_achat + '\'' +
+                ", utilisateur=" + utilisateur +
+                ", articleVendu=" + articleVendu +
+                '}';
     }
 }

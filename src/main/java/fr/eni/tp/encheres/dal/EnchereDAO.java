@@ -16,10 +16,12 @@ public interface EnchereDAO {
     // Récupérer toutes les enchères pour un article
     List<Enchere> selectByArticle(int noArticle);
 
+    // Met à jour les données de l'enchères pour un article
+    void updateEnchere(Enchere enchere);
+
     // Obtenir la meilleure enchère pour un article
     Enchere selectBestEnchere(int noArticle);
+
     // Supprimer toutes les enchères d’un article (par exemple si annulé)
     void deleteByArticle(int noArticle);
-    // Vérifier si un utilisateur a déjà enchéri sur un article
-    boolean hasUserBid(int noUtilisateur, int noArticle);
 }
