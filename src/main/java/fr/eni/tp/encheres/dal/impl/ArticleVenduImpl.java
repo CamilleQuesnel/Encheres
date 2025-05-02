@@ -68,26 +68,16 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
 
 
 
-
-
-
-
     @Override
-    public Optional<ArticleVendu> findById(int id) {
+    public ArticleVendu findById(int id) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", id);
 
-        List<ArticleVendu> results = namedParameterJdbcTemplate.query(
+        return namedParameterJdbcTemplate.queryForObject(
                 SELECT_BY_ID,
                 mapSqlParameterSource,
                 new ArticleVenduRowMapper()
         );
-
-        if (results.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(results.get(0));
-        }
     }
 
 

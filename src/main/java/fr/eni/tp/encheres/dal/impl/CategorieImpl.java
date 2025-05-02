@@ -88,7 +88,7 @@ public class CategorieImpl implements CategorieDAO {
     public Categorie findCategorieById(int id) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", id);
-        Categorie categorie = null;
+        Categorie categorie ;
         try {
             categorie = namedParameterJdbcTemplate.queryForObject(
                     SELECT_BY_ID,

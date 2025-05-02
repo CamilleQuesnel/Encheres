@@ -18,7 +18,7 @@ public interface RetraitDAO {
     Retrait findRetraitById( int id );
     List<Retrait> findRetraitByCodePostal (String CP);
     List<Retrait> findRetraitByVille (String ville);
-    boolean isIfRetraitExists(String id);
+    boolean isIfRetraitExists(int id);
     void updateRetrait(Retrait retrait);
 
 

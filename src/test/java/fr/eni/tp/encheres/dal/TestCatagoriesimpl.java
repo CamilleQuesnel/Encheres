@@ -33,6 +33,7 @@ public class TestCatagoriesimpl {
     void test_findCategorieByLibelle() {
         Categorie categorie = categorieDAO.findCategorieByLibelle("Jouets");//
         Assertions.assertEquals("Jouets", categorie.getLibelle());
+
     }
 
     @Test

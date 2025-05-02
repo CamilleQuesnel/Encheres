@@ -4,6 +4,7 @@ import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Categorie;
 import fr.eni.tp.encheres.bo.Retrait;
 import fr.eni.tp.encheres.dal.RetraitDAO;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -20,15 +21,13 @@ import java.util.List;
 public class RetraitImpl implements RetraitDAO {
 
     //*****************  QUERIES  ***********************
-    private static final String SELECT_ALL="SELECT no_article,rue,code_postal,ville FROM RETRAITS";
 
-    private static final String SELECT_BY_ID="SELECT no_categorie, libelle FROM CATEGORIES WHERE no_categorie = :id;";
-    private static final String SELECT_BY_LIBELLE="SELECT no_categorie, libelle FROM CATEGORIES WHERE libelle = :libelle;";
-    private static final String INSERT="INSERT INTO CATEGORIES (libelle) VALUES (:libelle);";
-    private static final String UPDATE="UPDATE CATEGORIES SET libelle = :libelle WHERE no_categorie = :no_categorie;";
-    // Pour delete une categorie
-    private static final String UPDATE_ARTICLES_WITH_NEW_LIBELLE = "UPDATE ARTICLES_VENDUS set no_categorie = 1 WHERE no_categorie = :id_delete;";
-    private static final String DELETE_CATEGORIE_WITH_NO_CAEGORIE = "DELETE FROM CATEGORIES WHERE no_categorie = :id_delete;";
+    private static final String SELECT_ALL="SELECT no_article,rue,code_postal,ville FROM RETRAITS";
+    private static final String INSERT="INSERT INTO RETRAITS (no_article, rue, code_postal, ville) VALUES (:no_article,:rue,:code_postal, :ville);";
+    private static final String SELECT_BY_ID="SELECT no_article,rue,code_postal,ville FROM RETRAITS WHERE no_article = :no_article;";
+    private static final String SELECT_BY_CODE_POSTAL="SELECT no_article,rue,code_postal,ville FROM RETRAITS WHERE code_postal = :code_postal;";
+    private static final String SELECT_BY_CODE_VILLE="SELECT no_article,rue,code_postal,ville FROM RETRAITS WHERE ville = :ville;";
+    private static final String UPDATE="UPDATE RETRAITS SET rue = :rue,code_postal = :code_postal,ville = :ville WHERE no_article = :no_article;";
 
     //*****************  QUERIES  ***********************
 
@@ -40,20 +39,20 @@ public class RetraitImpl implements RetraitDAO {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-    @Override
+    @Override // TEST OK
     public void create(Retrait retrait) {
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("no_article",retrait.getArticleVendu().getNoArticle());
         mapSqlParameterSource.addValue(("rue"),retrait.getRue());
-
+        mapSqlParameterSource.addValue(("code_postal"),retrait.getCode_postal());
+        mapSqlParameterSource.addValue(("ville"),retrait.getVille());
         namedParameterJdbcTemplate.update(
                 INSERT,
                 mapSqlParameterSource
         );
     }
-
-    @Override
+    @Override // TEST OK
     public List<Retrait> selectAllRetrait()
     {
         List<Retrait> retraits = jdbcTemplate.query(
@@ -64,29 +63,73 @@ public class RetraitImpl implements RetraitDAO {
         return retraits;
     }
 
-    @Override
+    @Override //TEST OK
     public Retrait findRetraitById(int id) {
-        return null;
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("no_article",id);
+
+        Retrait retrait;
+        try {
+            retrait = namedParameterJdbcTemplate.queryForObject(
+                    SELECT_BY_ID,
+                    mapSqlParameterSource,
+                    new RetraitRowMapper()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            throw e;
+        }catch(Exception e){
+            e.printStackTrace();
+            retrait = null;
+        }
+        return retrait;
     }
 
-    @Override
+    @Override //TEST OK
     public List<Retrait> findRetraitByCodePostal(String CP) {
-        return List.of();
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("code_postal",CP);
+        List<Retrait> retraits = namedParameterJdbcTemplate.query(
+                    SELECT_BY_CODE_POSTAL,
+                    mapSqlParameterSource,
+                    new RetraitRowMapper()
+            );
+        return  retraits;
     }
 
-    @Override
+    @Override//TEST OK
     public List<Retrait> findRetraitByVille(String ville) {
-        return List.of();
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("ville",ville);
+        List<Retrait> retraits = namedParameterJdbcTemplate.query(
+                SELECT_BY_CODE_VILLE,
+                mapSqlParameterSource,
+                new RetraitRowMapper()
+            );
+            return  retraits;
     }
 
-    @Override
-    public boolean isIfRetraitExists(String id) {
-        return false;
+    @Override //TEST OK
+    public boolean isIfRetraitExists(int id) {
+        boolean isExits = true;
+        try{
+            Retrait retrait = this.findRetraitById(id);
+        }catch(Exception e){
+            isExits = false;
+        }
+        return isExits;
     }
 
-    @Override
+    @Override//TEST OK
     public void updateRetrait(Retrait retrait) {
-
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("no_article",retrait.getArticleVendu().getNoArticle());
+        mapSqlParameterSource.addValue(("rue"),retrait.getRue());
+        mapSqlParameterSource.addValue(("code_postal"),retrait.getCode_postal());
+        mapSqlParameterSource.addValue(("ville"),retrait.getVille());
+        namedParameterJdbcTemplate.update(
+                UPDATE,
+                mapSqlParameterSource
+        );
     }
 }
 class RetraitRowMapper implements RowMapper<Retrait> {
@@ -97,12 +140,10 @@ class RetraitRowMapper implements RowMapper<Retrait> {
         retrait.setVille(rs.getString("ville"));
         retrait.setCode_postal(rs.getString("code_postal"));
 
-
         ArticleVendu articleVendu = new ArticleVendu();
         articleVendu.setNoArticle(rs.getInt("no_article"));
 
         retrait.setArticleVendu(articleVendu);
-
 
         return retrait;
     }
