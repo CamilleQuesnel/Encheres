@@ -32,22 +32,12 @@ public class TestArticlevenduDAO {
 
     @Test
     void test_findById() {
-
-        Optional<ArticleVendu> articleVendu = articleVenduDAO.findById(1);
-
-        assertThat(articleVendu).isPresent();
-
-        ArticleVendu article = articleVendu.get();
-
-        System.out.println("Article avec ID 1 : ");
-        System.out.println("Nom : " + article.getNomArticle());
-        System.out.println("Description : " + article.getDescription());
-        System.out.println("Prix : " + article.getMiseAPrix());
-        System.out.println("Etat de vente : " + article.getEtatVente());
-        System.out.println("Categorie ID : " + article.getCategorieArticle().getNoCategorie());
+     int id = 5;
+     ArticleVendu articleVendu = articleVenduDAO.findById(id);
+     assertThat(articleVendu).isNotNull();
+        System.out.println("Tous les articles : " + articleVendu.getNomArticle());
 
     }
-
     @Test
 
     void test_findByCategorie() {
@@ -103,8 +93,8 @@ public class TestArticlevenduDAO {
         ArticleVendu articleVendu = new ArticleVendu();
         articleVendu.setNoArticle(1);
 
-        articleVendu.setNomArticle("Nouvel Article");
-        articleVendu.setDescription("Description mise à jour");
+        articleVendu.setNomArticle("Camion télécommandé");
+        articleVendu.setDescription("Camion pour enfants, fonctionne à pile");
         articleVendu.setDateDebutEncheres(LocalDate.of(2025, 1, 1));
         articleVendu.setDateFinEncheres(LocalDate.of(2025, 12, 31));
         articleVendu.setMiseAPrix(100);
@@ -123,11 +113,11 @@ public class TestArticlevenduDAO {
         articleVenduDAO.update(articleVendu);
 
         // verify the update
-        ArticleVendu updated = articleVenduDAO.findById(1).orElseThrow();
+        ArticleVendu updated = articleVenduDAO.findById(1);
 
 
-        assertThat(updated.getNomArticle()).isEqualTo("Nouvel Article");
-        assertThat(updated.getDescription()).isEqualTo("Description mise à jour");
+        assertThat(updated.getNomArticle()).isEqualTo("Camion télécommandé");
+        assertThat(updated.getDescription()).isEqualTo("Camion pour enfants, fonctionne à pile");
         assertThat(updated.getDateDebutEncheres()).isEqualTo(LocalDate.of(2025, 1, 1));
         assertThat(updated.getDateFinEncheres()).isEqualTo(LocalDate.of(2025, 12, 31));
         assertThat(updated.getMiseAPrix()).isEqualTo(100);
@@ -140,7 +130,7 @@ public class TestArticlevenduDAO {
 
     @Test
     void test_delete() {
-        int noArticle = 52;
+        int noArticle = 53;
         articleVenduDAO.delete(noArticle);
     }
 }

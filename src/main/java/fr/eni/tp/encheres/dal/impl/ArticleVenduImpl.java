@@ -199,43 +199,45 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
         namedParameterJdbcTemplate.update(DELETE, parameters);
     }
 
-    class ArticleVenduRowMapper implements RowMapper<ArticleVendu> {
 
-        @Override
-        public ArticleVendu mapRow(ResultSet rs, int rowNum) throws SQLException {
-            ArticleVendu article = new ArticleVendu();
+}
 
-            article.setNoArticle(rs.getInt("no_article"));
-            article.setNomArticle(rs.getString("nom_article"));
-            article.setDescription(rs.getString("description"));
+class ArticleVenduRowMapper implements RowMapper<ArticleVendu> {
 
-            if (rs.getDate("date_debut_encheres") != null) {
-                article.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
-            }
+    @Override
+    public ArticleVendu mapRow(ResultSet rs, int rowNum) throws SQLException {
+        ArticleVendu article = new ArticleVendu();
 
-            if (rs.getDate("date_fin_encheres") != null) {
-                article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
-            }
+        article.setNoArticle(rs.getInt("no_article"));
+        article.setNomArticle(rs.getString("nom_article"));
+        article.setDescription(rs.getString("description"));
 
-            article.setMiseAPrix(rs.getInt("prix_initial"));
-            article.setPrixVente(rs.getInt("prix_vente"));
-            article.setEtatVente(rs.getString("etat_vente"));
-
-            // Mapping minimal de l'utilisateur et de la catégorie si présents
-            try {
-                Utilisateur utilisateur = new Utilisateur();
-                utilisateur.setNoUtilisateur(rs.getInt("no_utilisateur"));
-                article.setUtilisateur(utilisateur);
-            } catch (SQLException ignored) {}
-
-            try {
-                Categorie categorie = new Categorie();
-                categorie.setNoCategorie(rs.getInt("no_categorie"));
-                article.setCategorieArticle(categorie);
-            } catch (SQLException ignored) {}
-
-            return article;
+        if (rs.getDate("date_debut_encheres") != null) {
+            article.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
         }
+
+        if (rs.getDate("date_fin_encheres") != null) {
+            article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+        }
+
+        article.setMiseAPrix(rs.getInt("prix_initial"));
+        article.setPrixVente(rs.getInt("prix_vente"));
+        article.setEtatVente(rs.getString("etat_vente"));
+
+        // Mapping minimal de l'utilisateur et de la catégorie si présents
+        try {
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur.setNoUtilisateur(rs.getInt("no_utilisateur"));
+            article.setUtilisateur(utilisateur);
+        } catch (SQLException ignored) {}
+
+        try {
+            Categorie categorie = new Categorie();
+            categorie.setNoCategorie(rs.getInt("no_categorie"));
+            article.setCategorieArticle(categorie);
+        } catch (SQLException ignored) {}
+
+        return article;
     }
 }
 
