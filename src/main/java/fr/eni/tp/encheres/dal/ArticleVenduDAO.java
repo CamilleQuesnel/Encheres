@@ -12,4 +12,11 @@ public interface ArticleVenduDAO {
     void update(ArticleVendu article);
     void delete(int id);
 
+    /*AJOUT SEB A VALIDER PAR LA CHEF */
+    List<ArticleVendu> findByUserByEtat(String etat , Integer idUser); // Integer permet un null donc posibilité de rien envoyer
+    /*FIN AJOUT SEB A VALIDER PAR LA CHEF */
+
+
+
+
 }

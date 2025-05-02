@@ -5,6 +5,7 @@ import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Categorie;
 import fr.eni.tp.encheres.bo.Utilisateur;
 import fr.eni.tp.encheres.dal.ArticleVenduDAO;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -21,7 +22,15 @@ import java.util.Optional;
 
 @Repository
 public class ArticleVenduImpl implements ArticleVenduDAO {
-
+    //*****************  QUERIES  ***********************
+    private static final String SELECT_BY_ETAT = "SELECT no_article,nom_article,description,date_debut_encheres," +
+            "date_fin_encheres,prix_initial,prix_vente,no_categorie,etat_vente,url_image\n" +
+            "FROM ARTICLES_VENDUS WHERE etat_vente = :etat;";
+    private static final String SELECT_BY_ETAT_BY_USER = "SELECT no_article,nom_article,description," +
+            "date_debut_encheres,date_fin_encheres,prix_initial,prix_vente," +
+            "no_utilisateur,no_categorie,etat_vente,url_image FROM ARTICLES_VENDUS" +
+            " WHERE etat_vente = :etat AND no_utilisateur = :idUser;";
+    //*****************  QUERIES  ***********************
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -199,45 +208,94 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
         namedParameterJdbcTemplate.update(DELETE, parameters);
     }
 
-
-}
-
-class ArticleVenduRowMapper implements RowMapper<ArticleVendu> {
-
     @Override
-    public ArticleVendu mapRow(ResultSet rs, int rowNum) throws SQLException {
-        ArticleVendu article = new ArticleVendu();
+    public List<ArticleVendu> findByUserByEtat(String etat, Integer idUser) {
+        List<String> etatsValid = List.of("n.c", "en cours", "vendu", "annulé");
 
-        article.setNoArticle(rs.getInt("no_article"));
-        article.setNomArticle(rs.getString("nom_article"));
-        article.setDescription(rs.getString("description"));
+        boolean idUserOk = idUser != null;
+        boolean etatOk = etat != null && etatsValid.contains(etat);
 
-        if (rs.getDate("date_debut_encheres") != null) {
-            article.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        ArticleVendu articleVendu ;
+
+
+        if (!idUserOk && etatOk){ // LIST GENERIQUE
+            mapSqlParameterSource.addValue("etat",etat);
+            try {
+                articleVendu = namedParameterJdbcTemplate.queryForObject(
+                        SELECT_BY_ETAT,
+                        mapSqlParameterSource,
+                        new ArticleVenduRowMapper()
+                );
+            } catch (EmptyResultDataAccessException e) {
+                throw e;
+            }catch(Exception e){
+                e.printStackTrace();
+                articleVendu = null;
+            }
+
+        }else if(idUserOk && etatOk){ // LISTE PAR UTILISATEUR
+            mapSqlParameterSource.addValue("idUser",idUser);
+            mapSqlParameterSource.addValue("etat",etat);
+            try {
+                articleVendu = namedParameterJdbcTemplate.queryForObject(
+                        SELECT_BY_ETAT_BY_USER,
+                        mapSqlParameterSource,
+                        new ArticleVenduRowMapper()
+                );
+            } catch (EmptyResultDataAccessException e) {
+                throw e;
+            }catch(Exception e){
+                e.printStackTrace();
+                articleVendu = null;
+            }
+
         }
 
-        if (rs.getDate("date_fin_encheres") != null) {
-            article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+        // Tester si id null si oui list general
+            // tester si etats == a une des posibilité
+
+        return articleVendu;
+    }
+
+
+    class ArticleVenduRowMapper implements RowMapper<ArticleVendu> {
+
+        @Override
+        public ArticleVendu mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ArticleVendu article = new ArticleVendu();
+
+            article.setNoArticle(rs.getInt("no_article"));
+            article.setNomArticle(rs.getString("nom_article"));
+            article.setDescription(rs.getString("description"));
+
+            if (rs.getDate("date_debut_encheres") != null) {
+                article.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
+            }
+
+            if (rs.getDate("date_fin_encheres") != null) {
+                article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+            }
+
+            article.setMiseAPrix(rs.getInt("prix_initial"));
+            article.setPrixVente(rs.getInt("prix_vente"));
+            article.setEtatVente(rs.getString("etat_vente"));
+
+            // Mapping minimal de l'utilisateur et de la catégorie si présents
+            try {
+                Utilisateur utilisateur = new Utilisateur();
+                utilisateur.setNoUtilisateur(rs.getInt("no_utilisateur"));
+                article.setUtilisateur(utilisateur);
+            } catch (SQLException ignored) {}
+
+            try {
+                Categorie categorie = new Categorie();
+                categorie.setNoCategorie(rs.getInt("no_categorie"));
+                article.setCategorieArticle(categorie);
+            } catch (SQLException ignored) {}
+
+            return article;
         }
-
-        article.setMiseAPrix(rs.getInt("prix_initial"));
-        article.setPrixVente(rs.getInt("prix_vente"));
-        article.setEtatVente(rs.getString("etat_vente"));
-
-        // Mapping minimal de l'utilisateur et de la catégorie si présents
-        try {
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur.setNoUtilisateur(rs.getInt("no_utilisateur"));
-            article.setUtilisateur(utilisateur);
-        } catch (SQLException ignored) {}
-
-        try {
-            Categorie categorie = new Categorie();
-            categorie.setNoCategorie(rs.getInt("no_categorie"));
-            article.setCategorieArticle(categorie);
-        } catch (SQLException ignored) {}
-
-        return article;
     }
 }
 
