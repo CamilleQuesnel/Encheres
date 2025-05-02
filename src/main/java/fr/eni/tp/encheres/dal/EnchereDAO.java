@@ -23,5 +23,5 @@ public interface EnchereDAO {
     Enchere selectBestEnchere(int noArticle);
 
     // Supprimer toutes les enchères d’un article (par exemple si annulé)
-    void deleteByArticle(int noArticle);
+    void deleteEnchere(int noArticle, int noUtilisateur, int montant_enchere);
 }

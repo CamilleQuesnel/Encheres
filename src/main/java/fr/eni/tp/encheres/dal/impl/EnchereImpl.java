@@ -28,8 +28,8 @@ public class EnchereImpl implements EnchereDAO {
      *
      */
     private static final String INSERT_ENCHERE_INTO="INSERT INTO ENCHERES (no_utilisateur, no_article,date_enchere, montant_enchere) VALUES (:no_utilisateur, :no_article, :date_enchere, :montant_enchere)";
-    private static final String UPDATE_ENCHERE="UPDATE ENCHERES SET ENCHERES.montant_enchere = :montant_enchere, ENCHERES.date_enchere = :date_enchere, ENCHERES.etat_achat = :etat_achat WHERE ENCHERES.no_article =:no_article;";
-    private static final String DELETE_ENCHERE="DELETE FROM ENCHERES WHERE no_utilisateur = :no_utilisateur AND no_article = :no_article;";
+    private static final String UPDATE_ENCHERE="UPDATE ENCHERES SET ENCHERES.etat_achat = :etat_achat WHERE ENCHERES.no_article =:no_article;";
+    private static final String DELETE_ENCHERE="DELETE FROM ENCHERES WHERE no_utilisateur = :no_utilisateur AND no_article = :no_article AND montant_enchere = :montant_enchere;";
     private static final String SELECT_BY_NO_UTILISATEUR="SELECT * FROM ENCHERES WHERE ENCHERES.no_utilisateur = :no_utilisateur;";
     private static final String SELECT_BY_ARTICLE ="SELECT * FROM ENCHERES WHERE ENCHERES.no_article = :no_article;";
     private static final String SELECT_BEST_ENCHERE="SELECT TOP 1 no_utilisateur, no_article, date_enchere, montant_enchere, etat_achat FROM ENCHERES\n" +
@@ -85,10 +85,7 @@ public class EnchereImpl implements EnchereDAO {
     @Override
     public void updateEnchere(Enchere enchere) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("no_utilisateur", enchere.getUtilisateur().getNoUtilisateur());
         mapSqlParameterSource.addValue("no_article", enchere.getArticleVendu().getNoArticle());
-        mapSqlParameterSource.addValue("date_enchere", enchere.getDateEnchere());
-        mapSqlParameterSource.addValue("montant_enchere", enchere.getMontant_enchere());
         mapSqlParameterSource.addValue("etat_achat", enchere.getEtat_achat());
 
         namedParameterJdbcTemplate.update(
@@ -111,9 +108,11 @@ public class EnchereImpl implements EnchereDAO {
     }
 
     @Override
-    public void deleteByArticle(int noArticle) {
+    public void deleteEnchere(int noArticle, int noUtilisateur, int montant_enchere) {
     MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
     mapSqlParameterSource.addValue("no_article", noArticle);
+    mapSqlParameterSource.addValue("no_utilisateur", noUtilisateur);
+    mapSqlParameterSource.addValue("montant_enchere", montant_enchere);
 
     namedParameterJdbcTemplate.update(
             DELETE_ENCHERE,
@@ -129,7 +128,7 @@ class EnchereRowMapper implements RowMapper <Enchere> {
     @Override
     public Enchere mapRow(ResultSet rs, int rowNum) throws SQLException {
         Enchere enchere = new Enchere();
-        enchere.setDateEnchere(rs.getTimestamp("date_enchere").toLocalDateTime().toLocalDate());
+        enchere.setDateEnchere(rs.getTimestamp("date_enchere").toLocalDateTime());
         enchere.setMontant_enchere(rs.getInt("montant_enchere"));
         enchere.setEtat_achat(rs.getString("etat_achat"));
 
