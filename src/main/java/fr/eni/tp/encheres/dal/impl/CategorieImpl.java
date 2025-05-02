@@ -3,6 +3,7 @@ package fr.eni.tp.encheres.dal.impl;
 import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Categorie;
 import fr.eni.tp.encheres.dal.CategorieDAO;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -87,12 +88,20 @@ public class CategorieImpl implements CategorieDAO {
     public Categorie findCategorieById(int id) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", id);
+        Categorie categorie = null;
+        try {
+            categorie = namedParameterJdbcTemplate.queryForObject(
+                    SELECT_BY_ID,
+                    mapSqlParameterSource,
+                    new CategorieRowMapper()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            throw e;
+        }catch(Exception e){
+            e.printStackTrace();
+            categorie = null;
+        }
 
-        Categorie categorie = namedParameterJdbcTemplate.queryForObject(
-                SELECT_BY_ID,
-                mapSqlParameterSource,
-                new CategorieRowMapper()
-        );
         return categorie;
     }
     @Override // TEST OK
@@ -155,14 +164,6 @@ public class CategorieImpl implements CategorieDAO {
                 DELETE_CATEGORIE_WITH_NO_CAEGORIE,
                 mapSqlParameterSourceUpdate
         );
-
-
-
-        // 1 Recherche L'id categorie a supprimer dans la table articles_vendus
-        // 2 Update articles vendu avec no_cat divers .
-        // 3 delete categorie
-
-
     }
 }
 class CategorieRowMapper implements RowMapper<Categorie> {

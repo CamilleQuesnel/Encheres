@@ -3,6 +3,7 @@ package fr.eni.tp.encheres.bo;
 import java.util.Objects;
 
 public class Retrait {
+
     private String rue;
     private String code_postal;
     private String ville;

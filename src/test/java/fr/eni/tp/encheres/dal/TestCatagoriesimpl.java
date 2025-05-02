@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.List;
 
@@ -70,8 +71,10 @@ public class TestCatagoriesimpl {
     @Test
     void test_deleteCategorie() {
         categorieDAO.deleteCategorie(2);
-        // ASSERT THROW
-        Assertions.assertThrows();
+        Assertions.assertThrows(
+                EmptyResultDataAccessException.class, // Type d'exception attendu
+                () -> categorieDAO.findCategorieById(2) // Code qui doit échouer
+        );
 
     }
 }
