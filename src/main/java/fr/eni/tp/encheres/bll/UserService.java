@@ -3,6 +3,7 @@ package fr.eni.tp.encheres.bll;
 import fr.eni.tp.encheres.bo.Utilisateur;
 import fr.eni.tp.encheres.dto.RegisterDTO;
 import fr.eni.tp.encheres.dto.UpdateDTO;
+import fr.eni.tp.encheres.exception.BusinessException;
 
 import java.util.List;
 
@@ -16,5 +17,6 @@ public interface UserService {
     public void desactivateUtilisateur(int no_utilisateur);
     public void deleteUtilisateur(int no_utilisateur);
     public List<Utilisateur> readUsers();
+
 
 }

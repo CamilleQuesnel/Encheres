@@ -36,5 +36,6 @@ public class BusinessCode {
     public static final String VALID_UTILISATEUR_PASSWORD_REGEX = "validation.utilisateur.password.regex";
     public static final String VALID_UTILISATEUR_PASSWORD_LENGHT_MAX = "validation.utilisateur.password.length.max";
     public static final String VALID_UTILISATEUR_PASSWORD_CONFIRM = "validation.utilisateur.password.confirm";
-
+        //CONNEXION UTILISATEUR
+    public static final String CONNEXION_ERROR = "connexion.error";
 }

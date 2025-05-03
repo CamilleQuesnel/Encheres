@@ -2,6 +2,7 @@ package fr.eni.tp.encheres.dal.impl;
 
 import fr.eni.tp.encheres.bo.Utilisateur;
 import fr.eni.tp.encheres.dal.UtilisateurDAO;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -30,10 +31,11 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
          */
         private static final String SELECT_BY_MAIL = "SELECT UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS WHERE UTILISATEURS.email = :email;";
         private static final String SELECT_BY_ID="SELECT UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS WHERE UTILISATEURS.no_utilisateur = :no_utilisateur;";
-        private static final String SELECT_BY_PSEUDO="SELECT UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS WHERE UTILISATEURS.pseudo = :pseudo;";
+        private static final String SELECT_BY_PSEUDO="SELECT no_utilisateur, pseudo, nom, prenom, administrateur, rue, code_postal, ville, email, telephone, credit, actif " +
+            "FROM UTILISATEURS WHERE pseudo = :pseudo;";
         private static final String SELECT_ALL_USERS="SELECT UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS";
         private static final String SELECT_USERS_BUYERS="SELECT UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS INNER JOIN ROLES ON ROLES.no_utilisateur = UTILISATEURS.no_utilisateur WHERE ROLES.role_utilisateur='acheteur';";
-        private static final String INSERT_USER_INTO = "INSERT INTO UTILISATEURS (pseudo, nom,mot_de_passe, prenom, rue, code_postal, ville, email, telephone) VALUES (:pseudo, :nom, :prenom,:mot_de_passe, :rue, :code_postal, :ville, :email, :telephone);";
+        private static final String INSERT_USER_INTO = "INSERT INTO UTILISATEURS (pseudo, nom,mot_de_passe, prenom, rue, code_postal, ville, email, telephone) VALUES (:pseudo, :nom, :mot_de_passe,:prenom, :rue, :code_postal, :ville, :email, :telephone);";
     private static final String UPDATE_USER_INTO =
             "UPDATE UTILISATEURS SET " +
                     "pseudo = :pseudo, " +
@@ -69,65 +71,82 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
     @Override
     public void createUser(Utilisateur utilisateur) {
-            MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-            mapSqlParameterSource.addValue("pseudo", utilisateur.getPseudo());
-            mapSqlParameterSource.addValue("nom", utilisateur.getNom());
-            mapSqlParameterSource.addValue("prenom", utilisateur.getPrenom());
-            mapSqlParameterSource.addValue("mot_de_passe", utilisateur.getMotDePasse());//jamais vu mais je n'ai que ça à appeler
-            mapSqlParameterSource.addValue("rue", utilisateur.getRue());
-            mapSqlParameterSource.addValue("code_postal", utilisateur.getCodePostal());
-            mapSqlParameterSource.addValue("ville", utilisateur.getVille());
-            mapSqlParameterSource.addValue("email", utilisateur.getEmail());
-            mapSqlParameterSource.addValue("telephone", utilisateur.getTelephone());
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("pseudo", utilisateur.getPseudo());
+        mapSqlParameterSource.addValue("nom", utilisateur.getNom());
+        mapSqlParameterSource.addValue("mot_de_passe", utilisateur.getMotDePasse());
+        mapSqlParameterSource.addValue("prenom", utilisateur.getPrenom());
+        mapSqlParameterSource.addValue("rue", utilisateur.getRue());
+        mapSqlParameterSource.addValue("code_postal", utilisateur.getCodePostal());
+        mapSqlParameterSource.addValue("ville", utilisateur.getVille());
+        mapSqlParameterSource.addValue("email", utilisateur.getEmail());
+        mapSqlParameterSource.addValue("telephone", utilisateur.getTelephone());
 
-            KeyHolder keyHolder = new GeneratedKeyHolder();//pour le no_utilisateur qui est généré automatiquement
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-            namedParameterJdbcTemplate.update(
-                    INSERT_USER_INTO,
-                    mapSqlParameterSource,
-                    keyHolder,
-                    new String[]{"no_utilisateur"}
-            );
-        utilisateur.setNoUtilisateur(keyHolder.getKey().intValue());
+        int rowsAffected = namedParameterJdbcTemplate.update(
+                INSERT_USER_INTO,
+                mapSqlParameterSource,
+                keyHolder,
+                new String[]{"no_utilisateur"}
+        );
+
+        if (rowsAffected > 0 && keyHolder.getKey() != null) {
+            utilisateur.setNoUtilisateur(keyHolder.getKey().intValue());
+        } else {
+            throw new RuntimeException("Erreur lors de la création de l'utilisateur : aucun ID généré.");
+        }
     }
 
     @Override
-        public Utilisateur readId(int id) {
-            MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-            mapSqlParameterSource.addValue("id", id);
+    public Utilisateur readId(int id) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("id", id);
 
-            Utilisateur utilisateur= namedParameterJdbcTemplate.queryForObject(
+        try {
+            return namedParameterJdbcTemplate.queryForObject(
                     SELECT_BY_ID,
                     mapSqlParameterSource,
                     new UtilisateurRowMapper()
             );
-            return utilisateur;
+        } catch (EmptyResultDataAccessException e) {
+            return null; // Aucun utilisateur trouvé avec cet ID
         }
+    }
 
-        @Override
-        public Utilisateur readPseudo(String pseudo) {
-            MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-            mapSqlParameterSource.addValue("pseudo", pseudo);
+    @Override
+    public Utilisateur readPseudo(String pseudo) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("pseudo", pseudo);
 
-            Utilisateur utilisateur= namedParameterJdbcTemplate.queryForObject(
+        try {
+            return namedParameterJdbcTemplate.queryForObject(
                     SELECT_BY_PSEUDO,
                     mapSqlParameterSource,
                     new UtilisateurRowMapper()
             );
-            return utilisateur;
+        } catch (EmptyResultDataAccessException e) {
+            return null; // Aucun utilisateur trouvé → pseudo libre
         }
+    }
 
-        @Override
-        public Utilisateur readEmail(String email) {
-            MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-            mapSqlParameterSource.addValue("email", email);
 
-            return  namedParameterJdbcTemplate.queryForObject(
+    @Override
+    public Utilisateur readEmail(String email) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("email", email);
+
+        try {
+            return namedParameterJdbcTemplate.queryForObject(
                     SELECT_BY_MAIL,
                     mapSqlParameterSource,
                     new UtilisateurRowMapper()
             );
+        } catch (EmptyResultDataAccessException e) {
+            return null; // Aucun utilisateur trouvé avec cet email
         }
+    }
+
 
     @Override
     public void updateUser(Utilisateur utilisateur) {

@@ -8,11 +8,13 @@ import fr.eni.tp.encheres.dto.UpdateDTO;
 import fr.eni.tp.encheres.exception.BusinessCode;
 import fr.eni.tp.encheres.exception.BusinessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private UtilisateurDAO utilisateurDAO;
@@ -41,6 +43,7 @@ public class UserServiceImpl implements UserService {
     public List<Utilisateur> readUsers() {
         return utilisateurDAO.findUsers();
     }
+
 
     @Override
     public void createUtilisateur(RegisterDTO registerDTO) {
@@ -192,7 +195,7 @@ public class UserServiceImpl implements UserService {
         Pattern pattern = Pattern.compile(emailRegex);//compile la regex en objet
         Matcher matcher = pattern.matcher(email);//teste la regex compilée
         Utilisateur emailUtilisateur = utilisateurDAO.readEmail(email);
-        if (matcher.matches()) {
+        if (!matcher.matches()) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL_REGEX);
         }
@@ -217,7 +220,7 @@ public class UserServiceImpl implements UserService {
         String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
         Pattern pattern = Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(password);
-        if (matcher.matches()) {
+        if (!matcher.matches()) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_PASSWORD_REGEX);
         }
@@ -269,7 +272,7 @@ public class UserServiceImpl implements UserService {
         String postalRegex = "^(0[1-9]|[1-8][0-9]|9[0-8])[0-9]{3}$";
         Pattern pattern = Pattern.compile(postalRegex);
         Matcher matcher = pattern.matcher(postalCode);
-        if (matcher.matches()) {
+        if (!matcher.matches()) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_CODE_POSTAL_REGEX);
         }
@@ -285,7 +288,7 @@ public class UserServiceImpl implements UserService {
         String phoneRegex = "^(\\+33|0033)[1-9][0-9]{8}$";
         Pattern pattern = Pattern.compile(phoneRegex);
         Matcher matcher = pattern.matcher(phone);
-        if (matcher.matches()) {
+        if (!matcher.matches()) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_TELEPHONE_REGEX);
         }
@@ -299,4 +302,5 @@ public class UserServiceImpl implements UserService {
         }
         return isValid;
     }
+
 }
