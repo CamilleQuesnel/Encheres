@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -80,6 +81,21 @@ public class TestEnchereDAO {
         enchereDAO.deleteEnchere(utilisateur.getNoUtilisateur(),
                 article.getNoArticle(), enchere.getMontant_enchere());
     }
+
+    @Test
+    void test_findByUserByEtat() {//("remportée","perdue","en cours","annulée")
+        List<Enchere> encheres = new ArrayList<>();
+
+        encheres = enchereDAO.findByUserByEtat("remportée",null);
+        System.out.println(encheres);
+        encheres = enchereDAO.findByUserByEtat("remportée",4);
+        System.out.println(encheres);
+
+
+    }
+
+
+
 }
 
 

@@ -16,13 +16,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ArticleVendu> readSales() {// liste des articles vendu
-    return null;
+    public List<ArticleVendu> readSales() {// liste des articles vendu dans ARTICLES_VENDUS ('n.c','en cours','vendu','annulé')
+    return this.articleVenduDAO.findByUserByEtat("vendu",null);
     }
 
     @Override
-    public List<ArticleVendu> readPurchases() { //  liste des articles acheté
-        return null;
+    public List<ArticleVendu> readPurchases() { //  liste des articles acheté dans encheres ('remportée','perdue','en cours','annulée'))
+        return this.articleVenduDAO.findByUserByEtat("vendu",null);
     }
 
 

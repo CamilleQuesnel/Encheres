@@ -4,6 +4,7 @@ import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Enchere;
 import fr.eni.tp.encheres.bo.Utilisateur;
 import fr.eni.tp.encheres.dal.EnchereDAO;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -34,6 +36,14 @@ public class EnchereImpl implements EnchereDAO {
     private static final String SELECT_BY_ARTICLE ="SELECT * FROM ENCHERES WHERE ENCHERES.no_article = :no_article;";
     private static final String SELECT_BEST_ENCHERE="SELECT TOP 1 no_utilisateur, no_article, date_enchere, montant_enchere, etat_achat FROM ENCHERES\n" +
             "ORDER BY montant_enchere DESC;";
+    // AJout Seb 4/5/25
+    private static final String SELECT_BY_ETAT = "SELECT no_utilisateur, no_article, date_enchere , montant_enchere,etat_achat FROM ENCHERES WHERE etat_achat = :etat;";
+    private static final String SELECT_BY_ETAT_BY_USER = "SELECT no_utilisateur, no_article, date_enchere , montant_enchere,etat_achat FROM ENCHERES WHERE etat_achat = :etat and no_utilisateur = :idUser;";
+
+
+
+
+
 
     /**
      *
@@ -119,7 +129,54 @@ public class EnchereImpl implements EnchereDAO {
             mapSqlParameterSource
     );
     }
+    @Override //TEST OK
+    public List<Enchere> findByUserByEtat(String etat_achat, Integer idUser){
+        List<String> etatsValid = List.of("remportée","perdue","en cours","annulée");
 
+        List<Enchere> encheres = new ArrayList<>();
+
+    MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+
+        boolean idUserOk = idUser != null;
+        boolean etatOk = etat_achat != null && etatsValid.contains(etat_achat);
+
+
+
+        if (!idUserOk && etatOk){ // LIST GENERIQUE
+
+            mapSqlParameterSource.addValue("etat", etat_achat);
+            try {
+                encheres = namedParameterJdbcTemplate.query(
+                        SELECT_BY_ETAT,
+                        mapSqlParameterSource,
+                        new EnchereRowMapper()
+                );
+            } catch (EmptyResultDataAccessException e) {
+                throw e;
+            }catch(Exception e){
+                e.printStackTrace();
+                encheres = null;
+            }
+
+        }else if(idUserOk && etatOk){ // LISTE PAR UTILISATEUR
+            mapSqlParameterSource.addValue("etat", etat_achat);
+            mapSqlParameterSource.addValue("idUser", idUser);
+            try {
+                encheres = namedParameterJdbcTemplate.query(
+                        SELECT_BY_ETAT_BY_USER,
+                        mapSqlParameterSource,
+                        new EnchereRowMapper()
+                );
+            } catch (EmptyResultDataAccessException e) {
+                throw e;
+            }catch(Exception e){
+                e.printStackTrace();
+                encheres = null;
+            }
+
+        }
+        return encheres;
+    }
 
 }
 

@@ -1,5 +1,6 @@
 package fr.eni.tp.encheres.dal;
 
+import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Enchere;
 
 import java.util.List;
@@ -24,4 +25,8 @@ public interface EnchereDAO {
 
     // Supprimer toutes les enchères d’un article (par exemple si annulé)
     void deleteEnchere(int noArticle, int noUtilisateur, int montant_enchere);
+
+    // Récupérer tous les articles achetés par un utilisateur ou liste complete
+    public List<Enchere> findByUserByEtat(String etat_achat, Integer idUser);
+
 }
