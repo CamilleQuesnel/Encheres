@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Page d'accueil Enchères</title>
-</head>
-<body>
-Plop
-</body>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        data-th-replace="~{layouts/layout :: layout(
+                                                mainContent=~{:: main},
+                                                cssContent=~{},
+                                                title=~{}
+                                            )}"
+>
+<main>
+    <section>
+        <h1 data-th-text ="#{index.h1}"></h1>
+    </section>
+</main>
 </html>
