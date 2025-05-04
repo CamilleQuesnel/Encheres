@@ -133,4 +133,14 @@ public class TestArticlevenduDAO {
         int noArticle = 53;
         articleVenduDAO.delete(noArticle);
     }
+
+    @Test
+    void test_findByUserByEtat(){//('n.c','en cours','vendu','annulé')
+
+        List<ArticleVendu> articleVendus  = articleVenduDAO.findByUserByEtat("annulé",null);
+        System.out.println(articleVendus);
+        articleVendus = articleVenduDAO.findByUserByEtat("annulé",5);
+        System.out.println(articleVendus);
+
+            }
 }

@@ -208,7 +208,13 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
         namedParameterJdbcTemplate.update(DELETE, parameters);
     }
 
-    @Override
+    /**
+     *
+     * @param etat ('n.c','en cours','vendu','annulé')
+     * @param idUser peut etre mis a null = dans ce cas liste de l'etat
+     * @return
+     */
+    @Override // TEST OK
     public List<ArticleVendu> findByUserByEtat(String etat, Integer idUser) {
         List<String> etatsValid = List.of("n.c", "en cours", "vendu", "annulé");
 
@@ -216,13 +222,13 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
         boolean etatOk = etat != null && etatsValid.contains(etat);
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        ArticleVendu articleVendu ;
+        List<ArticleVendu> articleVendus = null;
 
 
         if (!idUserOk && etatOk){ // LIST GENERIQUE
             mapSqlParameterSource.addValue("etat",etat);
             try {
-                articleVendu = namedParameterJdbcTemplate.queryForObject(
+                articleVendus = namedParameterJdbcTemplate.query(
                         SELECT_BY_ETAT,
                         mapSqlParameterSource,
                         new ArticleVenduRowMapper()
@@ -231,14 +237,14 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
                 throw e;
             }catch(Exception e){
                 e.printStackTrace();
-                articleVendu = null;
+                articleVendus = null;
             }
 
         }else if(idUserOk && etatOk){ // LISTE PAR UTILISATEUR
             mapSqlParameterSource.addValue("idUser",idUser);
             mapSqlParameterSource.addValue("etat",etat);
             try {
-                articleVendu = namedParameterJdbcTemplate.queryForObject(
+                articleVendus = namedParameterJdbcTemplate.query(
                         SELECT_BY_ETAT_BY_USER,
                         mapSqlParameterSource,
                         new ArticleVenduRowMapper()
@@ -247,15 +253,11 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
                 throw e;
             }catch(Exception e){
                 e.printStackTrace();
-                articleVendu = null;
+                articleVendus = null;
             }
 
         }
-
-        // Tester si id null si oui list general
-            // tester si etats == a une des posibilité
-
-        return articleVendu;
+        return articleVendus;
     }
 
 
