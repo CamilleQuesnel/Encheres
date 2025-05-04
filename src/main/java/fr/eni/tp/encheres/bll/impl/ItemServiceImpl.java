@@ -3,16 +3,20 @@ package fr.eni.tp.encheres.bll.impl;
 import fr.eni.tp.encheres.bll.ItemService;
 import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Categorie;
+import fr.eni.tp.encheres.bo.Enchere;
 import fr.eni.tp.encheres.dal.ArticleVenduDAO;
+import fr.eni.tp.encheres.dal.EnchereDAO;
 
 import java.util.List;
 
 public class ItemServiceImpl implements ItemService {
 
     private ArticleVenduDAO articleVenduDAO;
+    private EnchereDAO enchereDAO;
 
-    public ItemServiceImpl(ArticleVenduDAO articleVenduDAO) {
+    public ItemServiceImpl(ArticleVenduDAO articleVenduDAO, EnchereDAO enchereDAO) {
         this.articleVenduDAO = articleVenduDAO;
+        this.enchereDAO = enchereDAO;
     }
 
     @Override
@@ -21,8 +25,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ArticleVendu> readPurchases() { //  liste des articles acheté dans encheres ('remportée','perdue','en cours','annulée'))
-        return this.articleVenduDAO.findByUserByEtat("vendu",null);
+    public List<Enchere> readPurchases() { //  liste des articles acheté dans encheres ('remportée','perdue','en cours','annulée'))
+        // TODO A mettre dans encheres ?
+        return this.enchereDAO.findByUserByEtat("vendu",null);
     }
 
 

@@ -2,13 +2,14 @@ package fr.eni.tp.encheres.bll;
 
 import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Categorie;
+import fr.eni.tp.encheres.bo.Enchere;
 import fr.eni.tp.encheres.bo.Utilisateur;
 
 import java.util.List;
 
 public interface ItemService{
     public List <ArticleVendu> readSales();
-    public List <ArticleVendu> readPurchases();
+    public List <Enchere> readPurchases();
 //    List<ArticleVendu> readSalesOrPurchasesByUser(int idUser,String SalesOrPurchases);
 //    List<ArticleVendu> readPurchasesByUser(int idUser); // A voir si readSalesOrPurchasesByUser et une bonne idée
     public ArticleVendu readArticle();
