@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Profile</title>
-</head>
-<body>
-
-</body>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        data-th-replace="~{layouts/layout :: layout(
+                                                mainContent=~{:: main},
+                                                cssContent=~{},
+                                                title=~{}
+                                            )}"
+>
+<main>
+    <div class="window">
+        <div class="title-bar">
+            <span>Profile.exe</span>
+            <div class="title-bar-button">X</div>
+        </div>
+        <div class="content">
+            <p>Vue profil à faire</p>
+        </div>
+    </div>
+</main>
 </html>

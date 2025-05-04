@@ -44,7 +44,7 @@ public class WebSecurityConfiguration {
 
         http.authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers(HttpMethod.GET, "/profile").hasRole("USER")
+                            .requestMatchers(HttpMethod.GET, "/profile").authenticated()
                             .requestMatchers(HttpMethod.GET, "/register").permitAll()
                             .requestMatchers(HttpMethod.POST, "/register").permitAll()
                             .requestMatchers("/").permitAll()

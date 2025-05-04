@@ -1,21 +1,20 @@
 <header data-th-fragment="header">
-  <div>
-    <img data-th-src="@{/images/logo.png}" alt="Logo de la filmothèque" height="50px">
-<!--    image du logo du site d'enchères à mettre-->
-    <div>
-      <a data-th-href="@{/(lang='fr')}"><img data-th-src="@{/images/French.webp}" height="10" alt="Drapeau français"></a>
-      <a data-th-href="@{/(lang='en')}"><img data-th-src="@{/images/English.webp}" height="10" alt="Drapeau anglais"></a>
+  <div class="header-content">
+    <div class="header-logo">
+      <img data-th-src="@{/images/logo.png}" alt="Logo MinouMinou" height="50">
+      <a data-th-href="@{/}" data-th-text="#{nom-application}"></a><strong data-th-if="${membreSession != null && membreSession.noUtilisateur != 0}" data-th-text="'[' + ${membreSession.prenom} + ']'"></strong>
+      <nav>
+        <ul>
+          <li><a data-th-href="@{/categories}" data-th-text="#{frag.header.categories}"></a></li>
+          <li data-th-if="${#authorization.expression('hasRole(''ADMIN'')')}"><a data-th-href="@{/admin}" data-th-text="#{frag.header.gestion}"></a></li>
+          <!--      page à créer pour l'administrateur et ce qu'il peut faire dedans-->
+          <li data-th-unless="${#authorization.expression('isAuthenticated')}"><a data-th-href="@{/login}" data-th-text="#{frag-entete.a.connexion}"></a></li>
+          <li data-th-unless="${#authorization.expression('isAuthenticated')}"><a data-th-href="@{/login}" data-th-text="#{frag-entete.a.inscription}"></a></li>
+          <li data-th-if="${#authorization.expression('isAuthenticated')}"><a data-th-href="@{/logout}" data-th-text="#{frag-entete.a.deconnexion}"></a></li>
+        </ul>
+      </nav>
     </div>
   </div>
-  <p id="nav-title"><a data-th-href="@{/}" data-th-text="#{nom-application}"></a><strong data-th-if="${membreSession != null && membreSession.id != 0}" data-th-text="'[' + ${membreSession.prenom} + ']'"></strong></p>
-  <nav>
-    <ul>
-      <li><a data-th-href="@{/categories}" data-th-text="#{frag.header.categories}"></a></li>
-      <li data-th-if="${#authorization.expression('hasRole(''ADMIN'')')}"><a data-th-href="@{/admin}" data-th-text="#{frag.header.gestion}"></a></li>
-<!--      page à créer pour l'administrateur et ce qu'il peut faire dedans-->
-      <li data-th-unless="${#authorization.expression('isAuthenticated')}"><a data-th-href="@{/login}" data-th-text="#{frag-entete.a.connexion}"></a></li>
-      <li data-th-unless="${#authorization.expression('isAuthenticated')}"><a data-th-href="@{/login}" data-th-text="#{frag-entete.a.inscription}"></a></li>
-      <li data-th-if="${#authorization.expression('isAuthenticated')}"><a data-th-href="@{/logout}" data-th-text="#{frag-entete.a.deconnexion}"></a></li>
-    </ul>
-  </nav>
+
 </header>
+
