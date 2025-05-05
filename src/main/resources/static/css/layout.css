@@ -95,18 +95,49 @@ nav a:active {
 
 }
 
-.button {
+/*.button {*/
+/*    background: silver;*/
+/*    border: 2px outset #fff;*/
+/*    padding: 4px 12px;*/
+/*    margin-top: 12px;*/
+/*    cursor: pointer;*/
+/*    font-family: inherit;*/
+/*}*/
+
+/*.button:active {*/
+/*    border: 2px inset #000;*/
+/*}*/
+
+form button {
     background: silver;
     border: 2px outset #fff;
     padding: 4px 12px;
     margin-top: 12px;
     cursor: pointer;
     font-family: inherit;
+    font-size: 14px;
+    display: inline-block;
 }
 
-.button:active {
+form button:active {
     border: 2px inset #000;
 }
+
+button {
+    background: silver;
+    border: 2px outset #fff;
+    padding: 4px 12px;
+    margin-top: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    display: inline-block;
+}
+
+button:active {
+    border: 2px inset #000;
+}
+
 
 footer {
     text-align: center;

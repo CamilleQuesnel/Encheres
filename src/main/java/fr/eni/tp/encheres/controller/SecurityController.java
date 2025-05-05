@@ -63,9 +63,12 @@ public class SecurityController {
      */
     @GetMapping("/register")
     public String afficherFormulaireInscription(Model model) {
-        model.addAttribute("registerDTO", new RegisterDTO());
+        if (!model.containsAttribute("registerDTO")) {// Cela empêche de remplacer registerDTO s'il existe déjà (donc s'il vient d’un POST avec des erreurs).
+            model.addAttribute("registerDTO", new RegisterDTO());
+        }
         return "register";
     }
+
 
     /**
      * Traitement de l'inscription
@@ -84,8 +87,9 @@ public class SecurityController {
         } catch (BusinessException exception) {
             exception.getKeys().forEach(key -> {
                 System.out.println(key);
-                // Tu peux utiliser FieldErrorMapper ici si besoin
-                bindingResult.addError(new ObjectError("globalError", new String[]{key}, null, null));
+                String field = FieldErrorMapper.getFieldName(key);
+                bindingResult.addError( new FieldError("registerDTO", field,null,false, new String[]{key}, null, null));
+
             });
             System.out.println("cuicui register");
         }

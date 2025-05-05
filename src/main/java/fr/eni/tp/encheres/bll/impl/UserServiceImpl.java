@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
         isValid = isLastnameValid(registerDTO.getLastname(), businessException);
         isValid &= isFirstnameValid(registerDTO.getFirstname(), businessException);
-        isValid &= isPseudoValid(registerDTO.getPassword(), businessException);
+        isValid &= isPseudoValid(registerDTO.getUsername(), businessException);
         isValid &= isEmailValid(registerDTO.getEmail(), businessException);
         isValid &= isPasswordValid(registerDTO.getPassword(), registerDTO.getPasswordConfirm(), businessException);
         isValid &= isStreetValid(registerDTO.getStreet(), businessException);
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
         boolean isValid =true;
         BusinessException businessException = new BusinessException();
 
-        isValid = isLastnameValid(updateDTO.getLastname(), businessException);
+        isValid &= isLastnameValid(updateDTO.getLastname(), businessException);
         isValid &= isFirstnameValid(updateDTO.getFirstname(), businessException);
         isValid &= isPseudoValid(updateDTO.getPassword(), businessException);
         isValid &= isEmailValid(updateDTO.getEmail(), businessException);
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
 
     private boolean isLastnameValid(String lastname, BusinessException businessException) {
         boolean isValid = true;
-        if (lastname == null || lastname.isEmpty() || lastname.isBlank()) {
+        if (lastname == null || lastname.isBlank()) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_LASTNAME);
             System.out.println("lastname is empty youpi");
@@ -196,6 +196,10 @@ public class UserServiceImpl implements UserService {
         Pattern pattern = Pattern.compile(emailRegex);//compile la regex en objet
         Matcher matcher = pattern.matcher(email);//teste la regex compilée
         Utilisateur emailUtilisateur = utilisateurDAO.readEmail(email);
+        if (emailUtilisateur != null) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL_ALREADY_EXISTS);
+        }
         if (!matcher.matches()) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL_REGEX);
@@ -208,10 +212,6 @@ public class UserServiceImpl implements UserService {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL);
         }
-        if (emailUtilisateur != null) {
-            isValid = false;
-            businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL_ALREADY_EXISTS);
-        }
 
         return isValid;
     }
@@ -221,13 +221,13 @@ public class UserServiceImpl implements UserService {
         String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
         Pattern pattern = Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(password);
-        if (!matcher.matches()) {
-            isValid = false;
-            businessException.addKey(BusinessCode.VALID_UTILISATEUR_PASSWORD_REGEX);
-        }
         if (password == null || password.isEmpty()) {//idem que pour l'email
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_PASSWORD);
+        }
+        if (!matcher.matches()) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_PASSWORD_REGEX);
         }
         if (password.length() > 68) {
             isValid = false;
@@ -273,35 +273,46 @@ public class UserServiceImpl implements UserService {
         String postalRegex = "^(0[1-9]|[1-8][0-9]|9[0-8])[0-9]{3}$";
         Pattern pattern = Pattern.compile(postalRegex);
         Matcher matcher = pattern.matcher(postalCode);
-        if (!matcher.matches()) {
-            isValid = false;
-            businessException.addKey(BusinessCode.VALID_UTILISATEUR_CODE_POSTAL_REGEX);
-        }
         if (postalCode == null || postalCode.isEmpty()) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_CODE_POSTAL);
+        }
+        if (!matcher.matches()) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_CODE_POSTAL_REGEX);
         }
         return isValid;
     }
 
     private boolean isPhoneValid(String phone, BusinessException businessException) {
         boolean isValid = true;
-        String phoneRegex = "^0[1-9](?: [0-9]{2}){4}$";
-        Pattern pattern = Pattern.compile(phoneRegex);
-        Matcher matcher = pattern.matcher(phone);
+
+        if (phone == null || phone.isEmpty()) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_TELEPHONE);
+            return false; // Inutile de continuer si déjà vide
+        }
+
+        // Nettoyage : on enlève espaces, points et tirets
+        String cleanedPhone = phone.replaceAll("[ .-]", "");
+
+        // Validation du format : commence par 0 + 9 chiffres (ex: 0601020304)
+        Pattern pattern = Pattern.compile("^0[1-9][0-9]{8}$");
+        Matcher matcher = pattern.matcher(cleanedPhone);
+
         if (!matcher.matches()) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_TELEPHONE_REGEX);
         }
-        if (phone == null || phone.isEmpty()) {
-            isValid = false;
-            businessException.addKey(BusinessCode.VALID_UTILISATEUR_TELEPHONE);
-        }
-        if (phone.length() > 10) {
+
+        // Longueur stricte (après nettoyage)
+        if (cleanedPhone.length() > 10) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_TELEPHONE_LENGHT_MAX);
         }
+
         return isValid;
     }
+
 
 }

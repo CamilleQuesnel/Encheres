@@ -19,6 +19,7 @@ public class FieldErrorMapper  {
             Map.entry(BusinessCode.VALID_UTILISATEUR_PASSWORD_CONFIRM, "passwordConfirm"),
             Map.entry(BusinessCode.VALID_UTILISATEUR_PASSWORD_LENGHT_MAX, "password"),
             Map.entry(BusinessCode.VALID_UTILISATEUR_PASSWORD_REGEX, "password"),
+//            Map.entry(BusinessCode.VALID_UTILISATEUR_PASSWORD_CONFIRM_REQUIRED, "passwordConfirm"),
             Map.entry(BusinessCode.VALID_UTILISATEUR_VILLE_LENGHT_MAX, "city"),
             Map.entry(BusinessCode.VALID_UTILISATEUR_VILLE, "city"),
             Map.entry(BusinessCode.VALID_UTILISATEUR_CODE_POSTAL_REGEX, "postalCode"),

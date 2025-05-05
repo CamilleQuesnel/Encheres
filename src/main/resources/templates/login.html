@@ -24,21 +24,18 @@
         <div class="content">
 
             <label for="username" data-th-text="#{login.form.username}"></label>
-            <input type="text" id="username" name="username" required autofocus>
+            <input type="text" id="username" name="username" autofocus>
 
             <label for="password" data-th-text="#{login.form.password}"></label>
-            <input type="password" id="password" name="password" required>
-
+            <input type="password" id="password" name="password">
+<!--TO DO : faire les erreurs-->
             <div class="button">
             <button type="submit" data-th-text="#{login.form.button}"></button>
             </div>
         </div>
     </div>
 </form>
-<!-- Affichage d'erreur je n'ai pas encore fait ça-->
-<div th:if="${param.error}">
-    <p class="erreur">Les identifiants sont incorrects.</p>
-</div>
+
 
 </main>
 </html>
