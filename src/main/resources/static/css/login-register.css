@@ -1,0 +1,21 @@
+button {
+    all: unset;
+
+    cursor: pointer;
+}
+
+.button {
+    text-align: center;
+}
+
+form .button {
+    text-align: center;
+}
+
+div button {
+    all: unset;
+
+    cursor: pointer;
+}
+
+
