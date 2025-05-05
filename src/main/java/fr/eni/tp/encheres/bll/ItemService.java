@@ -10,12 +10,10 @@ import java.util.List;
 public interface ItemService{
     public List <ArticleVendu> readSales();
     public List <Enchere> readPurchases();
-//    List<ArticleVendu> readSalesOrPurchasesByUser(int idUser,String SalesOrPurchases);
-//    List<ArticleVendu> readPurchasesByUser(int idUser); // A voir si readSalesOrPurchasesByUser et une bonne idée
-    public ArticleVendu readArticle();
-    public ArticleVendu createArticle(ArticleVendu articleVendu);
-    public ArticleVendu updateArticle(ArticleVendu articleVendu);
-    public ArticleVendu deleteArticle(ArticleVendu articleVendu);
+    public ArticleVendu readArticle(int id);
+    public void createArticle(ArticleVendu articleVendu);
+    public void updateArticle(ArticleVendu articleVendu);
+    public void deleteArticle(int id);
     List <Categorie> readCategories();
 
 

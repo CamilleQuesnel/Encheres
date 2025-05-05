@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        data-th-replace="~{layouts/layout :: layout(
+                                                mainContent=~{:: main},
+                                                cssContent=~{:: link},
+                                                title=~{:: title}
+                                            )}"
+>
+<title data-th-text="#{login.title}"></title>
+
+<main>
+<h1>Nouvelle vente</h1>
+  <form data-th-action="@{/}" method="post">
+    <ul class="flex-outer">
+      <li>
+        <label for="username" data-th-text="#{login.form.username}"></label>
+        <input type="text" id="username" name="username" required autofocus>
+      </li>
+      <li>
+        <label for="password" data-th-text="#{login.form.password}"></label>
+        <input type="password" id="password" name="password" required>
+      </li>
+      <li>
+        <button type="submit" data-th-text="#{login.form.button}"></button>
+      </li>
+    </ul>
+  </form>
+  <!-- Affichage d'erreur -->
+  <div th:if="${param.error}">
+    <p class="erreur">Les identifiants sont incorrects.</p>
+  </div>
+
+</main>
+</html>
