@@ -47,7 +47,7 @@ public class WebSecurityConfiguration {
                             .requestMatchers(HttpMethod.GET, "/profile").authenticated()
                             .requestMatchers(HttpMethod.GET, "/register").permitAll()
                             .requestMatchers(HttpMethod.POST, "/register").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/new_sale").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/new_sale").authenticated()
                             .requestMatchers("/").permitAll()
                             .requestMatchers("/css/*").permitAll()
                             .requestMatchers("/images/*").permitAll()

@@ -3,14 +3,20 @@ package fr.eni.tp.encheres.controller;
 import fr.eni.tp.encheres.bll.UserService;
 import fr.eni.tp.encheres.bo.Utilisateur;
 import fr.eni.tp.encheres.dto.RegisterDTO;
+import fr.eni.tp.encheres.exception.BusinessCode;
 import fr.eni.tp.encheres.exception.BusinessException;
+import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import fr.eni.tp.encheres.controller.FieldErrorMapper;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @SessionAttributes("membreSession")
@@ -70,19 +76,28 @@ public class SecurityController {
             BindingResult bindingResult,
             Model model
     ) {
+        System.out.println("début du cuicui");
+
         try {
             userService.createUtilisateur(dto);
-            return "redirect:/login";
+            System.out.println("pas cuicui");
         } catch (BusinessException exception) {
-            exception.getKeys().forEach(System.out::println);
-
             exception.getKeys().forEach(key -> {
-                ObjectError error = new ObjectError("globalError", key);
-                bindingResult.addError(error);
+                System.out.println(key);
+                // Tu peux utiliser FieldErrorMapper ici si besoin
+                bindingResult.addError(new ObjectError("globalError", new String[]{key}, null, null));
             });
+            System.out.println("cuicui register");
+        }
+
+        // ✅ Toujours revenir au formulaire si des erreurs sont présentes
+        if (bindingResult.hasErrors()) {
             return "register";
         }
+
+        return "redirect:/login";
     }
+
 
     /**
      *
@@ -102,3 +117,5 @@ public class SecurityController {
         return new Utilisateur();
     }
 }
+
+

@@ -68,9 +68,10 @@ main h1 {
     text-align: center;
 }
 
-/*
-Module 04 - TP 2
-Remplacement de la couleur des liens par défaut à blanc*/
+.cards {
+    background-color: darkred;
+}
+
 header a {
     color: #764E43;
 }

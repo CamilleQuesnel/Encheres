@@ -147,9 +147,10 @@ public class UserServiceImpl implements UserService {
 
     private boolean isLastnameValid(String lastname, BusinessException businessException) {
         boolean isValid = true;
-        if (lastname == null || lastname.isEmpty()) {
+        if (lastname == null || lastname.isEmpty() || lastname.isBlank()) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_LASTNAME);
+            System.out.println("lastname is empty youpi");
         }
         if (lastname.length() > 30) {
             isValid = false;
@@ -285,7 +286,7 @@ public class UserServiceImpl implements UserService {
 
     private boolean isPhoneValid(String phone, BusinessException businessException) {
         boolean isValid = true;
-        String phoneRegex = "^(\\+33|0033)[1-9][0-9]{8}$";
+        String phoneRegex = "^0[1-9](?: [0-9]{2}){4}$";
         Pattern pattern = Pattern.compile(phoneRegex);
         Matcher matcher = pattern.matcher(phone);
         if (!matcher.matches()) {
@@ -296,7 +297,7 @@ public class UserServiceImpl implements UserService {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_TELEPHONE);
         }
-        if (phone.length() > 13) {
+        if (phone.length() > 10) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_TELEPHONE_LENGHT_MAX);
         }

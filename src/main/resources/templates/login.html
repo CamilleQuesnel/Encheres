@@ -8,25 +8,34 @@
                                                 title=~{:: title}
                                             )}"
 >
+<link rel="stylesheet" data-th-href="@{/css/login-register.css}">
+
 <title data-th-text="#{login.title}"></title>
 
 <main>
+
 <form data-th-action="@{/login}" method="post">
-    <ul class="flex-outer">
-        <li>
+    <div class="window">
+        <div class="title-bar">
+            <span th:text="#{login.div}"></span>
+            <div class="title-bar-button" th:text="#{fake.close}"></div>
+        </div>
+
+        <div class="content">
+
             <label for="username" data-th-text="#{login.form.username}"></label>
             <input type="text" id="username" name="username" required autofocus>
-        </li>
-        <li>
+
             <label for="password" data-th-text="#{login.form.password}"></label>
             <input type="password" id="password" name="password" required>
-        </li>
-        <li>
+
+            <div class="button">
             <button type="submit" data-th-text="#{login.form.button}"></button>
-        </li>
-    </ul>
+            </div>
+        </div>
+    </div>
 </form>
-<!-- Affichage d'erreur -->
+<!-- Affichage d'erreur je n'ai pas encore fait ça-->
 <div th:if="${param.error}">
     <p class="erreur">Les identifiants sont incorrects.</p>
 </div>

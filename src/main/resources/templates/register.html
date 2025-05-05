@@ -4,49 +4,60 @@
         xmlns:th="http://www.thymeleaf.org"
         data-th-replace="~{layouts/layout :: layout(
                                                 mainContent=~{:: main},
-                                                cssContent=~{},
+                                                cssContent=~{::link},
                                                 title=~{}
                                             )}"
 >
+
+<link rel="stylesheet" data-th-href="@{/css/login-register.css}">
+
 <main>
+
+    <p class=cards data-th-each="keyError: ${#fields.errors('global')}" data-th-text="#{${keyError}}"></p>
     <div class="window">
         <div class="title-bar">
-            <span data-th-text = "#{register.title}">MinouMinou.exe</span>
-            <div class="title-bar-button">X</div>
+            <span data-th-text = "#{register.title}"></span>
+            <div class="title-bar-button" data-th-text="#{fake.close}"></div>
         </div>
         <div class="content">
 
 <form th:action="@{/register}" th:object="${registerDTO}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
     <div class="windows">
         <div class="title-bar">
             <span>Identité</span>
-            <div class="title-bar-button">X</div>
+            <div class="title-bar-button" data-th-text="#{fake.close}"></div>
         </div>
         <div class="content">
                 <input type="text" th:field="*{lastname}" placeholder="Nom" required />
+                     <div data-th-replace="~{fragments/fragment-error :: error(lastname)}"></div>
                 <input type="text" th:field="*{firstname}" placeholder="Prénom" required />
+                    <div data-th-replace="~{fragments/fragment-error :: error(firstname)}"></div>
                 <input type="text" th:field="*{username}" placeholder="Pseudo" required />
+                    <div data-th-replace="~{fragments/fragment-error :: error(username)}"></div>
                 <input type="email" th:field="*{email}" placeholder="Email" required />
+                    <div data-th-replace="~{fragments/fragment-error :: error(email)}"></div>
             </div>
     </div>
 
     <div class="windows">
         <div class="title-bar">
             <span>Adresse</span>
-            <div class="title-bar-button">X</div>
+            <div class="title-bar-button" data-th-text="#{fake.close}"></div>
         </div>
         <div class="content">
                 <input type="text" th:field="*{street}" placeholder="Rue" />
                 <input type="text" th:field="*{postalCode}" placeholder="Code postal" />
                 <input type="text" th:field="*{city}" placeholder="Ville" />
-                <input type="text" th:field="*{phone}" placeholder="Téléphone" />
+                <input type="text" th:field="*{phone}" placeholder="Téléphone (+33)" />
         </div>
         </div>
 
     <div class="windows">
         <div class="title-bar">
             <span>Mot de passe</span>
-            <div class="title-bar-button">X</div>
+            <div class="title-bar-button" data-th-text="#{fake.close}"></div>
         </div>
         <div class="content">
                 <input type="password" th:field="*{password}" placeholder="Mot de passe" required />
@@ -54,10 +65,13 @@
         </div>
     </div>
 
-    <button type="submit">S'inscrire</button>
+    <div class="button">
+        <button type="submit" data-th-text="#{register.form.button}"></button>
+    </div>
 </form>
 
 
+            <p class=cards data-th-each="keyError: ${#fields.errors('global')}" data-th-text="#{${keyError}}"></p>
         </div>
     </div>
 </main>
