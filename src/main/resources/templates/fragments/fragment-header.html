@@ -9,7 +9,7 @@
           <li data-th-if="${#authorization.expression('hasRole(''ADMIN'')')}"><a data-th-href="@{/admin}" data-th-text="#{frag.header.gestion}"></a></li>
           <!--      page à créer pour l'administrateur et ce qu'il peut faire dedans-->
           <li data-th-unless="${#authorization.expression('isAuthenticated')}"><a data-th-href="@{/login}" data-th-text="#{frag-entete.a.connexion}"></a></li>
-          <li data-th-unless="${#authorization.expression('isAuthenticated')}"><a data-th-href="@{/login}" data-th-text="#{frag-entete.a.inscription}"></a></li>
+          <li data-th-unless="${#authorization.expression('isAuthenticated')}"><a data-th-href="@{/register}" data-th-text="#{frag-entete.a.inscription}"></a></li>
           <li data-th-if="${#authorization.expression('isAuthenticated')}"><a data-th-href="@{/logout}" data-th-text="#{frag-entete.a.deconnexion}"></a></li>
         </ul>
       </nav>

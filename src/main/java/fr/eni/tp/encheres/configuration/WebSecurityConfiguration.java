@@ -56,7 +56,7 @@ public class WebSecurityConfiguration {
 
         http.formLogin(login -> {
             login.loginPage("/login");
-            login.defaultSuccessUrl("/login_success");
+            login.defaultSuccessUrl("/");
             login.permitAll();
         });
 

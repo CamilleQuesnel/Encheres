@@ -68,6 +68,7 @@ nav a:active {
     background: #C0C0C0;
     width: 600px;
     margin: 40px auto;
+
 }
 
 .title-bar {
@@ -91,6 +92,7 @@ nav a:active {
 
 .content {
     padding: 20px;
+
 }
 
 .button {
@@ -104,4 +106,8 @@ nav a:active {
 
 .button:active {
     border: 2px inset #000;
+}
+
+footer {
+    text-align: center;
 }

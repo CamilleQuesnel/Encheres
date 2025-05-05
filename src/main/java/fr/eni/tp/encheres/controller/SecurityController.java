@@ -49,7 +49,7 @@ public class SecurityController {
         membreSession.setAdministrateur(utilisateur.isAdministrateur());
         membreSession.setActif(utilisateur.isActif());
 
-        return "redirect:/profile";
+        return "redirect:/";
     }
 
     /**

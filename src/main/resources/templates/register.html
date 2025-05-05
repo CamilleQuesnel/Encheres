@@ -1,25 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
-<body>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        data-th-replace="~{layouts/layout :: layout(
+                                                mainContent=~{:: main},
+                                                cssContent=~{},
+                                                title=~{}
+                                            )}"
+>
+<main>
+    <div class="window">
+        <div class="title-bar">
+            <span data-th-text = "#{register.title}">MinouMinou.exe</span>
+            <div class="title-bar-button">X</div>
+        </div>
+        <div class="content">
 
 <form th:action="@{/register}" th:object="${registerDTO}" method="post">
-    <input type="text" th:field="*{lastname}" placeholder="Nom" required />
-    <input type="text" th:field="*{firstname}" placeholder="Prénom" required />
-    <input type="text" th:field="*{username}" placeholder="Pseudo" required />
-    <input type="email" th:field="*{email}" placeholder="Email" required />
-    <input type="text" th:field="*{street}" placeholder="Rue" />
-    <input type="text" th:field="*{postalCode}" placeholder="Code postal" />
-    <input type="text" th:field="*{city}" placeholder="Ville" />
-    <input type="text" th:field="*{phone}" placeholder="Téléphone" />
-    <input type="password" th:field="*{password}" placeholder="Mot de passe" required />
-    <input type="password" th:field="*{passwordConfirm}" placeholder="Confirmation du mot de passe" required />
+    <div class="windows">
+        <div class="title-bar">
+            <span>Identité</span>
+            <div class="title-bar-button">X</div>
+        </div>
+        <div class="content">
+                <input type="text" th:field="*{lastname}" placeholder="Nom" required />
+                <input type="text" th:field="*{firstname}" placeholder="Prénom" required />
+                <input type="text" th:field="*{username}" placeholder="Pseudo" required />
+                <input type="email" th:field="*{email}" placeholder="Email" required />
+            </div>
+    </div>
+
+    <div class="windows">
+        <div class="title-bar">
+            <span>Adresse</span>
+            <div class="title-bar-button">X</div>
+        </div>
+        <div class="content">
+                <input type="text" th:field="*{street}" placeholder="Rue" />
+                <input type="text" th:field="*{postalCode}" placeholder="Code postal" />
+                <input type="text" th:field="*{city}" placeholder="Ville" />
+                <input type="text" th:field="*{phone}" placeholder="Téléphone" />
+        </div>
+        </div>
+
+    <div class="windows">
+        <div class="title-bar">
+            <span>Mot de passe</span>
+            <div class="title-bar-button">X</div>
+        </div>
+        <div class="content">
+                <input type="password" th:field="*{password}" placeholder="Mot de passe" required />
+                <input type="password" th:field="*{passwordConfirm}" placeholder="Confirmation du mot de passe" required />
+        </div>
+    </div>
+
     <button type="submit">S'inscrire</button>
 </form>
 
 
-</body>
+        </div>
+    </div>
+</main>
 </html>
