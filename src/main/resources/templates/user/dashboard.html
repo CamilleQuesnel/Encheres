@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tableau de bord utilisateur</title>
+</head>
+<body>
+<h1>Mes ventes</h1>
+
+<div class="filter-section">
+    <button class="filter-btn active" data-filter="all">Toutes mes ventes</button>
+    <button class="filter-btn" data-filter="en cours">Ventes en cours</button>
+    <button class="filter-btn" data-filter="n.c">Ventes non débutées</button>
+    <button class="filter-btn" data-filter="vendu">Ventes terminées</button>
+</div>
+
+<div id="ventesEnCours" class="vente-category">
+    <h2>Ventes en cours</h2>
+    <div th:each="article : ${ventesEnCours}" class="article-card">
+        <h3 th:text="${article.nomArticle}"></h3>
+        <p>Description: <span th:text="${article.description}"></span></p>
+        <p>Prix actuel: <span th:text="${article.prixVente}"></span> points</p>
+        <!-- More article details -->
+    </div>
+</div>
+
+<div id="ventesNonDebutees" class="vente-category">
+    <h2>Ventes non débutées</h2>
+    <div th:each="article : ${ventesNonDebutees}" class="article-card">
+        <h3 th:text="${article.nomArticle}"></h3>
+        <p>Description: <span th:text="${article.description}"></span></p>
+        <p>Prix initial: <span th:text="${article.prixInitial}"></span> points</p>
+        <!-- More article details -->
+    </div>
+</div>
+
+<div id="ventesTerminees" class="vente-category">
+    <h2>Ventes terminées</h2>
+    <div th:each="article : ${ventesTerminees}" class="article-card">
+        <h3 th:text="${article.nomArticle}"></h3>
+        <p>Prix final: <span th:text="${article.prixVente}"></span> points</p>
+        <!-- More article details -->
+    </div>
+</div>
+
+<script>
+    // JavaScript to filter the displayed articles
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            const filter = this.dataset.filter;
+
+            if (filter === 'all') {
+                document.querySelectorAll('.vente-category').forEach(cat => {
+                    cat.style.display = 'block';
+                });
+            } else {
+                document.querySelectorAll('.vente-category').forEach(cat => {
+                    cat.style.display = 'none';
+                });
+                document.getElementById(`ventes${filter.replace(' ', '')}`).style.display = 'block';
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -52,7 +52,7 @@ public class ArticleController {
      * Handle the root URL ("/") and show all articles with status "en cours".
      * This is the homepage of the application.
      */
-    @GetMapping("/")
+    @GetMapping("/encheres")
     public String afficherAccueil(Model model) {
         List<ArticleVendu> articlesEnCours = articleVenduDAO.findByUserByEtat("en cours", null);
         model.addAttribute("articles", articlesEnCours);
