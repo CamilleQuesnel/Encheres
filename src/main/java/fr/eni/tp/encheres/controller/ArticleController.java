@@ -36,37 +36,6 @@ public class ArticleController {
 
 
 
-    /**
-     * Liste des articles en vente
-     */
-//    @GetMapping
-//    public String afficherListeArticles(Model model) {
-//
-//        List<ArticleVendu> articles = articleVenduDAO.findAll();
-//        model.addAttribute("articles", articles);
-//        return "articles/list"; // Thymeleaf: list.html
-//    }
-
-
-    /**
-     * Handle the root URL ("/") and show all articles with status "en cours".
-     * This is the homepage of the application.
-//     */
-//    @GetMapping("/encheres")
-//    public String afficherAccueil(Model model) {
-//        List<ArticleVendu> articlesEnCours = articleVenduDAO.findByUserByEtat("en cours", null);
-//        model.addAttribute("articles", articlesEnCours);
-//        return "index"; // Make sure this file exists: templates/articles/list.html
-//    }
-//
-
-    /**
-     * Détail d’un article
-     * Change: Added validation for ID to handle non-numeric inputs gracefully
-     */
-
-
-
 
     @GetMapping("/articles/{id}")
     public String getArticleById(@PathVariable int id, Model model) {

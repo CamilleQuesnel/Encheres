@@ -9,7 +9,9 @@
       </i>
       <nav>
         <ul>
-          <li><a data-th-href="@{/categories}" data-th-text="#{frag.header.categories}"></a></li>
+          <li th:if="${#authorization.expression('isAuthenticated')}">
+            <a th:href="@{/encheres/user/dashboard}" th:text="#{frag.header.dashboard}"></a>
+          </li>
           <li data-th-if="${#authorization.expression('hasRole(''ADMIN'')')}"><a data-th-href="@{/admin}" data-th-text="#{frag.header.gestion}"></a></li>
           <!--      page à créer pour l'administrateur et ce qu'il peut faire dedans-->
           <li><a data-th-href="@{/new_sale}" data-th-text="#{frag-entete.a.newsale}"></a></li>

@@ -1,68 +1,104 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        data-th-replace="~{layouts/layout :: layout(
+                                                mainContent=~{:: main},
+                                                cssContent=~{:: link},
+                                                title=~{:: title}
+                                            )}"
+>
+<link rel="stylesheet" data-th-href="@{/css/dashboard.css}">
 <head>
-    <meta charset="UTF-8">
-    <title>Tableau de bord utilisateur</title>
+    <title>Détail Article</title>
+    <meta charset="UTF-8"/>
 </head>
-<body>
-<h1>Mes ventes</h1>
+<main>
 
-<div class="filter-section">
-    <button class="filter-btn active" data-filter="all">Toutes mes ventes</button>
-    <button class="filter-btn" data-filter="en cours">Ventes en cours</button>
-    <button class="filter-btn" data-filter="n.c">Ventes non débutées</button>
-    <button class="filter-btn" data-filter="vendu">Ventes terminées</button>
-</div>
+    <div class="window">
+        <div class="title-bar">
+            <span>Liste des enchères</span>
+            <div class="title-bar-button">X</div>
+        </div>
+        <div class="content">
 
-<div id="ventesEnCours" class="vente-category">
-    <h2>Ventes en cours</h2>
-    <div th:each="article : ${ventesEnCours}" class="article-card">
-        <h3 th:text="${article.nomArticle}"></h3>
-        <p>Description: <span th:text="${article.description}"></span></p>
-        <p>Prix actuel: <span th:text="${article.prixVente}"></span> points</p>
-        <!-- More article details -->
+            <!-- Navigation Section -->
+            <div class="nav-section">
+                <div class="nav-category">
+                    <div class="nav-category-title">Achats</div>
+                    <label class="nav-option">
+                        <input type="checkbox" name="achat-option" value="open">
+                        enchères ouvertes
+                    </label>
+                    <label class="nav-option">
+                        <input type="checkbox" name="achat-option" value="current">
+                        mes enchères en cours
+                    </label>
+                    <label class="nav-option">
+                        <input type="checkbox" name="achat-option" value="won">
+                        mes enchères remportées
+                    </label>
+                </div>
+
+                <div class="nav-category">
+                    <div class="nav-category-title">Mes ventes</div>
+                    <label class="nav-option">
+                        <input type="checkbox" name="vente-option" value="current">
+                        mes ventes en cours
+                    </label>
+                    <label class="nav-option">
+                        <input type="checkbox" name="vente-option" value="upcoming">
+                        ventes non débutées
+                    </label>
+                    <label class="nav-option">
+                        <input type="checkbox" name="vente-option" value="completed">
+                        ventes terminées
+                    </label>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="auction-content">
+                <p>Sélectionnez une option pour afficher le contenu correspondant.</p>
+                <!-- Dynamic content would go here -->
+            </div>
+
+            <div style="margin-top: 15px;">
+                <!--            <button>Actualiser</button>-->
+                <!--            <button>Aide</button>-->
+                <!--            <button>Paramètres</button>-->
+            </div>
+        </div>
     </div>
-</div>
 
-<div id="ventesNonDebutees" class="vente-category">
-    <h2>Ventes non débutées</h2>
-    <div th:each="article : ${ventesNonDebutees}" class="article-card">
-        <h3 th:text="${article.nomArticle}"></h3>
-        <p>Description: <span th:text="${article.description}"></span></p>
-        <p>Prix initial: <span th:text="${article.prixInitial}"></span> points</p>
-        <!-- More article details -->
-    </div>
-</div>
+</main>
 
-<div id="ventesTerminees" class="vente-category">
-    <h2>Ventes terminées</h2>
-    <div th:each="article : ${ventesTerminees}" class="article-card">
-        <h3 th:text="${article.nomArticle}"></h3>
-        <p>Prix final: <span th:text="${article.prixVente}"></span> points</p>
-        <!-- More article details -->
-    </div>
-</div>
+
+
 
 <script>
-    // JavaScript to filter the displayed articles
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-
-            const filter = this.dataset.filter;
-
-            if (filter === 'all') {
-                document.querySelectorAll('.vente-category').forEach(cat => {
-                    cat.style.display = 'block';
+    // Simple checkbox behavior
+    document.querySelectorAll('.nav-option input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            // Uncheck other options in the same category when one is checked
+            if (this.checked) {
+                const categoryName = this.name;
+                document.querySelectorAll(`input[name="${categoryName}"]`).forEach(otherCheckbox => {
+                    if (otherCheckbox !== this) {
+                        otherCheckbox.checked = false;
+                    }
                 });
-            } else {
-                document.querySelectorAll('.vente-category').forEach(cat => {
-                    cat.style.display = 'none';
-                });
-                document.getElementById(`ventes${filter.replace(' ', '')}`).style.display = 'block';
+
+                // Update content based on selection
+                const contentDiv = document.querySelector('.auction-content');
+                contentDiv.innerHTML = `<p>Contenu pour: ${this.value}</p>`;
             }
         });
+    });
+
+    // Close button functionality
+    document.querySelector('.title-bar-button').addEventListener('click', function() {
+        alert("Fermeture de l'application!");
     });
 </script>
 </body>

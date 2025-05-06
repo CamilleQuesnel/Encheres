@@ -7,6 +7,7 @@ import fr.eni.tp.encheres.dal.ArticleVenduDAO;
 import fr.eni.tp.encheres.dto.RegisterDTO;
 import fr.eni.tp.encheres.exception.BusinessCode;
 import fr.eni.tp.encheres.exception.BusinessException;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
