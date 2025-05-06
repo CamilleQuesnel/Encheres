@@ -24,15 +24,15 @@
   </div>
 
   <div class="content">
-  <form data-th-action="@{/new_sale}" method="post" enctype="multipart/form-data">
+  <form data-th-action="@{/new_sale}" data-th-object="${NewSaleDTO}" method="post" enctype="multipart/form-data">
     <ul>
       <li>
         <label for="article" data-th-text="#{new_sale.form.article}"></label>
-        <input type="text" id="article" name="article" required>
+        <input type="text" id="article" name="article">
       </li>
     <li>
       <label for="categorie" data-th-text="#{new_sale.form.categorie}"></label>
-      <select id="categorie" name="categorie" required>
+      <select id="categorie" name="categorie" >
         <option value="" data-th-text="#{new_sale.form.selectionner}"></option>
         <option data-th-each="categorie : ${categories}" data-th-value="${categorie.noCategorie}" data-th-text="${categorie.libelle}"></option>
       </select>
@@ -43,7 +43,7 @@
     </li>
     <li>
     <label for="photo" data-th-text="#{new_sale.form.photo}"></label>
-    <input type="file" id="photo" name="photo" accept="image/*" class="image-upload">
+    <input type="file" id="photo" name="fichierPhoto" accept="image/*" class="image-upload">
     </li>
       <li>
     <label for="prix" data-th-text="#{new_sale.form.prixInitial}"></label>
@@ -51,11 +51,11 @@
       </li>
     <li>
     <label for="debut" data-th-text="#{new_sale.form.dateDebutEnchere }"></label>
-    <input type="date" id="debut" name="debut"  required data-th-attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
+    <input type="datetime-local" id="debut" name="debut"  required data-th-attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
     </li>
 <li>
-    <label for="fin" data-th-text="#{new_sale.form.dateFinEnchere}" data-th-attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"></label>
-    <input type="date" id="fin" name="fin" required>
+    <label for="fin" data-th-text="#{new_sale.form.dateFinEnchere}" ></label>
+    <input type="datetime-local" id="fin" name="fin" required data-th-attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
 </li>
       <li>
         <fieldset>

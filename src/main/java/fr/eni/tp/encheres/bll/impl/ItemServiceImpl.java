@@ -7,6 +7,7 @@ import fr.eni.tp.encheres.bo.Enchere;
 import fr.eni.tp.encheres.dal.ArticleVenduDAO;
 import fr.eni.tp.encheres.dal.CategorieDAO;
 import fr.eni.tp.encheres.dal.EnchereDAO;
+import fr.eni.tp.encheres.dto.NewSaleDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,12 +46,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void createArticle(ArticleVendu articleVendu) { // creer
+    public void createArticle(NewSaleDTO newSaleDTO) { // creer
 
         // TEST TODO
 
-
-        articleVenduDAO.insert(articleVendu);
     }
 
     @Override
