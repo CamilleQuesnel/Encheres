@@ -44,6 +44,7 @@ public class WebSecurityConfiguration {
 
         http.authorizeHttpRequests(auth -> {
                     auth
+                            .requestMatchers(HttpMethod.GET, "/articles/**").permitAll()
                             .requestMatchers(HttpMethod.GET, "/profile").authenticated()
                             .requestMatchers(HttpMethod.GET, "/register").permitAll()
                             .requestMatchers(HttpMethod.POST, "/register").permitAll()

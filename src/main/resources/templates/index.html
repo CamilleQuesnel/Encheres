@@ -3,21 +3,53 @@
         lang="en"
         xmlns:th="http://www.thymeleaf.org"
         data-th-replace="~{layouts/layout :: layout(
-                                                mainContent=~{:: main},
-                                                cssContent=~{},
-                                                title=~{}
-                                            )}"
+                                               mainContent=~{:: main},
+                                               cssContent=~{},
+                                               title=~{}
+                                           )}"
 >
+<link rel="stylesheet" href="/css/index-custom.css">
+
 <main>
-<div class="window">
-    <div class="title-bar">
-        <span>MinouMinou.exe</span>
-        <div class="title-bar-button">X</div>
+
+
+    <!-- Premier div : message de bienvenue -->
+    <div class="window welcome">
+        <div class="title-bar">
+            <span>MinouMinou.exe</span>
+            <div class="title-bar-button">X</div>
+        </div>
+        <div class="content">
+            <h1>Bienvenue sur MinouMinou's Auction House</h1>
+            <p>Site d'enchères en mode rétro !</p>
+        </div>
     </div>
-    <div class="content">
-        <h1>Bienvenue sur MinouMinou's Auction House</h1>
-        <p>Site d'enchères en mode rétro !</p>
+
+    <!-- Deuxième div : liste des enchères -->
+    <div class="window encheres">
+        <div class="title-bar">
+            <span>List d'encheres en cours</span>
+            <div class="title-bar-button">X</div>
+        </div>
+        <div class="content">
+            <ul class="article-list">
+                <li class="article-item" th:each="article : ${articles}">
+                    <a class="article-link" th:href="@{'/articles/' + ${article.noArticle}}"
+                       th:text="${article.nomArticle}">Nom de l'article</a>
+                    -
+                    <span class="article-price" th:text="${article.prixVente} + ' €'">Prix</span>
+                </li>
+            </ul>
+            <p th:if="${#lists.isEmpty(articles)}">Aucun article en vente pour le moment.</p>
+        </div>
     </div>
-</div>
+
+
+
+
+
 </main>
 </html>
+
+
+
