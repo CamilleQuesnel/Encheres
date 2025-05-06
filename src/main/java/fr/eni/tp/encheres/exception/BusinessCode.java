@@ -39,4 +39,22 @@ public class BusinessCode {
 //    public static final String VALID_UTILISATEUR_PASSWORD_CONFIRM_REQUIRED = "validation.utilisateur.password.confirm.blank";
         //CONNEXION UTILISATEUR
     public static final String CONNEXION_ERROR = "connexion.error";
-}
+
+
+    // VALIDATION ARTICLE
+    public static final String VALID_NOM_ARTICLE_BLANK       = "validation.article.nom.blank";
+    public static final String VALID_NOM_ARTICLE_LENGTH      = "validation.article.nom.length";
+    public static final String VALID_DESCRIPTION_BLANK       = "validation.description.blank";
+    public static final String VALID_DESCRIPTION_LENGTH      = "validation.description.length";
+    public static final String VALID_DATE_DEBUT_BLANK        = "validation.date_debut.blank";
+    public static final String VALID_DATE_FIN_BLANK          = "validation.date_fin.blank";
+    public static final String VALID_DATE_DEBUT_SUP_NOW      = "validation.date.debut.sup.now";
+    public static final String VALID_DATE_FIN_SUP_DATE_DEBUT = "validation.date.fin.sup.date.debut";
+    public static final String VALID_DATE_FORMAT_INVALID     = "validation.date.format.invalid";
+    public static final String VALID_PRIX_BLANK              = "validation.prix.blank";
+    public static final String VALID_PRIX_SUP_ZERO           = "validation.prix.sup.zero";
+    public static final String VALID_NOM_CATEGORIE_BLANK     = "validation.no.cat.blank";
+    public static final String VALID_NOM_CATEGORIE_NOT_EXIST = "validation.no.cat.exist";
+
+
+ }
