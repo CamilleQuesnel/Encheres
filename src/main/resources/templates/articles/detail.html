@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        data-th-replace="~{layouts/layout :: layout(
+                                                mainContent=~{:: main},
+                                                cssContent=~{:: link},
+                                                title=~{:: title}
+                                            )}"
+>
+<head>
+    <title>Détail Article</title>
+    <meta charset="UTF-8"/>
+</head>
+<main>
+<h1 th:text="${article.nomArticle}">Nom de l'article</h1>
+
+<p>Description : <span th:text="${article.description}">Description ici</span></p>
+<p>Mise à prix : <span th:text="${article.miseAPrix}">0</span> €</p>
+<p>Prix de vente : <span th:text="${article.prixVente}">0</span> €</p>
+
+<!-- Safe null check for vendeur -->
+<p th:if="${article.utilisateur != null}">
+    Vendu par : <span th:text="${article.utilisateur.pseudo}">Vendeur</span>
+</p>
+<p th:if="${article.utilisateur == null}">
+    Vendu par : <span>Inconnu</span>
+</p>
+
+<!-- Back to list -->
+<p><a th:href="@{/}">← Retour à la liste</a></p>
+
+</main>
+</html>
+
+

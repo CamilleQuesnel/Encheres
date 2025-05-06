@@ -1,0 +1,89 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+/* Titre */
+h1 {
+    text-align: center;
+    margin: auto;
+    margin-bottom: 20px;
+}
+form{
+    text-align: center;
+}
+
+/* Aperçu de l'image */
+.photo-preview {
+    margin: auto;
+    width: 250px;
+    height: 200px;
+    border: 1px solid #000;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+}
+
+.photo-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Formulaire */
+/* Fieldset pour adresse */
+fieldset {
+    width: 100%;
+    border: 1px solid #000;
+    padding: 10px;
+}
+
+fieldset legend {
+    font-weight: bold;
+}
+form{
+    margin: auto;
+}
+form ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+form li {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    width: 50%;
+    text-align: start;
+}
+
+/* Champs */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+    padding: 5px;
+    border: 1px solid #000;
+    width: 250px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+#button-center{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+
+

@@ -1,0 +1,24 @@
+/* Center the first div on the page */
+.window.welcome {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* Move the second div out of the viewport initially */
+.window.encheres {
+    margin-top: 150vh; /* Adjust this value to ensure it's off-screen initially */
+}
+
+/* Ensure proper spacing for the page */
+body {
+    min-height: 200vh; /* Makes sure the page can scroll */
+}
+
+/* Optional: Add a smooth scroll effect */
+html {
+    scroll-behavior: smooth;
+}
