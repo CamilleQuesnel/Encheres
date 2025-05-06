@@ -52,6 +52,7 @@ public class WebSecurityConfiguration {
                             .requestMatchers("/").permitAll()
                             .requestMatchers("/css/*").permitAll()
                             .requestMatchers("/images/*").permitAll()
+                            .requestMatchers("/js/*").permitAll()
                             .anyRequest().authenticated();
                 }
         );

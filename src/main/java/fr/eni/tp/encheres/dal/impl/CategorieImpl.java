@@ -76,6 +76,7 @@ public class CategorieImpl implements CategorieDAO {
                 SELECT_ALL,
                 new CategorieRowMapper()
         );
+        // TODO ordre alphabetique
         return categories;
     }
 

@@ -9,28 +9,83 @@
                                             )}"
 >
 <title data-th-text="#{login.title}"></title>
+<link data-th-rel="stylesheet" data-th-href="@{/css/newSale.css}">
 
 <main>
-<h1>Nouvelle vente</h1>
-  <form data-th-action="@{/}" method="post">
-    <ul class="flex-outer">
+  <div class="window">
+    <div class="title-bar" >
+      <span data-th-text="#{new_sale.form.title}"></span>
+<!--      data-th-text="#{fake.close}"-->
+      <div class="title-bar-button" >X</div>
+    </div>
+
+  <div class="photo-preview">
+    <img id="preview" src="" alt="Aperçu de l'image">
+  </div>
+
+  <div class="content">
+  <form data-th-action="@{/new_sale}" method="post" enctype="multipart/form-data">
+    <ul>
       <li>
-        <label for="username" data-th-text="#{login.form.username}"></label>
-        <input type="text" id="username" name="username" required autofocus>
+        <label for="article" data-th-text="#{new_sale.form.article}"></label>
+        <input type="text" id="article" name="article" required>
       </li>
+    <li>
+      <label for="categorie" data-th-text="#{new_sale.form.categorie}"></label>
+      <select id="categorie" name="categorie" required>
+        <option value="" data-th-text="#{new_sale.form.selectionner}"></option>
+        <option data-th-each="categorie : ${categories}" data-th-value="${categorie.noCategorie}" data-th-text="${categorie.libelle}"></option>
+      </select>
+    </li>
+    <li>
+      <label for="description" data-th-text="#{new_sale.form.description}"></label>
+      <textarea id="description" name="description" required></textarea>
+    </li>
+    <li>
+    <label for="photo" data-th-text="#{new_sale.form.photo}"></label>
+    <input type="file" id="photo" name="photo" accept="image/*" class="image-upload">
+    </li>
       <li>
-        <label for="password" data-th-text="#{login.form.password}"></label>
-        <input type="password" id="password" name="password" required>
+    <label for="prix" data-th-text="#{new_sale.form.prixInitial}"></label>
+    <input type="number" id="prix" name="prix" min="1" required>
       </li>
+    <li>
+    <label for="debut" data-th-text="#{new_sale.form.dateDebutEnchere }"></label>
+    <input type="date" id="debut" name="debut"  required data-th-attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
+    </li>
+<li>
+    <label for="fin" data-th-text="#{new_sale.form.dateFinEnchere}" data-th-attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"></label>
+    <input type="date" id="fin" name="fin" required>
+</li>
       <li>
-        <button type="submit" data-th-text="#{login.form.button}"></button>
+        <fieldset>
+          <legend data-th-text="#{new_sale.form.retrait}"></legend>
+          <ul id="retraitform">
+            <li>
+          <label for="rue" data-th-text="#{new_sale.form.rue}"></label>
+          <input type="text" id="rue" name="rue" required data-th-value="${utilisateur.rue}">
+            </li>
+            <li>
+          <label for="codePostal" data-th-text="#{new_sale.form.codePostal}"></label>
+          <input type="text"  id="codePostal" name="codePostal" required data-th-value="${utilisateur.codePostal}">
+            </li>
+            <li>
+          <label for="ville" data-th-text="#{new_sale.form.ville}"></label>
+          <input type="text"  id="ville" name="ville" required data-th-value="${utilisateur.ville}">
+            </li>
+          </ul>
+        </fieldset>
+      </li>
+      <li id="button-center">
+        <button class="button" type="submit" data-th-text="#{new_sale.form.button.enregistrer }"></button>
+        <button class="button" type="submit" data-th-text="#{new_sale.form.button.annuler}"></button>
       </li>
     </ul>
   </form>
-  <!-- Affichage d'erreur -->
-  <div th:if="${param.error}">
-    <p class="erreur">Les identifiants sont incorrects.</p>
+  </div>
   </div>
 
+
 </main>
+
 </html>

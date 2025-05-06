@@ -18,10 +18,9 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public class ArticleVenduImpl implements ArticleVenduDAO {
+public class ArticleVenduDAOImpl implements ArticleVenduDAO {
     //*****************  QUERIES  ***********************
     private static final String SELECT_BY_ETAT = "SELECT no_article,nom_article,description,date_debut_encheres," +
             "date_fin_encheres,prix_initial,prix_vente,no_categorie,etat_vente,url_image\n" +
@@ -36,7 +35,7 @@ public class ArticleVenduImpl implements ArticleVenduDAO {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 
-    public ArticleVenduImpl(
+    public ArticleVenduDAOImpl(
             JdbcTemplate jdbcTemplate,
             NamedParameterJdbcTemplate namedParameterJdbcTemplate
     ) {
