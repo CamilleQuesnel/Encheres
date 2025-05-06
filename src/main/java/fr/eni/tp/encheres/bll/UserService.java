@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserService {
 
-    public Utilisateur getUtilisateurById(int id);
+    public Utilisateur getUtilisateurById(int no_utilisateur);
     public Utilisateur getUtilisateurByEmail(String email);
     public Utilisateur getUtilisateurByPseudo(String pseudo);
     public void createUtilisateur(RegisterDTO registerDTO);
@@ -17,6 +17,5 @@ public interface UserService {
     public void desactivateUtilisateur(int no_utilisateur);
     public void deleteUtilisateur(int no_utilisateur);
     public List<Utilisateur> readUsers();
-
 
 }

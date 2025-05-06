@@ -28,35 +28,78 @@ public class SecurityController {
         this.userService = userService;
     }
 
+    @GetMapping("/")
+    public String displayEncheres(){
+        return "redirect:/encheres";
+    }
+    @GetMapping("/encheres")
+    public String afficherListeEncheres() {
+        return "index";
+    }
+
+
+
     /**
      * Page de login
      */
     @GetMapping("/login")
-    public String afficherLogin() {
+    public String displayLogin() {
         return "login";
     }
 
     /**
      * Redirection vers la page de profil après login réussi
      */
+//    @GetMapping("/login_success")
+//    public String loginSuccess(
+//            @ModelAttribute("membreSession") Utilisateur membreSession,
+//            Principal principal
+//    ) {
+//        String pseudo = principal.getName(); // pseudo car utilisé comme identifiant
+//        Utilisateur utilisateur = userService.getUtilisateurByPseudo(pseudo);
+//
+//        membreSession.setNoUtilisateur(utilisateur.getNoUtilisateur());
+//        membreSession.setPseudo(utilisateur.getPseudo());
+//        membreSession.setNom(utilisateur.getNom());
+//        membreSession.setPrenom(utilisateur.getPrenom());
+//        membreSession.setEmail(utilisateur.getEmail());
+//        membreSession.setAdministrateur(utilisateur.isAdministrateur());
+//        membreSession.setActif(utilisateur.isActif());
+//
+//        return "redirect:/";
+//    }
+
     @GetMapping("/login_success")
     public String loginSuccess(
             @ModelAttribute("membreSession") Utilisateur membreSession,
-            Principal principal
+            Principal principal,
+            Model model
     ) {
-        String pseudo = principal.getName(); // pseudo car utilisé comme identifiant
-        Utilisateur utilisateur = userService.getUtilisateurByPseudo(pseudo);
+        try {
+            String pseudo = principal.getName(); // pseudo car utilisé comme identifiant
+            Utilisateur utilisateur = userService.getUtilisateurByPseudo(pseudo);
 
-        membreSession.setNoUtilisateur(utilisateur.getNoUtilisateur());
-        membreSession.setPseudo(utilisateur.getPseudo());
-        membreSession.setNom(utilisateur.getNom());
-        membreSession.setPrenom(utilisateur.getPrenom());
-        membreSession.setEmail(utilisateur.getEmail());
-        membreSession.setAdministrateur(utilisateur.isAdministrateur());
-        membreSession.setActif(utilisateur.isActif());
+            if (utilisateur == null) {
+                model.addAttribute("loginError", "Utilisateur introuvable.");
+                return "redirect:/login?error"; // ou une page personnalisée
+            }
 
-        return "redirect:/";
+            membreSession.setNoUtilisateur(utilisateur.getNoUtilisateur());
+            membreSession.setPseudo(utilisateur.getPseudo());
+            membreSession.setNom(utilisateur.getNom());
+            membreSession.setPrenom(utilisateur.getPrenom());
+            membreSession.setEmail(utilisateur.getEmail());
+            membreSession.setAdministrateur(utilisateur.isAdministrateur());
+            membreSession.setActif(utilisateur.isActif());
+
+            return "redirect:/encheres";
+        } catch (Exception e) {
+            e.printStackTrace(); // pour le log, tu peux aussi utiliser un vrai logger
+            model.addAttribute("loginError", "Une erreur est survenue lors de la connexion.");
+            return "redirect:/login?error"; // tu peux aussi rediriger vers une page d’erreur
+        }
     }
+
 
     /**
      * Formulaire d'inscription

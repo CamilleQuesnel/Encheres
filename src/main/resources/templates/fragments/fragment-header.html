@@ -2,7 +2,11 @@
   <div class="header-content">
     <div class="header-logo">
       <img data-th-src="@{/images/logo.png}" alt="Logo MinouMinou" height="50">
-      <a data-th-href="@{/}" data-th-text="#{nom-application}"></a><strong data-th-if="${membreSession != null && membreSession.noUtilisateur != 0}" data-th-text="'[' + ${membreSession.prenom} + ']'"></strong>
+      <a data-th-href="@{/encheres}" data-th-text="#{nom-application}"></a>
+
+      <i><a data-th-href="@{/profile}"><span th:if="${membreSession != null and membreSession.noUtilisateur != 0}"
+               th:text="'Bienvenue ' + ${membreSession.pseudo}">[pseudo]</span></a>
+      </i>
       <nav>
         <ul>
           <li><a data-th-href="@{/categories}" data-th-text="#{frag.header.categories}"></a></li>

@@ -11,8 +11,8 @@ public interface UtilisateurDAO {
     Utilisateur readEmail (String email);
     void updateUser (Utilisateur utilisateur);
     void deleteUser (int noUtilisateur);
-    boolean isUserPseudoUnique (Utilisateur utilisateur);
-    boolean isUserEmailUnique (Utilisateur utilisateur);
+    boolean isUserPseudoUnique (String pseudo);
+    boolean isUserEmailUnique (String email);
     List<Utilisateur> findUsers();
     List<Utilisateur> findUsersBuyers();
     void deleteCredit(int noUtilisateur, int credit);

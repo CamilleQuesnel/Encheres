@@ -49,6 +49,7 @@ public class WebSecurityConfiguration {
                             .requestMatchers(HttpMethod.POST, "/register").permitAll()
                             .requestMatchers(HttpMethod.GET, "/new_sale").authenticated()
                             .requestMatchers("/").permitAll()
+                            .requestMatchers("/encheres", "/encheres/*").permitAll()
                             .requestMatchers("/css/*").permitAll()
                             .requestMatchers("/images/*").permitAll()
                             .anyRequest().authenticated();

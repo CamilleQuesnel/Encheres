@@ -25,8 +25,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Utilisateur getUtilisateurById(int id) {
-        return utilisateurDAO.readId(id);
+    public Utilisateur getUtilisateurById(int no_utilisateur) {
+        return utilisateurDAO.readId(no_utilisateur);
     }
 
     @Override
@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_PSEUDO_LENGHT_MAX);
         }
-        if (pseudoUtilisateur != null) {
+        if (!utilisateurDAO.isUserPseudoUnique(pseudo)) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_PSEUDO_ALREADY_EXISTS);
         }
@@ -196,9 +196,9 @@ public class UserServiceImpl implements UserService {
         Pattern pattern = Pattern.compile(emailRegex);//compile la regex en objet
         Matcher matcher = pattern.matcher(email);//teste la regex compilée
         Utilisateur emailUtilisateur = utilisateurDAO.readEmail(email);
-        if (emailUtilisateur != null) {
+        if (email == null || email.isEmpty()) {//même si l'IDE dit qu'il ne sera jamais nul ça n'empêche pas de le vérifier
             isValid = false;
-            businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL_ALREADY_EXISTS);
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL);
         }
         if (!matcher.matches()) {
             isValid = false;
@@ -208,9 +208,9 @@ public class UserServiceImpl implements UserService {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL_LENGHT_MAX);
         }
-        if (email == null || email.isEmpty()) {//même si l'IDE dit qu'il ne sera jamais nul ça n'empêche pas de le vérifier
+        if (!utilisateurDAO.isUserEmailUnique(email)) {
             isValid = false;
-            businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL);
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL_ALREADY_EXISTS);
         }
 
         return isValid;
@@ -314,5 +314,8 @@ public class UserServiceImpl implements UserService {
         return isValid;
     }
 
+    public Utilisateur isEmailUnique(String email){
+        return null;
+    }
 
 }

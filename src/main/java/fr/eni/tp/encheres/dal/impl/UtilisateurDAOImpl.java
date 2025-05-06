@@ -29,12 +29,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
          * Les requêtes SQL
          *
          */
-        private static final String SELECT_BY_MAIL = "SELECT UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS WHERE UTILISATEURS.email = :email;";
-        private static final String SELECT_BY_ID="SELECT UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS WHERE UTILISATEURS.no_utilisateur = :no_utilisateur;";
+        private static final String SELECT_BY_MAIL = "SELECT no_utilisateur, UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS WHERE UTILISATEURS.email = :email;";
+        private static final String SELECT_BY_ID="SELECT no_utilisateur, UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS WHERE UTILISATEURS.no_utilisateur = :no_utilisateur;";
         private static final String SELECT_BY_PSEUDO="SELECT no_utilisateur, pseudo, nom, prenom, administrateur, rue, code_postal, ville, email, telephone, credit, actif " +
             "FROM UTILISATEURS WHERE pseudo = :pseudo;";
-        private static final String SELECT_ALL_USERS="SELECT UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS";
-        private static final String SELECT_USERS_BUYERS="SELECT UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS INNER JOIN ROLES ON ROLES.no_utilisateur = UTILISATEURS.no_utilisateur WHERE ROLES.role_utilisateur='acheteur';";
+        private static final String SELECT_ALL_USERS="SELECT no_utilisateur, UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS";
+        private static final String SELECT_USERS_BUYERS="SELECT no_utilisateur, UTILISATEURS.pseudo, UTILISATEURS.nom, UTILISATEURS.prenom, UTILISATEURS.administrateur, UTILISATEURS.rue, UTILISATEURS.code_postal, UTILISATEURS.ville, UTILISATEURS.email, UTILISATEURS.telephone, UTILISATEURS.credit, UTILISATEURS.actif FROM UTILISATEURS INNER JOIN ROLES ON ROLES.no_utilisateur = UTILISATEURS.no_utilisateur WHERE ROLES.role_utilisateur='acheteur';";
         private static final String INSERT_USER_INTO = "INSERT INTO UTILISATEURS (pseudo, nom,mot_de_passe, prenom, rue, code_postal, ville, email, telephone) VALUES (:pseudo, :nom, :mot_de_passe,:prenom, :rue, :code_postal, :ville, :email, :telephone);";
     private static final String UPDATE_USER_INTO =
             "UPDATE UTILISATEURS SET " +
@@ -185,10 +185,10 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
     }
 
     @Override
-    public boolean isUserPseudoUnique(Utilisateur utilisateur) {
+    public boolean isUserPseudoUnique(String pseudo) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("pseudo", utilisateur.getPseudo());
-        mapSqlParameterSource.addValue("no_utilisateur", utilisateur.getNoUtilisateur());
+        mapSqlParameterSource.addValue("pseudo", pseudo);
+//        mapSqlParameterSource.addValue("no_utilisateur", utilisateur.getNoUtilisateur());
 
         List <Utilisateur> users = namedParameterJdbcTemplate.query(
                 SELECT_BY_PSEUDO,
@@ -199,10 +199,9 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
     }
 
     @Override
-    public boolean isUserEmailUnique(Utilisateur utilisateur) {
+    public boolean isUserEmailUnique(String email) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("email", utilisateur.getEmail());
-        mapSqlParameterSource.addValue("no_utilisateur", utilisateur.getNoUtilisateur());
+        mapSqlParameterSource.addValue("email", email);
 
         List <Utilisateur> users = namedParameterJdbcTemplate.query(
                 SELECT_BY_MAIL,
