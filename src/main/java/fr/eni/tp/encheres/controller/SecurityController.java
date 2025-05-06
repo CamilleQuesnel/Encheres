@@ -1,7 +1,9 @@
 package fr.eni.tp.encheres.controller;
 
 import fr.eni.tp.encheres.bll.UserService;
+import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Utilisateur;
+import fr.eni.tp.encheres.dal.ArticleVenduDAO;
 import fr.eni.tp.encheres.dto.RegisterDTO;
 import fr.eni.tp.encheres.exception.BusinessCode;
 import fr.eni.tp.encheres.exception.BusinessException;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import fr.eni.tp.encheres.controller.FieldErrorMapper;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -23,9 +26,11 @@ import java.util.Map;
 public class SecurityController {
 
     private final UserService userService;
+    private final ArticleVenduDAO articleVenduDAO;
 
-    public SecurityController(UserService userService) {
+    public SecurityController(UserService userService, ArticleVenduDAO articleVenduDAO) {
         this.userService = userService;
+        this.articleVenduDAO = articleVenduDAO;
     }
 
     @GetMapping("/")
@@ -33,7 +38,9 @@ public class SecurityController {
         return "redirect:/encheres";
     }
     @GetMapping("/encheres")
-    public String afficherListeEncheres() {
+    public String afficherListeEncheres(Model model) {
+        List<ArticleVendu> articlesEnCours = articleVenduDAO.findByUserByEtat("en cours", null);
+        model.addAttribute("articles", articlesEnCours);
         return "index";
     }
 

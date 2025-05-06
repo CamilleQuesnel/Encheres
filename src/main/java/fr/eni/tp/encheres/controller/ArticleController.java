@@ -51,14 +51,14 @@ public class ArticleController {
     /**
      * Handle the root URL ("/") and show all articles with status "en cours".
      * This is the homepage of the application.
-     */
-    @GetMapping("/encheres")
-    public String afficherAccueil(Model model) {
-        List<ArticleVendu> articlesEnCours = articleVenduDAO.findByUserByEtat("en cours", null);
-        model.addAttribute("articles", articlesEnCours);
-        return "index"; // Make sure this file exists: templates/articles/list.html
-    }
-
+//     */
+//    @GetMapping("/encheres")
+//    public String afficherAccueil(Model model) {
+//        List<ArticleVendu> articlesEnCours = articleVenduDAO.findByUserByEtat("en cours", null);
+//        model.addAttribute("articles", articlesEnCours);
+//        return "index"; // Make sure this file exists: templates/articles/list.html
+//    }
+//
 
     /**
      * Détail d’un article

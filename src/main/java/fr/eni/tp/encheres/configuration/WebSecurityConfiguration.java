@@ -69,7 +69,7 @@ public class WebSecurityConfiguration {
             logout.deleteCookies("JSESSIONID");
             logout.clearAuthentication(true);
             logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
-            logout.logoutSuccessUrl("/");
+            logout.logoutSuccessUrl("/encheres");
         });
 
         return http.build();
