@@ -4,8 +4,13 @@
       <div class="logo"></div>
       <a data-th-href="@{/encheres}">
         <img data-th-src="@{/images/logo.png}" alt="Logo MinouMinou" height="50" style="vertical-align: middle;">
+
         <span data-th-text="#{nom-application}" style="margin-left: 8px;"></span>
       </a>
+      <div>
+        <a data-th-href="@{/(lang='fr')}"><img data-th-src="@{/images/French.webp}" height="10" alt="Drapeau français"></a>
+        <a data-th-href="@{/(lang='en')}"><img data-th-src="@{/images/English.webp}" height="10" alt="Drapeau anglais"></a>
+      </div>
 
     <div class="pseudo">
       <i><a data-th-href="@{/profile}"><span th:if="${membreSession != null and membreSession.noUtilisateur != 0}"
