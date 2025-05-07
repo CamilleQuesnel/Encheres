@@ -144,4 +144,8 @@ public class UpdateDTO {
                 ", passwordConfirm='" + passwordConfirm + '\'' +
                 '}';
     }
+
+    public void setNo_utilisateur(int no_utilisateur) {
+        this.no_utilisateur = no_utilisateur;
+    }
 }

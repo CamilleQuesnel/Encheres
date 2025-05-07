@@ -1,11 +1,12 @@
 package fr.eni.tp.encheres.configuration;
 
+
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -22,7 +23,7 @@ public class WebSecurityConfiguration {
     @Bean
     UserDetailsManager userDetailsManager(DataSource dataSource) {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-        jdbcUserDetailsManager.setUsersByUsernameQuery("SELECT pseudo, mot_de_passe, 1 FROM UTILISATEURS WHERE pseudo = ?;");
+        jdbcUserDetailsManager.setUsersByUsernameQuery("SELECT pseudo, mot_de_passe, actif FROM UTILISATEURS WHERE pseudo = ?;");
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
                 "SELECT pseudo, CASE WHEN administrateur = 1 THEN 'ROLE_ADMIN' ELSE 'ROLE_USER' END FROM UTILISATEURS WHERE pseudo = ?;"
         );//adaptation pour signifier à Spring Security que administrateur correspond à role_admin
@@ -39,6 +40,7 @@ public class WebSecurityConfiguration {
     }
 
 
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -46,6 +48,7 @@ public class WebSecurityConfiguration {
                     auth
                             .requestMatchers(HttpMethod.GET, "/articles/**").permitAll()
                             .requestMatchers(HttpMethod.GET, "/profile").authenticated()
+                            .requestMatchers(HttpMethod.POST, "/profile").authenticated()
                             .requestMatchers(HttpMethod.GET, "/register").permitAll()
                             .requestMatchers(HttpMethod.POST, "/register").permitAll()
                             .requestMatchers(HttpMethod.GET, "/new_sale").authenticated()

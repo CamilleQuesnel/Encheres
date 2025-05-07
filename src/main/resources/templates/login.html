@@ -26,12 +26,20 @@
             <label for="username" data-th-text="#{login.form.username}"></label>
             <input type="text" id="username" name="username" autofocus>
 
+
+
             <label for="password" data-th-text="#{login.form.password}"></label>
             <input type="password" id="password" name="password">
 <!--TO DO : faire les erreurs-->
+            <div class="cards" th:if="${loginError}">
+                <p th:text="${loginError}"></p>
+            </div>
             <div class="button">
             <button type="submit" data-th-text="#{login.form.button}"></button>
             </div>
+<!--            <div th:if="${logoutSuccess}" class="success">-->
+<!--                <p th:text="${logoutSuccess}"></p>-->
+<!--            </div>-->
         </div>
     </div>
 </form>

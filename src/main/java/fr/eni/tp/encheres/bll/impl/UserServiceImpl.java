@@ -92,9 +92,9 @@ public class UserServiceImpl implements UserService {
 
         isValid &= isLastnameValid(updateDTO.getLastname(), businessException);
         isValid &= isFirstnameValid(updateDTO.getFirstname(), businessException);
-        isValid &= isPseudoValid(updateDTO.getPassword(), businessException);
+        isValid &= isPseudoValid(updateDTO.getUsername(), businessException);
         isValid &= isEmailValid(updateDTO.getEmail(), businessException);
-        isValid &= isPasswordValid(updateDTO.getPassword(), updateDTO.getPasswordConfirm(), businessException);
+        isValid &= isPasswordChanged(updateDTO.getPassword(), updateDTO.getPasswordConfirm(), businessException);
         isValid &= isStreetValid(updateDTO.getStreet(), businessException);
         isValid &= isCityValid(updateDTO.getCity(), businessException);
         isValid &= isCodePostalValid(updateDTO.getPostalCode(), businessException);
@@ -314,8 +314,40 @@ public class UserServiceImpl implements UserService {
         return isValid;
     }
 
-    public Utilisateur isEmailUnique(String email){
-        return null;
+    private boolean isPasswordChanged(String password, String passwordConfirm, BusinessException businessException) {
+        boolean isValid = true;
+
+        // Si les deux champs sont vides, pas de validation à faire (pas de changement demandé)
+        if ((password == null || password.isBlank()) && (passwordConfirm == null || passwordConfirm.isBlank())) {
+            return true;
+        }
+
+        // Si l’un des deux est vide mais pas l’autre
+        if ((password == null || password.isBlank()) || (passwordConfirm == null || passwordConfirm.isBlank())) {
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_PASSWORD);
+            return false;
+        }
+
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+        Pattern pattern = Pattern.compile(passwordRegex);
+        Matcher matcher = pattern.matcher(password);
+
+        if (!matcher.matches()) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_PASSWORD_REGEX);
+        }
+        if (password.length() > 68) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_PASSWORD_LENGHT_MAX);
+        }
+        if (!password.equals(passwordConfirm)) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_PASSWORD_CONFIRM);
+        }
+
+        return isValid;
     }
+
+
 
 }

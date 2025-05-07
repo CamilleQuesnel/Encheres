@@ -4,7 +4,9 @@ import fr.eni.tp.encheres.bll.UserService;
 import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Utilisateur;
 import fr.eni.tp.encheres.dal.ArticleVenduDAO;
+import fr.eni.tp.encheres.dto.NewSaleDTO;
 import fr.eni.tp.encheres.dto.RegisterDTO;
+import fr.eni.tp.encheres.dto.UpdateDTO;
 import fr.eni.tp.encheres.exception.BusinessCode;
 import fr.eni.tp.encheres.exception.BusinessException;
 import jakarta.servlet.http.HttpSession;
@@ -45,37 +47,17 @@ public class SecurityController {
         return "index";
     }
 
-
-
-    /**
-     * Page de login
-     */
     @GetMapping("/login")
-    public String displayLogin() {
+    public String displayLogin(Model model, @RequestParam(required = false) String error,
+                               @RequestParam(required = false) String logout) {
+        if (error != null) {
+            model.addAttribute("loginError", "Identifiant ou mot de passe incorrect, ou compte désactivé.");
+        }
+        if (logout != null) {
+            model.addAttribute("logoutSuccess", "Vous avez été déconnecté(e).");
+        }
         return "login";
     }
-
-    /**
-     * Redirection vers la page de profil après login réussi
-     */
-//    @GetMapping("/login_success")
-//    public String loginSuccess(
-//            @ModelAttribute("membreSession") Utilisateur membreSession,
-//            Principal principal
-//    ) {
-//        String pseudo = principal.getName(); // pseudo car utilisé comme identifiant
-//        Utilisateur utilisateur = userService.getUtilisateurByPseudo(pseudo);
-//
-//        membreSession.setNoUtilisateur(utilisateur.getNoUtilisateur());
-//        membreSession.setPseudo(utilisateur.getPseudo());
-//        membreSession.setNom(utilisateur.getNom());
-//        membreSession.setPrenom(utilisateur.getPrenom());
-//        membreSession.setEmail(utilisateur.getEmail());
-//        membreSession.setAdministrateur(utilisateur.isAdministrateur());
-//        membreSession.setActif(utilisateur.isActif());
-//
-//        return "redirect:/";
-//    }
 
     @GetMapping("/login_success")
     public String loginSuccess(
@@ -84,12 +66,12 @@ public class SecurityController {
             Model model
     ) {
         try {
-            String pseudo = principal.getName(); // pseudo car utilisé comme identifiant
+            String pseudo = principal.getName();
             Utilisateur utilisateur = userService.getUtilisateurByPseudo(pseudo);
 
             if (utilisateur == null) {
                 model.addAttribute("loginError", "Utilisateur introuvable.");
-                return "redirect:/login?error"; // ou une page personnalisée
+                return "redirect:/login?error";
             }
 
             membreSession.setNoUtilisateur(utilisateur.getNoUtilisateur());
@@ -102,50 +84,35 @@ public class SecurityController {
 
             return "redirect:/encheres";
         } catch (Exception e) {
-            e.printStackTrace(); // pour le log, tu peux aussi utiliser un vrai logger
+            e.printStackTrace();
             model.addAttribute("loginError", "Une erreur est survenue lors de la connexion.");
-            return "redirect:/login?error"; // tu peux aussi rediriger vers une page d’erreur
+            return "redirect:/login?error";
         }
     }
 
-
-    /**
-     * Formulaire d'inscription
-     */
     @GetMapping("/register")
     public String afficherFormulaireInscription(Model model) {
-        if (!model.containsAttribute("registerDTO")) {// Cela empêche de remplacer registerDTO s'il existe déjà (donc s'il vient d’un POST avec des erreurs).
+        if (!model.containsAttribute("registerDTO")) {
             model.addAttribute("registerDTO", new RegisterDTO());
         }
         return "register";
     }
 
-
-    /**
-     * Traitement de l'inscription
-     */
     @PostMapping("/register")
     public String traiterInscription(
             @ModelAttribute("registerDTO") RegisterDTO dto,
             BindingResult bindingResult,
             Model model
     ) {
-        System.out.println("début du cuicui");
-
         try {
             userService.createUtilisateur(dto);
-            System.out.println("pas cuicui");
         } catch (BusinessException exception) {
             exception.getKeys().forEach(key -> {
-                System.out.println(key);
                 String field = FieldErrorMapper.getFieldName(key);
-                bindingResult.addError( new FieldError("registerDTO", field,null,false, new String[]{key}, null, null));
-
+                bindingResult.addError(new FieldError("registerDTO", field, null, false, new String[]{key}, null, null));
             });
-            System.out.println("cuicui register");
         }
 
-        // ✅ Toujours revenir au formulaire si des erreurs sont présentes
         if (bindingResult.hasErrors()) {
             return "register";
         }
@@ -153,27 +120,75 @@ public class SecurityController {
         return "redirect:/login";
     }
 
-
-    /**
-     *
-     * Page profile
-     */
     @GetMapping("/profile")
-    public String afficherProfile() {
+    public String afficherProfile(@ModelAttribute("membreSession") Utilisateur membreSession, Model model) {
+        Utilisateur utilisateur = userService.getUtilisateurByPseudo(membreSession.getPseudo());
+
+        membreSession.setNom(utilisateur.getNom());
+        membreSession.setPrenom(utilisateur.getPrenom());
+        membreSession.setEmail(utilisateur.getEmail());
+        membreSession.setRue(utilisateur.getRue());
+        membreSession.setCodePostal(utilisateur.getCodePostal());
+        membreSession.setVille(utilisateur.getVille());
+        membreSession.setTelephone(utilisateur.getTelephone());
+
+        UpdateDTO dto = new UpdateDTO();
+        dto.setNo_utilisateur(utilisateur.getNoUtilisateur());
+        dto.setLastname(utilisateur.getNom());
+        dto.setFirstname(utilisateur.getPrenom());
+        dto.setUsername(utilisateur.getPseudo());
+        dto.setEmail(utilisateur.getEmail());
+        dto.setStreet(utilisateur.getRue());
+        dto.setPostalCode(utilisateur.getCodePostal());
+        dto.setCity(utilisateur.getVille());
+        dto.setPhone(utilisateur.getTelephone());
+        dto.setPassword("");
+        dto.setPasswordConfirm("");
+
+        model.addAttribute("UpdateDTO", dto);
         return "profile";
     }
 
+    @PostMapping("/profile")
+    public String updateProfile(
+            @ModelAttribute("membreSession") Utilisateur membreSession,
+            @ModelAttribute("UpdateDTO") UpdateDTO updateDTO,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        try {
+            updateDTO.setUsername(membreSession.getPseudo());
+            updateDTO.setNo_utilisateur(membreSession.getNoUtilisateur());
 
-    /**
-     * Création de l'attribut de session membreSession  pour stocker l'utilisateur connecté
-     */
+            userService.updateUtilisateur(updateDTO);
+
+            membreSession.setNom(updateDTO.getLastname());
+            membreSession.setPrenom(updateDTO.getFirstname());
+            membreSession.setEmail(updateDTO.getEmail());
+            membreSession.setRue(updateDTO.getStreet());
+            membreSession.setCodePostal(updateDTO.getPostalCode());
+            membreSession.setVille(updateDTO.getCity());
+            membreSession.setTelephone(updateDTO.getPhone());
+
+            model.addAttribute("successMessage", "Profil mis à jour avec succès.");
+
+        } catch (BusinessException exception) {
+            System.out.println("Erreurs de validation dans updateUtilisateur :");
+            System.out.println("Contenu de UpdateDTO : " + updateDTO);
+            exception.printStackTrace();
+            exception.getKeys().forEach(key -> {
+                String field = FieldErrorMapper.getFieldName(key);
+                bindingResult.addError(new FieldError("UpdateDTO", field, null, false, new String[]{key}, null, null));
+            });
+            model.addAttribute("errorMessage", "Erreur lors de la mise à jour du profil.");
+            return "profile";
+        }
+
+        return "redirect:/profile";
+    }
+
     @ModelAttribute("membreSession")
     public Utilisateur membreSession() {
         return new Utilisateur();
     }
-
-
-
 }
-
-

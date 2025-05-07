@@ -4,18 +4,74 @@
         xmlns:th="http://www.thymeleaf.org"
         data-th-replace="~{layouts/layout :: layout(
                                                 mainContent=~{:: main},
-                                                cssContent=~{},
+                                                cssContent=~{:: link},
                                                 title=~{}
                                             )}"
 >
+
+<link data-th-rel="stylesheet" data-th-href="@{/css/newSale.css}">
 <main>
     <div class="window">
         <div class="title-bar">
-            <span>Profile.exe</span>
+            <span th:text="${UpdateDTO.username} + '.exe'"></span>
             <div class="title-bar-button">X</div>
         </div>
         <div class="content">
-            <p>Vue profil à faire</p>
+            <form th:action="@{/profile}" th:object="${UpdateDTO}" method="post">
+                <input type="hidden" th:field="*{no_utilisateur}">
+
+                <ul>
+                    <li>
+                        <label for="lastname" th:text="#{profile.form.nom}"></label>
+                        <input type="text" id="lastname" name="lastname"
+                               th:value="${#strings.capitalize(UpdateDTO.lastname)}">
+                    </li>
+                    <li>
+                        <label for="firstname" th:text="#{profile.form.prenom}"></label>
+                        <input type="text" id="firstname" name="firstname"
+                               th:value="${#strings.capitalize(UpdateDTO.firstname)}">
+                    </li>
+                    <li>
+                        <label for="email" th:text="#{profile.form.email}"></label>
+                        <input type="email" id="email" name="email"
+                               th:value="*{email}">
+                    </li>
+                    <li>
+                        <label for="phone" th:text="Téléphone"></label>
+                        <input type="text" id="phone" name="phone"
+                               th:value="*{phone}">
+                    </li>
+                    <li>
+                        <label for="street" th:text="#{profile.form.rue}"></label>
+                        <input type="text" id="street" name="street"
+                               th:value="*{street}">
+                    </li>
+                    <li>
+                        <label for="postalCode" th:text="#{profile.form.codepostal}"></label>
+                        <input type="text" id="postalCode" name="postalCode"
+                               th:value="*{postalCode}">
+                    </li>
+                    <li>
+                        <label for="city" th:text="#{profile.form.ville}"></label>
+                        <input type="text" id="city" name="city"
+                               th:value="*{city}">
+                    </li>
+                    <li>
+                        <label for="password" th:text="#{profile.form.button.password}"></label>
+                        <input type="password" id="password" th:field="*{password}" />
+                    </li>
+
+                    <li>
+                        <label for="passwordConfirm" th:text="#{profile.form.button.password.confirm}"></label>
+                        <input type="password" id="passwordConfirm" th:field="*{passwordConfirm}" />
+                    </li>
+
+                    <li id="button-center">
+                        <button class="button" type="submit" th:text="#{profile.form.button.enregistrer}"></button>
+                        <button class="button" type="reset" th:text="#{profile.form.button.annuler}"></button>
+                    </li>
+                </ul>
+            </form>
         </div>
     </div>
 </main>
