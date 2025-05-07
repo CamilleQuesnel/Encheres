@@ -8,8 +8,8 @@ public class ArticleVendu {
     private int noArticle;
     private String nomArticle;
     private String description;
-    private LocalDate dateDebutEncheres;
-    private LocalDate dateFinEncheres;
+    private LocalDateTime dateDebutEncheres;
+    private LocalDateTime dateFinEncheres;
     private int miseAPrix;
     private int prixVente;
     private String etatVente;
@@ -20,7 +20,7 @@ public class ArticleVendu {
 
     public ArticleVendu() {}
 
-    public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, List<Enchere> encheres, Categorie categorieArticle) {
+    public ArticleVendu(int noArticle, String nomArticle, String description, LocalDateTime dateDebutEncheres, LocalDateTime dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, List<Enchere> encheres, Categorie categorieArticle) {
         this.noArticle = noArticle;
         this.nomArticle = nomArticle;
         this.description = description;
@@ -59,7 +59,7 @@ public class ArticleVendu {
         this.description = description;
     }
 
-    public LocalDate getDateDebutEncheres() {
+    public LocalDateTime getDateDebutEncheres() {
         return dateDebutEncheres;
     }
 
@@ -67,7 +67,7 @@ public class ArticleVendu {
         this.dateDebutEncheres = dateDebutEncheres;
     }
 
-    public LocalDate getDateFinEncheres() {
+    public LocalDateTime getDateFinEncheres() {
         return dateFinEncheres;
     }
 
