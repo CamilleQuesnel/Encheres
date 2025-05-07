@@ -8,7 +8,7 @@ public interface ArticleVenduDAO {
     ArticleVendu findById(int id);
     List<ArticleVendu> findAll();
     List<ArticleVendu> findByCategorie(int idCategorie);
-    void insert(ArticleVendu article);
+    ArticleVendu insert(ArticleVendu article);
     void update(ArticleVendu article);
     void delete(int id);
 

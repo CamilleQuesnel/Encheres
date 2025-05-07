@@ -64,6 +64,7 @@
             <li>
           <label for="rue" data-th-text="#{new_sale.form.rue}"></label>
           <input type="text" id="rue" name="rue" required data-th-value="${utilisateur.rue}">
+          <input type="text" hidden="hidden" id="no_utilisateur" name="no_utilisateur"  data-th-value="${utilisateur.getNoUtilisateur()}">
             </li>
             <li>
           <label for="codePostal" data-th-text="#{new_sale.form.codePostal}"></label>

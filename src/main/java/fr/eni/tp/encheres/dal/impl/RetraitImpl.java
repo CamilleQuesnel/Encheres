@@ -43,7 +43,7 @@ public class RetraitImpl implements RetraitDAO {
     public void create(Retrait retrait) {
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("no_article",retrait.getArticleVendu().getNoArticle());
+        mapSqlParameterSource.addValue("no_article",retrait.getArticleVendu());
         mapSqlParameterSource.addValue(("rue"),retrait.getRue());
         mapSqlParameterSource.addValue(("code_postal"),retrait.getCode_postal());
         mapSqlParameterSource.addValue(("ville"),retrait.getVille());
@@ -76,7 +76,7 @@ public class RetraitImpl implements RetraitDAO {
                     new RetraitRowMapper()
             );
         } catch (EmptyResultDataAccessException e) {
-            throw e;
+            return null;
         }catch(Exception e){
             e.printStackTrace();
             retrait = null;
@@ -122,7 +122,7 @@ public class RetraitImpl implements RetraitDAO {
     @Override//TEST OK
     public void updateRetrait(Retrait retrait) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("no_article",retrait.getArticleVendu().getNoArticle());
+        mapSqlParameterSource.addValue("no_article",retrait.getArticleVendu());
         mapSqlParameterSource.addValue(("rue"),retrait.getRue());
         mapSqlParameterSource.addValue(("code_postal"),retrait.getCode_postal());
         mapSqlParameterSource.addValue(("ville"),retrait.getVille());
@@ -143,7 +143,7 @@ class RetraitRowMapper implements RowMapper<Retrait> {
         ArticleVendu articleVendu = new ArticleVendu();
         articleVendu.setNoArticle(rs.getInt("no_article"));
 
-        retrait.setArticleVendu(articleVendu);
+        retrait.setArticleVendu(articleVendu.getNoArticle());
 
         return retrait;
     }

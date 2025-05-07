@@ -1,14 +1,17 @@
 package fr.eni.tp.encheres.dto;
 
+import java.time.LocalDateTime;
+
 public class NewSaleDTO {
     // objet article
+    private int no_utlisateur;
     private String article;
-    private String categorie;
+    private int categorie;
     private String description;
     private String photo;
-    private String prix;
-    private String debut;
-    private String fin;
+    private int prix;
+    private LocalDateTime debut;
+    private LocalDateTime fin;
     // objet categorie
     private String rue;
     private String codePostal;
@@ -17,7 +20,8 @@ public class NewSaleDTO {
     public NewSaleDTO() {
     }
 
-    public NewSaleDTO(String article, String categorie, String description, String photo, String prix, String debut, String fin, String rue, String codePostal, String ville) {
+    public NewSaleDTO(int no_utlisateur, String article, int categorie, String description, String photo, int prix, LocalDateTime debut, LocalDateTime fin, String rue, String codePostal, String ville) {
+        this.no_utlisateur = no_utlisateur;
         this.article = article;
         this.categorie = categorie;
         this.description = description;
@@ -30,6 +34,13 @@ public class NewSaleDTO {
         this.ville = ville;
     }
 
+    public int getNo_utlisateur() {
+        return no_utlisateur;
+    }
+
+    public void setNo_utlisateur(int no_utlisateur) {
+        this.no_utlisateur = no_utlisateur;
+    }
 
     public String getArticle() {
         return article;
@@ -39,11 +50,11 @@ public class NewSaleDTO {
         this.article = article;
     }
 
-    public String getCategorie() {
+    public int getCategorie() {
         return categorie;
     }
 
-    public void setCategorie(String categorie) {
+    public void setCategorie(int categorie) {
         this.categorie = categorie;
     }
 
@@ -63,27 +74,27 @@ public class NewSaleDTO {
         this.photo = photo;
     }
 
-    public String getPrix() {
+    public int getPrix() {
         return prix;
     }
 
-    public void setPrix(String prix) {
+    public void setPrix(int prix) {
         this.prix = prix;
     }
 
-    public String getDebut() {
+    public LocalDateTime getDebut() {
         return debut;
     }
 
-    public void setDebut(String debut) {
+    public void setDebut(LocalDateTime debut) {
         this.debut = debut;
     }
 
-    public String getFin() {
+    public LocalDateTime getFin() {
         return fin;
     }
 
-    public void setFin(String fin) {
+    public void setFin(LocalDateTime fin) {
         this.fin = fin;
     }
 
@@ -109,22 +120,5 @@ public class NewSaleDTO {
 
     public void setVille(String ville) {
         this.ville = ville;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("NewSaleDTO{");
-        sb.append("article='").append(article).append('\'');
-        sb.append(", categorie='").append(categorie).append('\'');
-        sb.append(", description='").append(description).append('\'');
-        sb.append(", photo='").append(photo).append('\'');
-        sb.append(", prix='").append(prix).append('\'');
-        sb.append(", debut='").append(debut).append('\'');
-        sb.append(", fin='").append(fin).append('\'');
-        sb.append(", rue='").append(rue).append('\'');
-        sb.append(", codePostal='").append(codePostal).append('\'');
-        sb.append(", ville='").append(ville).append('\'');
-        sb.append('}');
-        return sb.toString();
     }
 }

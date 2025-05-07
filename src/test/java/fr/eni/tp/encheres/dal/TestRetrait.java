@@ -29,7 +29,7 @@ public class TestRetrait {
         ArticleVendu articleVendu = new ArticleVendu();
         articleVendu = articleVenduDAO.findById(5);
         articleVendu.setNoArticle(20);
-        Retrait retrait = new Retrait("2 rue de la ville","99999","TEST VILLE",articleVendu);
+        Retrait retrait = new Retrait("2 rue de la ville","99999","TEST VILLE",articleVendu.getNoArticle());
         retraitDAO.create(retrait);
     }
     @Test

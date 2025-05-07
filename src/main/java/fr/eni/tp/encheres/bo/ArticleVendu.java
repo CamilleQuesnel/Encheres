@@ -1,6 +1,6 @@
 package fr.eni.tp.encheres.bo;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,19 +8,20 @@ public class ArticleVendu {
     private int noArticle;
     private String nomArticle;
     private String description;
-    private LocalDate dateDebutEncheres;
-    private LocalDate dateFinEncheres;
+    private LocalDateTime dateDebutEncheres;
+    private LocalDateTime dateFinEncheres;
     private int miseAPrix;
     private int prixVente;
     private String etatVente;
     private Utilisateur utilisateur;
     private Retrait lieuRetrait;
+    private String urlImage;
     private List<Enchere> encheres;
-    private Categorie categorieArticle;
+    private Categorie categorie;
 
     public ArticleVendu() {}
 
-    public ArticleVendu(int noArticle, String nomArticle, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, List<Enchere> encheres, Categorie categorieArticle) {
+    public ArticleVendu(int noArticle, String nomArticle, String description, LocalDateTime dateDebutEncheres, LocalDateTime dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, String urlImage, List<Enchere> encheres, Categorie categorie) {
         this.noArticle = noArticle;
         this.nomArticle = nomArticle;
         this.description = description;
@@ -31,8 +32,9 @@ public class ArticleVendu {
         this.etatVente = etatVente;
         this.utilisateur = utilisateur;
         this.lieuRetrait = lieuRetrait;
+        this.urlImage = urlImage;
         this.encheres = encheres;
-        this.categorieArticle = categorieArticle;
+        this.categorie = categorie;
     }
 
     public int getNoArticle() {
@@ -59,19 +61,19 @@ public class ArticleVendu {
         this.description = description;
     }
 
-    public LocalDate getDateDebutEncheres() {
+    public LocalDateTime getDateDebutEncheres() {
         return dateDebutEncheres;
     }
 
-    public void setDateDebutEncheres(LocalDate dateDebutEncheres) {
+    public void setDateDebutEncheres(LocalDateTime dateDebutEncheres) {
         this.dateDebutEncheres = dateDebutEncheres;
     }
 
-    public LocalDate getDateFinEncheres() {
+    public LocalDateTime getDateFinEncheres() {
         return dateFinEncheres;
     }
 
-    public void setDateFinEncheres(LocalDate dateFinEncheres) {
+    public void setDateFinEncheres(LocalDateTime dateFinEncheres) {
         this.dateFinEncheres = dateFinEncheres;
     }
 
@@ -115,6 +117,14 @@ public class ArticleVendu {
         this.lieuRetrait = lieuRetrait;
     }
 
+    public String getUrlImage() {
+        return urlImage;
+    }
+
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
+    }
+
     public List<Enchere> getEncheres() {
         return encheres;
     }
@@ -123,21 +133,12 @@ public class ArticleVendu {
         this.encheres = encheres;
     }
 
-    public Categorie getCategorieArticle() {
-        return categorieArticle;
+    public Categorie getCategorie() {
+        return categorie;
     }
 
-    public void setCategorieArticle(Categorie categorieArticle) {
-        this.categorieArticle = categorieArticle;
-    }
-
-    // Ajout des getters utilitaires demandés
-    public int getNoUtilisateur() {
-        return utilisateur != null ? utilisateur.getNoUtilisateur() : 0;
-    }
-
-    public int getNoCategorie() {
-        return categorieArticle != null ? categorieArticle.getNoCategorie() : 0;
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
     }
 
     @Override
@@ -154,31 +155,20 @@ public class ArticleVendu {
                 ", utilisateur=" + utilisateur +
                 ", lieuRetrait=" + lieuRetrait +
                 ", encheres=" + encheres +
-                ", categorieArticle=" + categorieArticle +
+                ", categorie=" + categorie +
+                ", urlImage=" + urlImage +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ArticleVendu)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         ArticleVendu that = (ArticleVendu) o;
-        return noArticle == that.noArticle &&
-                miseAPrix == that.miseAPrix &&
-                prixVente == that.prixVente &&
-                Objects.equals(nomArticle, that.nomArticle) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(dateDebutEncheres, that.dateDebutEncheres) &&
-                Objects.equals(dateFinEncheres, that.dateFinEncheres) &&
-                Objects.equals(etatVente, that.etatVente) &&
-                Objects.equals(utilisateur, that.utilisateur) &&
-                Objects.equals(lieuRetrait, that.lieuRetrait) &&
-                Objects.equals(encheres, that.encheres) &&
-                Objects.equals(categorieArticle, that.categorieArticle);
+        return noArticle == that.noArticle && miseAPrix == that.miseAPrix && prixVente == that.prixVente && Objects.equals(nomArticle, that.nomArticle) && Objects.equals(description, that.description) && Objects.equals(dateDebutEncheres, that.dateDebutEncheres) && Objects.equals(dateFinEncheres, that.dateFinEncheres) && Objects.equals(etatVente, that.etatVente) && Objects.equals(utilisateur, that.utilisateur) && Objects.equals(lieuRetrait, that.lieuRetrait) && Objects.equals(urlImage, that.urlImage) && Objects.equals(encheres, that.encheres) && Objects.equals(categorie, that.categorie);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(noArticle, nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, utilisateur, lieuRetrait, encheres, categorieArticle);
+        return Objects.hash(noArticle, nomArticle, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, etatVente, utilisateur, lieuRetrait, urlImage, encheres, categorie);
     }
 }

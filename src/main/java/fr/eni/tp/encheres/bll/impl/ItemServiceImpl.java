@@ -4,13 +4,13 @@ import fr.eni.tp.encheres.bll.ItemService;
 import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Categorie;
 import fr.eni.tp.encheres.bo.Enchere;
-import fr.eni.tp.encheres.dal.ArticleVenduDAO;
-import fr.eni.tp.encheres.dal.CategorieDAO;
-import fr.eni.tp.encheres.dal.EnchereDAO;
-import fr.eni.tp.encheres.dal.UtilisateurDAO;
+import fr.eni.tp.encheres.bo.Retrait;
+import fr.eni.tp.encheres.dal.*;
 import fr.eni.tp.encheres.dto.NewSaleDTO;
 import fr.eni.tp.encheres.exception.BusinessCode;
 import fr.eni.tp.encheres.exception.BusinessException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,12 +24,14 @@ public class ItemServiceImpl implements ItemService {
     private EnchereDAO enchereDAO;
     private CategorieDAO categorieDAO;
     private UtilisateurDAO utilisateurDAO;
+    private RetraitDAO retraitDAO;
 
-    public ItemServiceImpl(ArticleVenduDAO articleVenduDAO, EnchereDAO enchereDAO, CategorieDAO categorieDAO, UtilisateurDAO utilisateurDAO) {
+    public ItemServiceImpl(ArticleVenduDAO articleVenduDAO, EnchereDAO enchereDAO, CategorieDAO categorieDAO, UtilisateurDAO utilisateurDAO, RetraitDAO retraitDAO) {
         this.articleVenduDAO = articleVenduDAO;
         this.enchereDAO = enchereDAO;
         this.categorieDAO = categorieDAO;
         this.utilisateurDAO = utilisateurDAO;
+        this.retraitDAO = retraitDAO;
     }
 
     @Override
@@ -55,40 +57,59 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void createArticle(NewSaleDTO newSaleDTO) { // creer
-        boolean isValid = true;
+        boolean isArticleValid = true;
+        boolean isRetraitValid = true;
+        boolean dateSupNow = true;
         BusinessException businessException = new BusinessException();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
     //VALIDATION ARTICLE
-        /**
-         * CREATE TABLE ARTICLES_VENDUS (
-         *     no_article                    INT IDENTITY(1,1) NOT NULL,
-         *     nom_article                   VARCHAR(30) NOT NULL,
-         *     description                   VARCHAR(300) NOT NULL,
-         * 	date_debut_encheres           DATE NOT NULL,
-         *     date_fin_encheres             DATE NOT NULL,
-         *     prix_initial                  INT,
-         *     prix_vente                    INT,
-         *     no_utilisateur                INT NOT NULL,
-         *     no_categorie                  INT NOT NULL ,
-         * 	etat_vente					  VARCHAR (20) CHECK (etat_vente IN ('n.c','en cours','vendu','annulé')),
-         * 	url_image
-         */
 
-        isValid  = isNomArticleValid(newSaleDTO.getArticle(),businessException);
-        isValid &= isDescritionValid(newSaleDTO.getDescription(),businessException);
-        isValid &= isDateEnchereValid(newSaleDTO.getDebut(), newSaleDTO.getFin(),businessException);
-        isValid &= isPrixValid(newSaleDTO.getPrix(),businessException);
-        isValid &= isNoCategorieValid(newSaleDTO.getCategorie(),businessException);
+        isArticleValid  = isNomArticleValid(newSaleDTO.getArticle(),businessException);
+        isArticleValid &= isDescritionValid(newSaleDTO.getDescription(),businessException);
+        isArticleValid &= isDateEnchereValid(newSaleDTO.getDebut(), newSaleDTO.getFin(),dateSupNow,businessException);
+        isArticleValid &= isPrixValid(newSaleDTO.getPrix(),businessException);
+        isArticleValid &= isNoCategorieValid(newSaleDTO.getCategorie(),businessException);
 
-        if(isValid){
-            // TODO CREATION ARTICLES
-//            ArticleVendu articleVendu = new ArticleVendu();
-//            articleVendu.setNomArticle();
+        if(isArticleValid){
+
+            ArticleVendu articleVendu = new ArticleVendu();
+            articleVendu.setCategorie(categorieDAO.findCategorieById(newSaleDTO.getCategorie()));
+            articleVendu.setNomArticle(newSaleDTO.getArticle());
+            articleVendu.setDescription(newSaleDTO.getDescription());
+            articleVendu.setDateDebutEncheres(newSaleDTO.getDebut());
+            articleVendu.setDateFinEncheres(newSaleDTO.getFin());
+            articleVendu.setMiseAPrix(newSaleDTO.getPrix());
+            articleVendu.setPrixVente(newSaleDTO.getPrix());
+
+            if (newSaleDTO.getDebut().isAfter(LocalDateTime.now())) {
+                articleVendu.setEtatVente("n.c");
+            }else{
+                articleVendu.setEtatVente("en cours");
+            }
+            articleVendu.setUtilisateur(utilisateurDAO.readPseudo(username));
+            articleVendu.setUrlImage(newSaleDTO.getPhoto());
+
+            ArticleVendu newArticle = articleVenduDAO.insert(articleVendu);
+
+            // CREATION LIEU RETRAIT
+            isRetraitValid = isNoArcticleValid(newArticle.getNoArticle(),businessException);
+            if(isRetraitValid){
+                Retrait retrait = new Retrait();
+                retrait.setArticleVendu(newArticle.getNoArticle());
+                retrait.setRue(newSaleDTO.getRue());
+                retrait.setVille(newSaleDTO.getVille());
+                retrait.setCode_postal(newSaleDTO.getCodePostal());
+                retraitDAO.create(retrait);
+            }
         }else{
-
+            throw businessException;
         }
 
+    }
 
-
+    private boolean isNoArcticleValid(int noArticle, BusinessException businessException) {
+        return  retraitDAO.findRetraitById(noArticle) == null;
     }
 
     @Override
@@ -97,7 +118,6 @@ public class ItemServiceImpl implements ItemService {
         // TEST TODO
         articleVenduDAO.update(articleVendu);
     }
-
 
     @Override
     public void deleteArticle(int id) {
@@ -117,7 +137,6 @@ public class ItemServiceImpl implements ItemService {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_NOM_ARTICLE_LENGTH);
         }
-
         return  isValid;
     }
     public boolean isDescritionValid(String description ,BusinessException businessException){
@@ -129,31 +148,27 @@ public class ItemServiceImpl implements ItemService {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_DESCRIPTION_LENGTH);
         }
-
         return  isValid;
     }
-    public boolean isDateEnchereValid(String debut, String fin,BusinessException businessException){
+    public boolean isDateEnchereValid(LocalDateTime debut, LocalDateTime fin,boolean dateSupNow,BusinessException businessException){
         boolean isValid = true;
-        if (debut == null || debut.isBlank()) {
+        if (debut == null ) {
             businessException.addKey(BusinessCode.VALID_DATE_DEBUT_BLANK);
             isValid = false;
         }
-        if (fin == null || fin.isBlank()) {
+        if (fin == null ) {
             businessException.addKey(BusinessCode.VALID_DATE_FIN_BLANK);
             isValid = false;
         }
 
         try {
-            LocalDateTime dateDebut = LocalDateTime.parse(debut);
-            LocalDateTime dateFin = LocalDateTime.parse(fin);
-            LocalDateTime now = LocalDateTime.now();
 
-            if (dateDebut.isBefore(now)) {
+            if (debut.isBefore(LocalDate.now().atStartOfDay())) {
                 businessException.addKey(BusinessCode.VALID_DATE_DEBUT_SUP_NOW);
                 isValid = false;
             }
 
-            if (!dateFin.isAfter(dateDebut)) {
+            if (!fin.isAfter(debut)) {
                 businessException.addKey(BusinessCode.VALID_DATE_FIN_SUP_DATE_DEBUT);
                 isValid = false;
             }
@@ -162,37 +177,29 @@ public class ItemServiceImpl implements ItemService {
             businessException.addKey(BusinessCode.VALID_DATE_FORMAT_INVALID);
             isValid = false;
         }
-
         return  isValid;
     }
-    public boolean isPrixValid(String prix,BusinessException businessException){
+    public boolean isPrixValid(int prix,BusinessException businessException){
         boolean isValid = true;
-        if(prix == null || prix.isBlank() ) {
-            isValid = false;
-            businessException.addKey(BusinessCode.VALID_PRIX_BLANK);
-        }else if (Integer.parseInt(prix) <0) {
+
+            if (prix <0) {
             isValid = false;
             businessException.addKey(BusinessCode.VALID_PRIX_SUP_ZERO);
         }
-
         return  isValid;
     }
-    public boolean isNoCategorieValid( String categorie,BusinessException businessException){
+    public boolean isNoCategorieValid( int categorie,BusinessException businessException){
+        System.out.println(" no categorie isVAlid ? ");
+        System.out.println(categorie);
         boolean isValid = true;
-        if(categorie == null || categorie.isBlank() ) {
-            isValid = false;
-            businessException.addKey(BusinessCode.VALID_NOM_CATEGORIE_BLANK);
-        }
-        if(categorieDAO.findCategorieById(Integer.parseInt(categorie))==null){
+
+        if(categorieDAO.findCategorieById(categorie)==null){
             isValid = false;
             businessException.addKey(BusinessCode.VALID_NOM_CATEGORIE_NOT_EXIST);
 
         }
-
         return  isValid;
-    }
-
-    ;
+    };
 
 
 }

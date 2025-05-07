@@ -52,8 +52,8 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
     private static final String SELECT_ALL = "SELECT * FROM ARTICLES_VENDUS";
     //Insert
     private static final String INSERT = "INSERT INTO ARTICLES_VENDUS " +
-            "(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, etat_vente, no_utilisateur, no_categorie) " +
-            "VALUES (:nom_article, :description, :date_debut_encheres, :date_fin_encheres, :prix_initial, :etat_vente, :no_utilisateur, :no_categorie)";
+            "(nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial,prix_vente, etat_vente, no_utilisateur, no_categorie, url_image) " +
+            "VALUES (:nom_article, :description, :date_debut_encheres, :date_fin_encheres, :prix_initial, :prix_vente ,:etat_vente, :no_utilisateur, :no_categorie , :url_image)";
 
 
     //Update
@@ -127,13 +127,16 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
 
 
     @Override
-    public void insert(ArticleVendu article) {
+    public ArticleVendu insert(ArticleVendu article) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("nom_article", article.getNomArticle());
         mapSqlParameterSource.addValue("description", article.getDescription());
         mapSqlParameterSource.addValue("date_debut_encheres",article.getDateDebutEncheres());
         mapSqlParameterSource.addValue("date_fin_encheres", article.getDateFinEncheres());
         mapSqlParameterSource.addValue("prix_initial",article.getMiseAPrix());
+        mapSqlParameterSource.addValue("prix_vente",article.getPrixVente());
+        mapSqlParameterSource.addValue("url_image",article.getUrlImage());
+
         // Récupération des identifiants de l'utilisateur et de la catégorie
         if (article.getUtilisateur() != null) {
             mapSqlParameterSource.addValue("no_utilisateur", article.getUtilisateur().getNoUtilisateur());
@@ -142,8 +145,8 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
         }
 
 
-        if (article.getCategorieArticle() != null) {
-            mapSqlParameterSource.addValue("no_categorie", article.getCategorieArticle().getNoCategorie());
+        if (article.getCategorie() != null) {
+            mapSqlParameterSource.addValue("no_categorie", article.getCategorie().getNoCategorie());
         } else {
             throw new IllegalArgumentException("CategorieArticle ne peut pas être null");
         }
@@ -166,6 +169,7 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
 
         // Mise à jour de l'identifiant de l'article
         article.setNoArticle(keyHolder.getKey().intValue());
+        return article;
     }
 
 
@@ -186,8 +190,8 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
             throw new IllegalArgumentException("Utilisateur ne peut pas être null");
         }
 
-        if (article.getCategorieArticle() != null) {
-            mapSqlParameterSource.addValue("no_categorie", article.getCategorieArticle().getNoCategorie());
+        if (article.getCategorie() != null) {
+            mapSqlParameterSource.addValue("no_categorie", article.getCategorie().getNoCategorie());
         } else {
             throw new IllegalArgumentException("CategorieArticle ne peut pas être null");
         }
@@ -271,11 +275,11 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
             article.setDescription(rs.getString("description"));
 
             if (rs.getDate("date_debut_encheres") != null) {
-                article.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
+               article.setDateDebutEncheres(rs.getTimestamp("date_debut_encheres").toLocalDateTime());
             }
 
             if (rs.getDate("date_fin_encheres") != null) {
-                article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+                article.setDateFinEncheres(rs.getTimestamp("date_fin_encheres").toLocalDateTime());
             }
 
             article.setMiseAPrix(rs.getInt("prix_initial"));
@@ -292,7 +296,7 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
             try {
                 Categorie categorie = new Categorie();
                 categorie.setNoCategorie(rs.getInt("no_categorie"));
-                article.setCategorieArticle(categorie);
+                article.setCategorie(categorie);
             } catch (SQLException ignored) {}
 
             return article;

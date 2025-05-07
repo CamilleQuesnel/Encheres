@@ -7,12 +7,12 @@ public class Retrait {
     private String rue;
     private String code_postal;
     private String ville;
-    private ArticleVendu articleVendu;
+    private int articleVendu;
 
     public Retrait() {
     }
 
-    public Retrait(String rue, String code_postal, String ville, ArticleVendu articleVendu) {
+    public Retrait(String rue, String code_postal, String ville, int articleVendu) {
         this.rue = rue;
         this.code_postal = code_postal;
         this.ville = ville;
@@ -43,11 +43,11 @@ public class Retrait {
         this.ville = ville;
     }
 
-    public ArticleVendu getArticleVendu() {
+    public int getArticleVendu() {
         return articleVendu;
     }
 
-    public void setArticleVendu(ArticleVendu articleVendu) {
+    public void setArticleVendu(int articleVendu) {
         this.articleVendu = articleVendu;
     }
 
