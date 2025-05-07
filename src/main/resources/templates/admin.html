@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        data-th-replace="~{layouts/layout :: layout(
+                                                mainContent=~{:: main},
+                                                cssContent=~{:: link},
+                                                title=~{:: title}
+                                            )}"
+>
+<link rel="stylesheet" data-th-href="@{/css/admin.css}">
+
+
+<main>
+    <div class="window">
+        <div class="title-bar">
+            <span th:text="#{adminitrateur.interface.h1}"></span>
+            <div class="title-bar-button">X</div>
+        </div>
+        <div class="content">
+          <ul>
+            <li><a th:href="@{/admin/categories_gestion}">Interface de gestion des catégories d'articles</a>
+            </li>
+            <legend>Permet la modification, suppression, ajout de catégorie(s)</legend>
+
+            <li><a th:href="@{/admin/utilisateur_gestion}">Désactiver un compte utilisateur</a>
+            </li>
+            <legend>Toutes les ventes et enchères de l'utilisateur sont supprimées, l'utilisateur ne pourra plus accéder à son compte et faire des actions.</legend>
+          </ul>
+        </div>
+
+
+    </div>
+</main>
+</html>

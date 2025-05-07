@@ -4,25 +4,20 @@ import fr.eni.tp.encheres.bll.UserService;
 import fr.eni.tp.encheres.bo.ArticleVendu;
 import fr.eni.tp.encheres.bo.Utilisateur;
 import fr.eni.tp.encheres.dal.ArticleVenduDAO;
-import fr.eni.tp.encheres.dto.NewSaleDTO;
+import fr.eni.tp.encheres.dal.UtilisateurDAO;
 import fr.eni.tp.encheres.dto.RegisterDTO;
 import fr.eni.tp.encheres.dto.UpdateDTO;
-import fr.eni.tp.encheres.exception.BusinessCode;
 import fr.eni.tp.encheres.exception.BusinessException;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import fr.eni.tp.encheres.controller.FieldErrorMapper;
+import org.springframework.web.bind.support.SessionStatus;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @SessionAttributes("membreSession")
@@ -30,10 +25,12 @@ public class SecurityController {
 
     private final UserService userService;
     private final ArticleVenduDAO articleVenduDAO;
+    private final UtilisateurDAO utilisateurDAO;
 
-    public SecurityController(UserService userService, ArticleVenduDAO articleVenduDAO) {
+    public SecurityController(UserService userService, ArticleVenduDAO articleVenduDAO, UtilisateurDAO utilisateurDAO) {
         this.userService = userService;
         this.articleVenduDAO = articleVenduDAO;
+        this.utilisateurDAO = utilisateurDAO;
     }
 
     @GetMapping("/")
@@ -51,7 +48,7 @@ public class SecurityController {
     public String displayLogin(Model model, @RequestParam(required = false) String error,
                                @RequestParam(required = false) String logout) {
         if (error != null) {
-            model.addAttribute("loginError", "Identifiant ou mot de passe incorrect, ou compte désactivé.");
+            model.addAttribute("loginError", "⚠ Identifiant ou mot de passe incorrect, ou compte désactivé.");
         }
         if (logout != null) {
             model.addAttribute("logoutSuccess", "Vous avez été déconnecté(e).");
@@ -122,7 +119,7 @@ public class SecurityController {
 
     @GetMapping("/profile")
     public String afficherProfile(@ModelAttribute("membreSession") Utilisateur membreSession, Model model) {
-        Utilisateur utilisateur = userService.getUtilisateurByPseudo(membreSession.getPseudo());
+        Utilisateur utilisateur = userService.getUtilisateurById(membreSession.getNoUtilisateur());
 
         membreSession.setNom(utilisateur.getNom());
         membreSession.setPrenom(utilisateur.getPrenom());
@@ -142,50 +139,111 @@ public class SecurityController {
         dto.setPostalCode(utilisateur.getCodePostal());
         dto.setCity(utilisateur.getVille());
         dto.setPhone(utilisateur.getTelephone());
-        dto.setPassword("");
-        dto.setPasswordConfirm("");
+
 
         model.addAttribute("UpdateDTO", dto);
         return "profile";
     }
 
-    @PostMapping("/profile")
-    public String updateProfile(
-            @ModelAttribute("membreSession") Utilisateur membreSession,
-            @ModelAttribute("UpdateDTO") UpdateDTO updateDTO,
-            BindingResult bindingResult,
-            Model model
-    ) {
-        try {
-            updateDTO.setUsername(membreSession.getPseudo());
-            updateDTO.setNo_utilisateur(membreSession.getNoUtilisateur());
+@PostMapping("/profile")
+public String updateProfile(
+        @ModelAttribute("membreSession") Utilisateur membreSession,
+        @ModelAttribute("UpdateDTO") UpdateDTO updateDTO,
+        BindingResult bindingResult,
+        Model model,
+        SessionStatus sessionStatus
+) {
+    try {
+        System.out.println("ID utilisateur en session : " + membreSession.getNoUtilisateur());
 
-            userService.updateUtilisateur(updateDTO);
+        membreSession = utilisateurDAO.readId(membreSession.getNoUtilisateur());
 
-            membreSession.setNom(updateDTO.getLastname());
-            membreSession.setPrenom(updateDTO.getFirstname());
-            membreSession.setEmail(updateDTO.getEmail());
-            membreSession.setRue(updateDTO.getStreet());
-            membreSession.setCodePostal(updateDTO.getPostalCode());
-            membreSession.setVille(updateDTO.getCity());
-            membreSession.setTelephone(updateDTO.getPhone());
+        boolean aChanger = false;
 
-            model.addAttribute("successMessage", "Profil mis à jour avec succès.");
-
-        } catch (BusinessException exception) {
-            System.out.println("Erreurs de validation dans updateUtilisateur :");
-            System.out.println("Contenu de UpdateDTO : " + updateDTO);
-            exception.printStackTrace();
-            exception.getKeys().forEach(key -> {
-                String field = FieldErrorMapper.getFieldName(key);
-                bindingResult.addError(new FieldError("UpdateDTO", field, null, false, new String[]{key}, null, null));
-            });
-            model.addAttribute("errorMessage", "Erreur lors de la mise à jour du profil.");
-            return "profile";
+        if (!Objects.equals(membreSession.getPseudo(), updateDTO.getUsername())) {
+            aChanger = true;
+        }
+        if (!Objects.equals(membreSession.getPrenom(), updateDTO.getFirstname())) {
+            aChanger = true;
+        }
+        if (!Objects.equals(membreSession.getNom(), updateDTO.getLastname())) {
+            aChanger = true;
+        }
+        if (!Objects.equals(membreSession.getEmail(), updateDTO.getEmail())) {
+            aChanger = true;
+        }
+        if (!Objects.equals(membreSession.getRue(), updateDTO.getStreet())) {
+            aChanger = true;
+        }
+        if (!Objects.equals(membreSession.getCodePostal(), updateDTO.getPostalCode())) {
+            aChanger = true;
+        }
+        if (!Objects.equals(membreSession.getVille(), updateDTO.getCity())) {
+            aChanger = true;
+        }
+        if (!Objects.equals(membreSession.getTelephone(), updateDTO.getPhone())) {
+            aChanger = true;
         }
 
-        return "redirect:/profile";
+        if (aChanger) {
+            userService.updateUtilisateur(updateDTO);
+            membreSession.setPseudo(updateDTO.getUsername());
+            model.addAttribute("membreSession", membreSession);
+            System.out.println("le pseudo est mis à jour");
+        } else {
+            System.out.println("Aucune modification détectée.");
+        }
+
+    } catch (BusinessException exception) {
+        exception.printStackTrace();
+        exception.getKeys().forEach(key -> {
+            String field = FieldErrorMapper.getFieldName(key);
+            bindingResult.addError(new FieldError("UpdateDTO", field, null, false, new String[]{key}, null, null));
+        });
     }
+
+    return "redirect:/profile";
+}
+
+    @GetMapping("/admin")
+    public String interfaceAdministrateur(
+            Model model
+    ){
+        return "/admin";
+    }
+
+    @GetMapping("/admin/categories_gestion")
+    public String interfaceAdministrateurCategories(
+            Model model
+    ){
+        return "admin/categories_gestion";
+    }
+
+    @GetMapping("/admin/utilisateur_gestion")
+    public String interfaceAdministrateurUtilisateur(
+            @RequestParam(name = "query", required = false) String query,
+            Model model
+    ) {
+        List<Utilisateur> utilisateurs;
+
+        if (query != null && !query.isBlank()) {
+            utilisateurs = utilisateurDAO.searchByPseudoOrEmail(query.trim());
+        } else {
+            utilisateurs = utilisateurDAO.findUsers(); // méthode pour tous les utilisateurs
+        }
+
+        model.addAttribute("utilisateurs", utilisateurs);
+        return "admin/utilisateur_gestion";
+    }
+
+    @GetMapping("/admin/toggle_utilisateur")
+    public String toggleUtilisateur(@RequestParam("id") int id) {
+        Utilisateur utilisateur = utilisateurDAO.readId(id);
+        utilisateur.setActif(!utilisateur.isActif()); // inverse l'état
+        utilisateurDAO.updateUser(utilisateur); // met à jour dans la BDD
+        return "redirect:/admin/utilisateur_gestion";
+    }
+
 
     @ModelAttribute("membreSession")
     public Utilisateur membreSession() {

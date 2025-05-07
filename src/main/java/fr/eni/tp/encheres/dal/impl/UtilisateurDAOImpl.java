@@ -42,7 +42,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
                     "nom = :nom, " +
                     "prenom = :prenom, " +
                     "administrateur = :administrateur, " +
-                    "mot_de_passe = :mot_de_passe, " +
+//                    "mot_de_passe = :mot_de_passe, " +
                     "rue = :rue, " +
                     "code_postal = :code_postal, " +
                     "ville = :ville, " +
@@ -99,9 +99,9 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
     }
 
     @Override
-    public Utilisateur readId(int id) {
+    public Utilisateur readId(int no_utilisateur) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("id", id);
+        mapSqlParameterSource.addValue("no_utilisateur", no_utilisateur);
 
         try {
             return namedParameterJdbcTemplate.queryForObject(
@@ -210,6 +210,48 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         );
         return users.isEmpty();
     }
+
+    @Override
+    public boolean isUserPseudoUniqueForUpdate(String pseudo, int id) {
+        String sql = "SELECT COUNT(*) FROM UTILISATEURS WHERE pseudo = :pseudo AND no_utilisateur != :id";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("pseudo", pseudo)
+                .addValue("id", id);
+        Integer count = namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
+        return count == 0;
+    }
+
+    public boolean isUserPseudoUniqueExceptCurrent(String pseudo, int id) {
+        String sql = "SELECT COUNT(*) FROM UTILISATEURS WHERE pseudo = :pseudo AND no_utilisateur != :id";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("pseudo", pseudo);
+        params.addValue("id", id);
+
+        Integer count = namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
+        return count == 0;
+    }
+
+    @Override
+    public List<Utilisateur> searchByPseudoOrEmail(String query) {
+        String sql = "SELECT * FROM UTILISATEURS WHERE pseudo LIKE :q OR email LIKE :q";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("q", "%" + query + "%");
+
+        return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Utilisateur.class));
+    }
+
+
+
+    @Override
+    public boolean isUserEmailUniqueForUpdate(String email, int id) {
+        String sql = "SELECT COUNT(*) FROM UTILISATEURS WHERE email = :email AND no_utilisateur != :id";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("email", email)
+                .addValue("id", id);
+        Integer count = namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
+        return count == 0;
+    }
+
 
     @Override
     public List<Utilisateur> findUsers() {

@@ -19,30 +19,31 @@ public class UpdateDTO {
     public UpdateDTO() {
     }
 
-    /**
-     * Pas d'id dedans, il ne sert qu'à rechercher l'id utilisateur, il n'y a pas de setter pour l'id non plus
-     * @param passwordConfirm
-     * @param password
-     * @param phone
-     * @param postalCode
-     * @param city
-     * @param street
-     * @param email
-     * @param username
-     * @param firstname
-     * @param lastname
-     */
-    public UpdateDTO(String passwordConfirm, String password, String phone, String postalCode, String city, String street, String email, String username, String firstname, String lastname) {
-        this.passwordConfirm = passwordConfirm;
-        this.password = password;
-        this.phone = phone;
-        this.postalCode = postalCode;
-        this.city = city;
-        this.street = street;
-        this.email = email;
-        this.username = username;
-        this.firstname = firstname;
+    public UpdateDTO(String lastname, String firstname, String username, String email, String street, String city, String postalCode, String phone, String password, String passwordConfirm) {
         this.lastname = lastname;
+        this.firstname = firstname;
+        this.username = username;
+        this.email = email;
+        this.street = street;
+        this.city = city;
+        this.postalCode = postalCode;
+        this.phone = phone;
+        this.password = password;
+        this.passwordConfirm = passwordConfirm;
+    }
+
+    public UpdateDTO(int no_utilisateur, String lastname, String firstname, String username, String email, String street, String city, String postalCode, String phone, String password, String passwordConfirm) {
+        this.no_utilisateur = no_utilisateur;
+        this.lastname = lastname;
+        this.firstname = firstname;
+        this.username = username;
+        this.email = email;
+        this.street = street;
+        this.city = city;
+        this.postalCode = postalCode;
+        this.phone = phone;
+        this.password = password;
+        this.passwordConfirm = passwordConfirm;
     }
 
     public int getNo_utilisateur() {

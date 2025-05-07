@@ -19,8 +19,14 @@
         <div class="content">
             <form th:action="@{/profile}" th:object="${UpdateDTO}" method="post">
                 <input type="hidden" th:field="*{no_utilisateur}">
+<!--                c'est caché mais c'est appelé obligatoirement-->
 
                 <ul>
+                    <li>
+                        <label for="username" th:text="#{profile.form.pseudo}"></label>
+                        <input type="text" id="username" name="username"
+                               th:value="${#strings.capitalize(UpdateDTO.username)}">
+                    </li>
                     <li>
                         <label for="lastname" th:text="#{profile.form.nom}"></label>
                         <input type="text" id="lastname" name="lastname"
@@ -37,7 +43,7 @@
                                th:value="*{email}">
                     </li>
                     <li>
-                        <label for="phone" th:text="Téléphone"></label>
+                        <label for="phone" th:text="#{profile.form.phone}"></label>
                         <input type="text" id="phone" name="phone"
                                th:value="*{phone}">
                     </li>
@@ -56,15 +62,7 @@
                         <input type="text" id="city" name="city"
                                th:value="*{city}">
                     </li>
-                    <li>
-                        <label for="password" th:text="#{profile.form.button.password}"></label>
-                        <input type="password" id="password" th:field="*{password}" />
-                    </li>
 
-                    <li>
-                        <label for="passwordConfirm" th:text="#{profile.form.button.password.confirm}"></label>
-                        <input type="password" id="passwordConfirm" th:field="*{passwordConfirm}" />
-                    </li>
 
                     <li id="button-center">
                         <button class="button" type="submit" th:text="#{profile.form.button.enregistrer}"></button>

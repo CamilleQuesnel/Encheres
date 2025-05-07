@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        data-th-replace="~{layouts/layout :: layout(
+                                                mainContent=~{:: main},
+                                                cssContent=~{:: link},
+                                                title=~{:: title}
+                                            )}"
+>
+<link rel="stylesheet" data-th-href="@{/css/admin.css}">
+
+
+<main>
+    <div class="window">
+        <div class="title-bar">
+            <span th:text="#{adminitrateur.interface.encheres}"></span>
+            <div class="title-bar-button">X</div>
+        </div>
+        <div class="content">
+            <ul>
+                <legend>Permet la modification, suppression, ajout de catégorie(s)</legend>
+                <li><a href="#">Ajout d'une catégorie</a></li>
+                <li><a href="#">Modification d'une catégorie</a></li>
+                <li><a href="#">Suppression d'une catégorie</a></li>
+
+            </ul>
+            <div class="centered-button">
+                <a th:href="@{/admin}" class="button" th:text="#{administrateur.retour}"></a>
+            </div>
+        </div>
+
+
+    </div>
+</main>
+</html>

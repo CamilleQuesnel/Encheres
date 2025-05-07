@@ -87,39 +87,68 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUtilisateur(UpdateDTO updateDTO) {
-        boolean isValid =true;
+        boolean isValid = true;
         BusinessException businessException = new BusinessException();
 
+        // Charger l'utilisateur existant
+        Utilisateur utilisateur = utilisateurDAO.readId(updateDTO.getNo_utilisateur());
+        if (utilisateur == null) {
+            businessException.addKey(BusinessCode.UTILISATEUR_INEXISTANT);
+            throw businessException;
+        }
+
+        // Validations classiques
         isValid &= isLastnameValid(updateDTO.getLastname(), businessException);
         isValid &= isFirstnameValid(updateDTO.getFirstname(), businessException);
-        isValid &= isPseudoValid(updateDTO.getUsername(), businessException);
-        isValid &= isEmailValid(updateDTO.getEmail(), businessException);
-        isValid &= isPasswordChanged(updateDTO.getPassword(), updateDTO.getPasswordConfirm(), businessException);
         isValid &= isStreetValid(updateDTO.getStreet(), businessException);
         isValid &= isCityValid(updateDTO.getCity(), businessException);
         isValid &= isCodePostalValid(updateDTO.getPostalCode(), businessException);
         isValid &= isPhoneValid(updateDTO.getPhone(), businessException);
 
-        if (isValid) {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String hashedPassword = passwordEncoder.encode(updateDTO.getPassword());
-            Utilisateur utilisateur = utilisateurDAO.readId(updateDTO.getNo_utilisateur());
-            utilisateur.setMotDePasse("{bcrypt}" + hashedPassword);
-            utilisateur.setNom(updateDTO.getLastname());
-            utilisateur.setPrenom(updateDTO.getFirstname());
-            utilisateur.setPseudo(updateDTO.getUsername());
-            utilisateur.setEmail(updateDTO.getEmail());
-            utilisateur.setRue(updateDTO.getStreet());
-            utilisateur.setCodePostal(updateDTO.getPostalCode());
-            utilisateur.setVille(updateDTO.getCity());
-            utilisateur.setTelephone(updateDTO.getPhone());
-            utilisateur.setActif(true);
-            utilisateur.setAdministrateur(false);
-            utilisateurDAO.updateUser(utilisateur);
-        } else {
+        // Vérifier l’unicité du pseudo seulement s’il change
+        if (!updateDTO.getUsername().equals(utilisateur.getPseudo())) {
+            if (!utilisateurDAO.isUserPseudoUnique(updateDTO.getUsername())) {
+                isValid = false;
+                businessException.addKey(BusinessCode.VALID_UTILISATEUR_PSEUDO_ALREADY_EXISTS);
+            }
+        }
+
+        // Vérifier l’unicité de l’email seulement s’il change
+        if (!updateDTO.getEmail().equals(utilisateur.getEmail())) {
+            if (!utilisateurDAO.isUserEmailUnique(updateDTO.getEmail())) {
+                isValid = false;
+                businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL_ALREADY_EXISTS);
+            }
+        }
+
+        // Vérifications de format pour email et pseudo
+        isValid &= isPseudoValidForUpdate(updateDTO.getUsername(), updateDTO.getNo_utilisateur(), businessException);
+        isValid &= isEmailValidForUpdate(updateDTO.getEmail(), updateDTO.getNo_utilisateur(), businessException);
+
+        if (!isValid) {
+            System.out.println("Erreurs de validation détectées :");
+            businessException.getKeys().forEach(System.out::println);
             throw businessException;
         }
+
+
+        // Mise à jour des données
+        utilisateur.setNom(updateDTO.getLastname());
+        utilisateur.setPrenom(updateDTO.getFirstname());
+        utilisateur.setPseudo(updateDTO.getUsername());
+        utilisateur.setEmail(updateDTO.getEmail());
+        utilisateur.setRue(updateDTO.getStreet());
+        utilisateur.setCodePostal(updateDTO.getPostalCode());
+        utilisateur.setVille(updateDTO.getCity());
+        utilisateur.setTelephone(updateDTO.getPhone());
+        utilisateur.setActif(true); // facultatif si tu veux toujours forcer à true
+        utilisateur.setAdministrateur(false); // idem
+
+        utilisateurDAO.updateUser(utilisateur);
+
+        System.out.println("Utilisateur mis à jour avec succès");
     }
+
 
     @Override
     public void desactivateUtilisateur(int no_utilisateur) {
@@ -348,6 +377,50 @@ public class UserServiceImpl implements UserService {
         return isValid;
     }
 
+    private boolean isPseudoValidForUpdate(String pseudo, int id, BusinessException businessException) {
+        boolean isValid = true;
+
+        if (pseudo == null || pseudo.isEmpty()) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_PSEUDO);
+        }
+        if (pseudo.length() > 30) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_PSEUDO_LENGHT_MAX);
+        }
+        if (!utilisateurDAO.isUserPseudoUniqueExceptCurrent(pseudo, id)) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_PSEUDO_ALREADY_EXISTS);
+        }
+
+        return isValid;
+    }
+
+
+    private boolean isEmailValidForUpdate(String email, int id, BusinessException businessException) {
+        boolean isValid = true;
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+
+        if (email == null || email.isEmpty()) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL);
+        }
+        if (!matcher.matches()) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL_REGEX);
+        }
+        if (email.length() > 50) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL_LENGHT_MAX);
+        }
+        if (!utilisateurDAO.isUserEmailUniqueForUpdate(email, id)) {
+            isValid = false;
+            businessException.addKey(BusinessCode.VALID_UTILISATEUR_EMAIL_ALREADY_EXISTS);
+        }
+        return isValid;
+    }
 
 
 }

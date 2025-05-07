@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        data-th-replace="~{layouts/layout :: layout(
+                                                mainContent=~{:: main},
+                                                cssContent=~{:: link},
+                                                title=~{:: title}
+                                            )}"
+>
+<link rel="stylesheet" data-th-href="@{/css/admin.css}">
+
+
+<main>
+  <div class="window">
+    <div class="title-bar">
+      <span th:text="#{adminitrateur.interface.utilisateur}"></span>
+      <div class="title-bar-button">X</div>
+    </div>
+    <div class="content">
+      <ul>
+        <legend>Toutes les ventes et enchères de l'utilisateur seront supprimées, l'utilisateur ne pourra plus accéder à son compte et faire des actions.</legend>
+      </ul>
+
+
+<!--        attention c'est en test, à commenter si pas fini-->
+
+      <form th:action="@{/admin/utilisateur_gestion}" method="get" style="margin-bottom: 20px;">
+        <label for="search">Rechercher un utilisateur :</label>
+        <input type="text" id="search" name="query" placeholder="Pseudo, email..." />
+        <button type="submit">Rechercher</button>
+      </form>
+
+
+      <table>
+        <thead>
+        <tr>
+          <th>Pseudo</th>
+          <th>Email</th>
+          <th>État</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${utilisateurs}">
+          <td th:text="${user.pseudo}"></td>
+          <td th:text="${user.email}"></td>
+          <td th:text="${user.actif ? 'Actif' : 'Désactivé'}"></td>
+          <td>
+            <a th:href="@{/admin/toggle_utilisateur(id=${user.noUtilisateur})}"
+               th:text="${user.actif ? 'Désactiver' : 'Réactiver'}"></a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+
+      <!--        fin du test-->
+
+
+      <div class="centered-button">
+      <a th:href="@{/admin}" class="button" th:text="#{administrateur.retour}"></a>
+      </div>
+    </div>
+
+
+  </div>
+</main>
+</html>
