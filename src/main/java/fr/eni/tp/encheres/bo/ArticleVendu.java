@@ -17,11 +17,11 @@ public class ArticleVendu {
     private Retrait lieuRetrait;
     private String urlImage;
     private List<Enchere> encheres;
-    private Categorie categorie;
+    private int categorie;
 
     public ArticleVendu() {}
 
-    public ArticleVendu(int noArticle, String nomArticle, String description, LocalDateTime dateDebutEncheres, LocalDateTime dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, String urlImage, List<Enchere> encheres, Categorie categorie) {
+    public ArticleVendu(int noArticle, String nomArticle, String description, LocalDateTime dateDebutEncheres, LocalDateTime dateFinEncheres, int miseAPrix, int prixVente, String etatVente, Utilisateur utilisateur, Retrait lieuRetrait, String urlImage, List<Enchere> encheres, int categorie) {
         this.noArticle = noArticle;
         this.nomArticle = nomArticle;
         this.description = description;
@@ -133,11 +133,11 @@ public class ArticleVendu {
         this.encheres = encheres;
     }
 
-    public Categorie getCategorie() {
+    public int getCategorie() {
         return categorie;
     }
 
-    public void setCategorie(Categorie categorie) {
+    public void setCategorie(int categorie) {
         this.categorie = categorie;
     }
 

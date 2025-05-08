@@ -127,8 +127,18 @@ button:active {
     border: 2px inset #000;
 }
 
-
 footer {
     text-align: center;
-
 }
+/*ajout seb*/
+.imgIndex{
+    width: 100px;
+    height: auto;
+    position: relative;
+    top: 30px;
+}
+.article-item{
+    margin-bottom: 20px;
+}
+
+

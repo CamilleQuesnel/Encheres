@@ -74,7 +74,7 @@ public class ItemServiceImpl implements ItemService {
         if(isArticleValid){
 
             ArticleVendu articleVendu = new ArticleVendu();
-            articleVendu.setCategorie(categorieDAO.findCategorieById(newSaleDTO.getCategorie()));
+            articleVendu.setCategorie(newSaleDTO.getCategorie());
             articleVendu.setNomArticle(newSaleDTO.getArticle());
             articleVendu.setDescription(newSaleDTO.getDescription());
             articleVendu.setDateDebutEncheres(newSaleDTO.getDebut());

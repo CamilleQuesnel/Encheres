@@ -145,8 +145,8 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
         }
 
 
-        if (article.getCategorie() != null) {
-            mapSqlParameterSource.addValue("no_categorie", article.getCategorie().getNoCategorie());
+        if (article.getCategorie() != 0) {
+            mapSqlParameterSource.addValue("no_categorie", article.getCategorie());
         } else {
             throw new IllegalArgumentException("CategorieArticle ne peut pas être null");
         }
@@ -190,8 +190,8 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
             throw new IllegalArgumentException("Utilisateur ne peut pas être null");
         }
 
-        if (article.getCategorie() != null) {
-            mapSqlParameterSource.addValue("no_categorie", article.getCategorie().getNoCategorie());
+        if (article.getCategorie() != 0) {
+            mapSqlParameterSource.addValue("no_categorie", article.getCategorie());
         } else {
             throw new IllegalArgumentException("CategorieArticle ne peut pas être null");
         }
@@ -273,6 +273,7 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
             article.setNoArticle(rs.getInt("no_article"));
             article.setNomArticle(rs.getString("nom_article"));
             article.setDescription(rs.getString("description"));
+            article.setUrlImage(rs.getString("url_image"));
 
             if (rs.getDate("date_debut_encheres") != null) {
                article.setDateDebutEncheres(rs.getTimestamp("date_debut_encheres").toLocalDateTime());
@@ -296,7 +297,7 @@ public class ArticleVenduDAOImpl implements ArticleVenduDAO {
             try {
                 Categorie categorie = new Categorie();
                 categorie.setNoCategorie(rs.getInt("no_categorie"));
-                article.setCategorie(categorie);
+                article.setCategorie(categorie.getNoCategorie());
             } catch (SQLException ignored) {}
 
             return article;

@@ -34,12 +34,14 @@
         <div class="content">
             <ul class="article-list">
                 <li class="article-item" th:each="article : ${articles}">
+                    <img  class="imgIndex"  data-th-src="${article.urlImage}" th:alt="${article.nomArticle}">
                     <a class="article-link" th:href="@{'/articles/' + ${article.noArticle}}"
                        th:text="${article.nomArticle}">Nom de l'article</a>
                     -
                     <span class="article-price" th:text="${article.prixVente} + ' €'">Prix</span>
                     -
                     <span th:text="${article.dateFinEncheres}"></span>
+
                 </li>
             </ul>
             <p th:if="${#lists.isEmpty(articles)}">Aucun article en vente pour le moment.</p>

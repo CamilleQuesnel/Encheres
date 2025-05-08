@@ -84,7 +84,7 @@ public class NewSaleController {
                 Path path = Paths.get(uploadDir + File.separator + photoName);
 
                 // Mettre à jour l'objet NewSaleDTO avec le chemin de la photo
-                newSaleDTO.setPhoto(uploadDir + photoName);
+                newSaleDTO.setPhoto("images/" + photoName);
 
                 itemService.createArticle(newSaleDTO);
 
