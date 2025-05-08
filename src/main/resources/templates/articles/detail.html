@@ -29,7 +29,7 @@
 
             <!-- Safe null check for vendeur -->
             <p th:if="${article.utilisateur != null}">
-                Vendu par : <span th:text="${article.utilisateur.pseudo}">Vendeur</span>
+                Vendu par : <span th:text="${utilisateur.pseudo}">Vendeur</span>
             </p>
             <p th:if="${article.utilisateur == null}">
                 Vendu par : <span>Inconnu</span>
