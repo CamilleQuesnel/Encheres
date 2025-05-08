@@ -40,7 +40,7 @@
                     -
                     <span class="article-price" th:text="${article.prixVente} + ' €'">Prix</span>
                     -
-                    <span th:text="${article.dateFinEncheres}"></span>
+                    <span th:text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy HH:mm')}"></span>
 
                 </li>
             </ul>
