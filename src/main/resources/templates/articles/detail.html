@@ -20,9 +20,12 @@
             <div class="title-bar-button">X</div>
         </div>
         <div class="content">
+            <div class="imgDetail">
+                <img class="centered-img" data-th-src="${article.urlImage}" th:alt="${article.nomArticle}">
+            </div>
             <p>Description : <span th:text="${article.description}">Description ici</span></p>
-            <p>Mise à prix : <span th:text="${article.miseAPrix}">0</span> €</p>
-            <p>Prix de vente : <span th:text="${article.prixVente}">0</span> €</p>
+            <p>Mise à prix : <span th:text="${article.miseAPrix}">0</span><img class="minouCoin" data-th-src="@{/images/CMC.png}" alt="Cryptomonnaie MinouMinou"></p>
+            <p>Prix de vente : <span th:text="${article.prixVente}">0</span><img class="minouCoin" data-th-src="@{/images/CMC.png}" alt="Cryptomonnaie MinouMinou"></p>
 
             <!-- Safe null check for vendeur -->
             <p th:if="${article.utilisateur != null}">

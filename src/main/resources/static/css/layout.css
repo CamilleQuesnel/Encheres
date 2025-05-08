@@ -135,10 +135,37 @@ footer {
     width: 100px;
     height: auto;
     position: relative;
-    top: 30px;
+    vertical-align: middle;
+    padding: 5px;
+    background: linear-gradient(90deg, #000080, #1084d0);
+    border-radius: 10px;
+    margin: 20px auto;
 }
 .article-item{
     margin-bottom: 20px;
 }
+.minouCoin{
+    height: 1.25em;
+    vertical-align: middle;
+}
 
+.imgDetail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    background: linear-gradient(90deg, #000080, #1084d0);
+    border-radius: 10px;
+    width: fit-content;
+    margin: 20px auto;
+}
+
+.centered-img {
+    display: block;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+    background: white;
+}
 
