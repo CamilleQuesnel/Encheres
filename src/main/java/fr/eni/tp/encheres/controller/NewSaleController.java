@@ -80,7 +80,7 @@ public class NewSaleController {
         if (!fichierPhoto.isEmpty()) {
             try {
                 // Créer le dossier si il n'existe pas
-                File uploadDirFile = new File(context.getContextPath());
+                File uploadDirFile = new File(uploadDir);
                 if (!uploadDirFile.exists()) {
                     uploadDirFile.mkdirs();  // Créer le dossier uploads s'il n'existe pas
                 }
@@ -89,7 +89,7 @@ public class NewSaleController {
                 // Créer un chemin pour le fichier
 //                Path path = Paths.get(uploadDir + File.separator + photoName);
 //                Path path = Paths.get(uploadDir + File.separator + photoName);
-                Path path = Paths.get(uploadDirFile + photoName);
+                Path path = Paths.get(uploadDir + photoName);
                 System.out.println(path);
                 // Mettre à jour l'objet NewSaleDTO avec le chemin de la photo
                 newSaleDTO.setPhoto("/images/" + photoName);
