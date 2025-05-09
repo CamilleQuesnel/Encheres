@@ -14,14 +14,9 @@ public class WebConfiguration  implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //         Cette ligne expose le dossier "uploads" pour qu'il soit accessible via HTTP
         registry.addResourceHandler("/images/**")
-//                    .addResourceLocations("file:///static/images/")
-//                    .addResourceLocations("file:///public/images/")
                     .addResourceLocations("file:///" + uploadDir)
                     .addResourceLocations("classpath:/static/images/") // Garder l'accès aux ressources statiques
                     .resourceChain(true);
-
-//                .addResourceLocations("file:/E:/Encheres/");
-
 
     }
 }

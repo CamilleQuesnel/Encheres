@@ -37,6 +37,10 @@
 .content {
     padding: 15px;
 }
+.content>p{
+    display: block;
+    margin-bottom: 50px;
+}
 
 /* Navigation styles */
 .nav-section {

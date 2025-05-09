@@ -79,28 +79,22 @@ public class NewSaleController {
     ) {
         if (!fichierPhoto.isEmpty()) {
             try {
-                // Créer le dossier si il n'existe pas
                 File uploadDirFile = new File(uploadDir);
-                if (!uploadDirFile.exists()) {
-                    uploadDirFile.mkdirs();  // Créer le dossier uploads s'il n'existe pas
+                if (!uploadDirFile.exists()) { // Créer le dossier uploads s'il n'existe pas
+                    uploadDirFile.mkdirs();
                 }
                 // Générer un nom unique pour la photo (pour éviter les conflits de noms)
                 String photoName = authentication.getName() + "_" + System.currentTimeMillis() + "_" + fichierPhoto.getOriginalFilename();
-                // Créer un chemin pour le fichier
-//                Path path = Paths.get(uploadDir + File.separator + photoName);
-//                Path path = Paths.get(uploadDir + File.separator + photoName);
-                Path path = Paths.get(uploadDir + photoName);
-                System.out.println(path);
-                // Mettre à jour l'objet NewSaleDTO avec le chemin de la photo
-                newSaleDTO.setPhoto("/images/" + photoName);
 
+                // Créer un chemin pour le fichier
+                Path path = Paths.get(uploadDir + photoName);
+
+                newSaleDTO.setPhoto("/images/" + photoName);// Mettre à jour l'objet NewSaleDTO avec le chemin de la photo
                 itemService.createArticle(newSaleDTO);
 
-                // Sauvegarder le fichier dans le dossier
                 //TRY pour fermeture auto du stream
-
                 try (InputStream inputStream = fichierPhoto.getInputStream()) {
-                    Files.copy(inputStream, path);
+                    Files.copy(inputStream, path);// Sauvegarder le fichier dans le dossier
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -108,16 +102,11 @@ public class NewSaleController {
                 System.out.println("NewSaleController");
                 System.out.println(newSaleDTO.getArticle());
                 System.out.println("****************************************************************************************************************************");
-                return "redirect:/"; //ATTENTION A REDIRIGER LA OU IL DOIT ALLER :)
+                return "redirect:/";
 
             } catch (BusinessException exception) {
                 exception.getKeys().forEach(key -> {
 
-
-//                    System.out.println("****************************************************************************************************************************");
-//                    System.out.println("ENTRE CATCH CREATION ARTICLE A VENDRE ");
-//                    System.out.println(key);
-//                    System.out.println("****************************************************************************************************************************");
                     ObjectError error = new ObjectError("globalError", key);
                     bindingResult.addError(error);
                     List<Categorie> categories = itemService.readCategories();
