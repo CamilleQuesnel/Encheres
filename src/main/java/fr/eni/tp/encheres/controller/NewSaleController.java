@@ -98,10 +98,10 @@ public class NewSaleController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                System.out.println("****************************************************************************************************************************");
-                System.out.println("NewSaleController");
-                System.out.println(newSaleDTO.getArticle());
-                System.out.println("****************************************************************************************************************************");
+//                System.out.println("****************************************************************************************************************************");
+//                System.out.println("NewSaleController");
+//                System.out.println(newSaleDTO.getArticle());
+//                System.out.println("****************************************************************************************************************************");
                 return "redirect:/";
 
             } catch (BusinessException exception) {
