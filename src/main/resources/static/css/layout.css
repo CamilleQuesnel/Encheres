@@ -94,7 +94,9 @@ nav a:active {
     padding: 20px;
 
 }
-
+p{
+    margin-bottom: 10px;
+}
 
 
 form button {

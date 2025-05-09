@@ -26,8 +26,8 @@
             <p>Description : <span th:text="${article.description}">Description ici</span></p>
             <p>Mise à prix : <span th:text="${article.miseAPrix}">0</span><img class="minouCoin" data-th-src="@{/images/CMC.png}" alt="Cryptomonnaie MinouMinou"></p>
             <p>Prix de vente : <span th:text="${article.prixVente}">0</span><img class="minouCoin" data-th-src="@{/images/CMC.png}" alt="Cryptomonnaie MinouMinou"></p>
-            <p>Date début de l'enchère : <span th:text="${article.dateDebutEncheres}">0</span></p>
-            <p>Date fin de l'enchère : <span th:text="${article.dateFinEncheres}">0</span></p>
+            <p>Date début de l'enchère : <span th:text="${#temporals.format(article.dateDebutEncheres, 'dd/MM/yyyy HH:mm')}">0</span></p>
+            <p>Date fin de l'enchère : <span th:text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy HH:mm')}">0</span></p>
             <p>Statut de l'enchère : <span th:text="${article.etatVente}">0</span></p>
             <!-- Safe null check for vendeur -->
             <p th:if="${article.utilisateur != null}">
