@@ -6,6 +6,8 @@ import fr.eni.tp.encheres.bo.Categorie;
 import fr.eni.tp.encheres.bo.Utilisateur;
 import fr.eni.tp.encheres.dto.NewSaleDTO;
 import fr.eni.tp.encheres.exception.BusinessException;
+import jakarta.servlet.ServletContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.sql.init.SqlDataSourceScriptDatabaseInitializer;
 import org.springframework.security.core.Authentication;
@@ -30,6 +32,9 @@ import java.util.stream.Collectors;
 @Controller
 @SessionAttributes("membreSession")
 public class NewSaleController {
+
+    @Autowired
+    private ServletContext context;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -61,6 +66,7 @@ public class NewSaleController {
         return "new_sale";
     }
 
+
     @PostMapping("new_sale")
     @Transactional
     public String CreateNewSale(
@@ -74,15 +80,17 @@ public class NewSaleController {
         if (!fichierPhoto.isEmpty()) {
             try {
                 // Créer le dossier si il n'existe pas
-                File uploadDirFile = new File(uploadDir);
+                File uploadDirFile = new File(context.getContextPath());
                 if (!uploadDirFile.exists()) {
                     uploadDirFile.mkdirs();  // Créer le dossier uploads s'il n'existe pas
                 }
                 // Générer un nom unique pour la photo (pour éviter les conflits de noms)
                 String photoName = authentication.getName() + "_" + System.currentTimeMillis() + "_" + fichierPhoto.getOriginalFilename();
                 // Créer un chemin pour le fichier
-                Path path = Paths.get(uploadDir + File.separator + photoName);
-
+//                Path path = Paths.get(uploadDir + File.separator + photoName);
+//                Path path = Paths.get(uploadDir + File.separator + photoName);
+                Path path = Paths.get(uploadDirFile + photoName);
+                System.out.println(path);
                 // Mettre à jour l'objet NewSaleDTO avec le chemin de la photo
                 newSaleDTO.setPhoto("/images/" + photoName);
 
@@ -90,6 +98,7 @@ public class NewSaleController {
 
                 // Sauvegarder le fichier dans le dossier
                 //TRY pour fermeture auto du stream
+
                 try (InputStream inputStream = fichierPhoto.getInputStream()) {
                     Files.copy(inputStream, path);
                 } catch (IOException e) {

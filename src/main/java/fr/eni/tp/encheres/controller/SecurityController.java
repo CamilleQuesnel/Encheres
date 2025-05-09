@@ -40,6 +40,8 @@ public class SecurityController {
     @GetMapping("/encheres")
     public String afficherListeEncheres(Model model) {
         List<ArticleVendu> articlesEnCours = articleVenduDAO.findByUserByEtat("en cours", null);
+        System.out.println("*********************** CONTROLLER / ARTICLES VENDU ");
+        System.out.println(articlesEnCours);
         model.addAttribute("articles", articlesEnCours);
         return "index";
     }

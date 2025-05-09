@@ -61,6 +61,7 @@ public class WebSecurityConfiguration {
                             .requestMatchers("/css/*").permitAll()
                             .requestMatchers("/images/*").permitAll()
                             .requestMatchers("/js/*").permitAll()
+//                            .requestMatchers(("file:///D:/Encheres/uploads/*")).permitAll()
                             .requestMatchers(HttpMethod.GET, "/user/**").authenticated()
                             .anyRequest().authenticated();
 
